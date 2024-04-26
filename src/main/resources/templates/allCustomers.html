@@ -9,15 +9,15 @@
 <table th:unless="${#lists.isEmpty(allCustomers)}">
     <tr>
         <th>ID</th>
-        <th>Customer Name</th>
-<!--        <th></th>-->
+        <th>Name</th>
+        <th>Phone</th>
         <th></th>
         <th></th>
     </tr>
     <tr th:each="c : ${allCustomers}">
         <td th:text="${c.id}"></td>
         <td th:text="${c.name}"></td>
-<!--        <td type=hidden th:text="${c.phone}"></td>-->
+        <td type=hidden th:text="${c.phone}"></td>
         <td><a href="updateCustomer.html" th:href="@{/customers/updateForm/{id}(id=${c.id})}">Update</a></td>
         <td><a th:href="@{/customers/delete/{id}(id=${c.id})}">Delete</a></td>
     </tr>
