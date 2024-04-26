@@ -14,8 +14,8 @@ public class RoomTypeController {
     private final RoomTypeService service;
 
     @RequestMapping("getAll")
-    public List<RoomTypeDto> getAllRoomTypes() {
-        return service.getAllRoomTypes();
+    public List<RoomTypeDto> getAll() {
+        return service.getAll();
     }
 
     @RequestMapping("add")
