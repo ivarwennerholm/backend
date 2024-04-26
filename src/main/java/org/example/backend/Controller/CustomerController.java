@@ -21,14 +21,14 @@ public class CustomerController {
 
     private List<CustomerDto> allCustomersList = new ArrayList<>();
 
-    @RequestMapping("getAll")
+    @RequestMapping("all")
     public String getAllCustomers(Model model){
         allCustomersList = cusService.getAll();
         model.addAttribute("allCustomers", allCustomersList);
         return "allCustomers.html";
     }
 
-    @PostMapping("addCustomer")
+    @PostMapping("add")
     public String addCustomer(@RequestParam String name,
                                  @RequestParam String phone,
                                  Model model){
@@ -55,7 +55,7 @@ public class CustomerController {
         return "updateCustomer.html";
     }
 
-    @PostMapping("updateCustomer/{id}")
+    @PostMapping("update/{id}")
     public String updateCustomer(@PathVariable Long id,
                                  @RequestParam(required = false) String newName,
                                  @RequestParam(required = false) String newPhone,
