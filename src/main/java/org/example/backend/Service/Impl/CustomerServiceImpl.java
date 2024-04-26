@@ -37,6 +37,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public String addCustomer2(String name, String phone) {
+        Customer c = new Customer(name,phone);
+        customerRepo.save(c);
+        return "added new customer";
+    }
+
+    @Override
     public String deleteCustomerByName(String name) {
         Customer c = customerRepo.findByName(name);
         customerRepo.delete(c);
