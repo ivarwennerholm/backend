@@ -1,11 +1,11 @@
-package org.example.backend1.Controller;
+package org.example.backend.Controller;
 
-import org.example.backend1.Model.Booking;
-import org.example.backend1.Model.Customer;
-import org.example.backend1.Model.Room;
-import org.example.backend1.Repository.BookingRepository;
-import org.example.backend1.Repository.CustomerRepository;
-import org.example.backend1.Repository.RoomRepository;
+import org.example.backend.Model.Booking;
+import org.example.backend.Model.Customer;
+import org.example.backend.Model.Room;
+import org.example.backend.Repository.BookingRepository;
+import org.example.backend.Repository.CustomerRepository;
+import org.example.backend.Repository.RoomRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,8 +1,7 @@
-package org.example.backend1.Service;
+package org.example.backend.Service;
 
-import org.example.backend1.DTO.CustomerDto;
-import org.example.backend1.Model.Customer;
-import org.springframework.stereotype.Service;
+import org.example.backend.DTO.CustomerDto;
+import org.example.backend.Model.Customer;
 
 import java.util.List;
 

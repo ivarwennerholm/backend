@@ -1,4 +1,4 @@
-package org.example.backend1.DTO;
+package org.example.backend.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

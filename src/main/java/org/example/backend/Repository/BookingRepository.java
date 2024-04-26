@@ -1,6 +1,6 @@
-package org.example.backend1.Repository;
+package org.example.backend.Repository;
 
-import org.example.backend1.Model.Booking;
+import org.example.backend.Model.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {

@@ -1,8 +1,8 @@
-package org.example.backend1.Controller;
+package org.example.backend.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend1.DTO.RoomTypeDto;
-import org.example.backend1.Service.RoomTypeService;
+import org.example.backend.DTO.RoomTypeDto;
+import org.example.backend.Service.RoomTypeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

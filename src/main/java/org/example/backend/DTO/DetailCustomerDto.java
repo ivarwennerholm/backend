@@ -1,9 +1,9 @@
-//package org.example.backend1.DTO;
+//package org.example.backend.DTO;
 //
 //import lombok.Builder;
 //import lombok.Data;
 //import lombok.RequiredArgsConstructor;
-//import org.example.backend1.Model.Booking;
+//import org.example.backend.Model.Booking;
 //
 //@Data
 //@Builder

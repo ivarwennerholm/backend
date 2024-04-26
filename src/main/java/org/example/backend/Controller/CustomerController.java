@@ -1,10 +1,8 @@
-package org.example.backend1.Controller;
+package org.example.backend.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend1.DTO.CustomerDto;
-import org.example.backend1.Model.Customer;
-import org.example.backend1.Repository.CustomerRepository;
-import org.example.backend1.Service.CustomerService;
+import org.example.backend.DTO.CustomerDto;
+import org.example.backend.Service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

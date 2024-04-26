@@ -1,8 +1,7 @@
-package org.example.backend1.DTO;
+package org.example.backend.DTO;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @Builder

@@ -1,9 +1,9 @@
-package org.example.backend1.Service;
+package org.example.backend.Service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend1.DTO.RoomTypeDto;
-import org.example.backend1.Model.RoomType;
-import org.example.backend1.Repository.RoomTypeRepository;
+import org.example.backend.DTO.RoomTypeDto;
+import org.example.backend.Model.RoomType;
+import org.example.backend.Repository.RoomTypeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

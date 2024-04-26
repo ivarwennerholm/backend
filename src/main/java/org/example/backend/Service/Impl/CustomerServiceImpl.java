@@ -1,10 +1,10 @@
-package org.example.backend1.Service.Impl;
+package org.example.backend.Service.Impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend1.DTO.CustomerDto;
-import org.example.backend1.Model.Customer;
-import org.example.backend1.Repository.CustomerRepository;
-import org.example.backend1.Service.CustomerService;
+import org.example.backend.DTO.CustomerDto;
+import org.example.backend.Model.Customer;
+import org.example.backend.Repository.CustomerRepository;
+import org.example.backend.Service.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
