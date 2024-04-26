@@ -24,24 +24,51 @@ public class CustomerController {
     @RequestMapping("getAll")
     public String getAllCustomers(Model model){
         allCustomersList = cusService.getAll();
-        model.addAttribute("fruit","apple");
         model.addAttribute("allCustomers", allCustomersList);
         return "allCustomers.html";
     }
 
-    @RequestMapping("addNewCustomer")
-    public String addCustomer(){
-        return "addNewCustomer.html";
-    }
-
-    @PostMapping("getAll")
-    public String submitCustomer(@RequestParam String name,
+    @PostMapping("addCustomer")
+    public String addCustomer(@RequestParam String name,
                                  @RequestParam String phone,
                                  Model model){
         cusService.addCustomer(new CustomerDto(name,phone));
-        allCustomersList = cusService.getAll();
-        model.addAttribute("allCustomers", allCustomersList);
-        return "allCustomers.html";
+        return getAllCustomers(model);
+    }
+
+    @RequestMapping("registerForm")
+    public String registerForm(){
+        return "addNewCustomer.html";
+    }
+
+    @RequestMapping("delete/{id}")
+    public String deleteCustomer(@PathVariable Long id, Model model){
+        cusService.deleteCustomerById(id);
+        return getAllCustomers(model);
+    }
+
+    @RequestMapping("updateForm/{id}")
+    public String updateForm(@PathVariable Long id,
+                                 Model model){
+        CustomerDto customer = cusService.findCustomerById(id);
+        model.addAttribute("customer", customer);
+        return "updateCustomer.html";
+    }
+
+    @PostMapping("updateCustomer/{id}")
+    public String updateCustomer(@PathVariable Long id,
+                                 @RequestParam(required = false) String newName,
+                                 @RequestParam(required = false) String newPhone,
+                                 Model model){
+        CustomerDto c = cusService.findCustomerById(id);
+        if (!newName.isEmpty()){
+            c.setName(newName);
+        }
+        if (!newPhone.isEmpty()){
+            c.setPhone(newPhone);
+        }
+        cusService.updateCustomer(id,c.getName(),c.getPhone());
+        return getAllCustomers(model);
     }
 
 
