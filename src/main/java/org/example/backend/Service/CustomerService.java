@@ -8,7 +8,7 @@ import java.util.List;
 public interface CustomerService {
     public Customer customerDtoToCustomer(CustomerDto c);
 
-    public CustomerDto customeerToCustomerDto(Customer c);
+    public CustomerDto customerToCustomerDto(Customer c);
 
     public List<CustomerDto> getAll();
 
