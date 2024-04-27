@@ -1,5 +1,6 @@
 package org.example.backend.Service.Impl;
 
+import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.CustomerDto;
 import org.example.backend.DTO.RoomDto;
@@ -12,16 +13,19 @@ import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Service.BookingService;
 import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.RoomService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
-    private RoomService roomService;
-    private CustomerService customerService;
-    private RoomRepository roomRepository;
-    private CustomerRepository customerRepository;
-    private BookingRepository bookingRepository;
+    private final RoomService roomService;
+    private final CustomerService customerService;
+    private final RoomRepository roomRepository;
+    private final CustomerRepository customerRepository;
+    private final BookingRepository bookingRepository;
 
     @Override
     public BookingDto bookingToBookingDto(Booking b) {
@@ -55,6 +59,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getAll() {
+        System.out.println(bookingRepository.findAll().stream().toList());
         return bookingRepository.findAll().stream().map(this::bookingToBookingDto).toList();
     }
 
