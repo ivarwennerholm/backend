@@ -11,16 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Room {
 
-
     @Id
     @GeneratedValue
     private Long id;
     private int roomNumber;
     private int pricePerNight;
+
     @ManyToOne
     @JoinColumn
     private RoomType type;
-
 
     public Room(int roomNumber, int pricePerNight, RoomType type) {
         this.roomNumber = roomNumber;

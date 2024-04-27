@@ -2,6 +2,7 @@ package org.example.backend.Service.Impl;
 
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.CustomerDto;
+import org.example.backend.DTO.RoomDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
@@ -10,6 +11,7 @@ import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Service.BookingService;
 import org.example.backend.Service.CustomerService;
+import org.example.backend.Service.RoomService;
 
 import java.util.List;
 
