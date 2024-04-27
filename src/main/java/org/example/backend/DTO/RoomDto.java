@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class RoomDto {
     private long Id;
     private int roomNumber;
-    private int pricePerNight;
 }

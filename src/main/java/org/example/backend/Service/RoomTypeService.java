@@ -14,10 +14,10 @@ public class RoomTypeService {
     private final RoomTypeRepository repo;
 
     public RoomTypeDto roomTypeToRoomTypeDtoDto(RoomType rt) {
-        return RoomTypeDto.builder().id(rt.getId()).type(rt.getType()).maxExtraBed(rt.getMaxExtraBed()).maxPerson(rt.getMaxPerson()).build();
+        return RoomTypeDto.builder().id(rt.getId()).type(rt.getType()).maxExtraBed(rt.getMaxExtraBed()).maxPerson(rt.getMaxPerson()).pricePerNight(rt.getPricePerNight()).build();
     }
     public RoomType roomTypeDtoToRoomType(RoomTypeDto rtd) {
-        return RoomType.builder().id(rtd.getId()).type(rtd.getType()).maxExtraBed(rtd.getMaxExtraBed()).maxPerson(rtd.getMaxPerson()).build();
+        return RoomType.builder().id(rtd.getId()).type(rtd.getType()).maxExtraBed(rtd.getMaxExtraBed()).maxPerson(rtd.getMaxPerson()).pricePerNight(rtd.getPricePerNight()).build();
     }
 
     public List<RoomTypeDto> getAllRoomTypes() {

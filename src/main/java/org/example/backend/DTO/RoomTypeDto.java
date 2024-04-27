@@ -14,5 +14,6 @@ public class RoomTypeDto {
     private String type;
     private int maxExtraBed;
     private int maxPerson;
+    private double pricePerNight;
 
 }

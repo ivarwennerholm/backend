@@ -29,7 +29,6 @@ public class RoomServiceImpl implements RoomService {
     public RoomDto roomToRoomDto(Room r){
         return RoomDto.builder().Id(r.getId())
                 .roomNumber(r.getRoomNumber())
-                .pricePerNight(r.getPricePerNight())
                 .build();
     }
 

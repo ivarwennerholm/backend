@@ -25,4 +25,5 @@ public class RoomType {
     private String type;
     private int maxExtraBed;
     private int maxPerson;
+    private double pricePerNight;
 }

@@ -15,15 +15,13 @@ public class Room {
     @GeneratedValue
     private Long id;
     private int roomNumber;
-    private int pricePerNight;
 
     @ManyToOne
     @JoinColumn
     private RoomType type;
 
-    public Room(int roomNumber, int pricePerNight, RoomType type) {
+    public Room(int roomNumber, RoomType type) {
         this.roomNumber = roomNumber;
-        this.pricePerNight = pricePerNight;
         this.type = type;
     }
 
