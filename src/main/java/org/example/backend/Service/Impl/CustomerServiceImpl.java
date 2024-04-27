@@ -52,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto findCustomerById(Long id) {
-        return customeerToCustomerDto(customerRepo.findById(id).get());
+        return customerToCustomerDto(customerRepo.findById(id).get());
     }
 
     @Override
