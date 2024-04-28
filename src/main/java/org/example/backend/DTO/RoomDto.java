@@ -9,11 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RoomTypeDto {
-    private Long id;
-    private String type;
-    private int maxExtraBed;
-    private int maxPerson;
-    private double pricePerNight;
-
+public class RoomDto {
+    private long id;
+    private int roomNumber;
+    private RoomTypeDto roomType;
 }

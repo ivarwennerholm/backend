@@ -20,14 +20,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto customeerToCustomerDto(Customer c) {
+    public CustomerDto customerToCustomerDto(Customer c) {
         return CustomerDto.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).build();
     }
 
 
     @Override
     public List<CustomerDto> getAll() {
-        return customerRepo.findAll().stream().map(k -> customeerToCustomerDto(k)).toList();
+        return customerRepo.findAll().stream().map(k -> customerToCustomerDto(k)).toList();
     }
 
     @Override
