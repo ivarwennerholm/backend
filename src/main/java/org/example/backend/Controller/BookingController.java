@@ -1,49 +1,108 @@
 package org.example.backend.Controller;
 
-import org.example.backend.Model.Booking;
-import org.example.backend.Model.Customer;
-import org.example.backend.Model.Room;
-import org.example.backend.Repository.BookingRepository;
-import org.example.backend.Repository.CustomerRepository;
-import org.example.backend.Repository.RoomRepository;
+import lombok.RequiredArgsConstructor;
+import org.example.backend.DTO.BookingDto;
+import org.example.backend.DTO.RoomDto;
+import org.example.backend.Service.BookingService;
+import org.example.backend.Service.CustomerService;
+import org.example.backend.Service.RoomService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
-@RestController
-@RequestMapping("bookings")
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("booking")
 public class BookingController {
 
-    private final BookingRepository repo;
-    private final RoomRepository rRepo;
-    private final CustomerRepository cRepo;
+    private final RoomService roomService;
+    private final BookingService bookingService;
+    private final CustomerService customerService;
 
-    public BookingController(BookingRepository repo, RoomRepository rRepo, CustomerRepository cRepo) {
-        this.repo = repo;
-        this.rRepo = rRepo;
-        this.cRepo = cRepo;
+    @RequestMapping("/add")
+    public String addBooking() {
+        return "searchBooking";
     }
 
-    @RequestMapping("getAll")
-    public List<Booking> getAllBookings(){
-        return repo.findAll();
-    }
-
-    @RequestMapping("add")
-    public String addBooking(@RequestParam String checkin, @RequestParam String checkout, @RequestParam int guests, @RequestParam int extrabed,  @RequestParam Long custid, @RequestParam Long roomid) throws ParseException {
+    @RequestMapping("/getAvailable")
+    public String getAvailableBookings(@RequestParam int guests, @RequestParam String checkin, @RequestParam String checkout, Model model) throws ParseException {
+        model.addAttribute("guests", guests);
+        model.addAttribute("checkin", checkin);
+        model.addAttribute("checkout", checkout);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date checkinDate = new java.sql.Date(df.parse(checkin).getTime());
         Date checkoutDate = new java.sql.Date(df.parse(checkout).getTime());
-        Customer cust = cRepo.findById(custid).get();
-        Room room = rRepo.findById(roomid).get();
-        Booking booking = new Booking(checkinDate, checkoutDate, guests, extrabed, cust, room);
-        repo.save(booking);
-        return "Booking (" + checkin + " - " + checkout + ") added successfully";
+        long differenceMillis = checkoutDate.getTime() - checkinDate.getTime();
+        long differenceDays = differenceMillis / (1000 * 60 * 60 * 24);
+        model.addAttribute("nights", differenceDays);
+        
+        List<Date> allDatesInSearch = new ArrayList<>();
+        Date iterateDate = checkinDate;
+        while (!iterateDate.after(checkoutDate)) {
+            allDatesInSearch.add(iterateDate);
+            Calendar c = Calendar.getInstance();
+            c.setTime(iterateDate);
+            c.add(Calendar.DATE, 1);
+            iterateDate = new java.sql.Date(c.getTimeInMillis());
+        }
+
+        List <RoomDto> roomList = roomService.
+                getAll().
+                stream().
+                filter(rd -> rd.getRoomType().getMaxPerson() >= guests).
+                toList();
+
+        List <Long> roomIdList = roomList.
+                stream().
+                map(RoomDto::getId).
+                toList();
+
+        List <BookingDto> bookingList = bookingService.
+                getAll().
+                stream().
+                filter(b -> roomIdList.contains(b.getRoom().getId())).
+                toList();
+
+        HashMap <Long, List<Date>> roomIdAndDateRange = new HashMap<>();
+        bookingList.forEach(b -> roomIdAndDateRange.put(b.getId(),b.getListOfAllDatesInBooking()));       ;
+
+        roomList = roomList.
+                stream().
+                filter(r -> areDatesOverlapping(allDatesInSearch, roomIdAndDateRange.get(r.getId()))).
+                toList();
+
+        model.addAttribute("roomList", roomList);
+
+        //System.out.println(allDatesInSearch); // TEST
+
+        return "getAvailableRooms";
     }
+
+    public boolean areDatesOverlapping(List<Date> list1, List<Date> list2) {
+        boolean output = false;
+        for (Date date: list1) {
+            if (list2.contains(date))
+                output = true;
+        }
+        return output;
+    }
+
+    public Long getNumberOfNightsInDateInterval(String checkin, String checkout) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date checkinDate = new java.sql.Date(df.parse(checkin).getTime());
+        Date checkoutDate = new java.sql.Date(df.parse(checkout).getTime());
+        long differenceMillis = checkoutDate.getTime() - checkinDate.getTime();
+        return differenceMillis / (1000 * 60 * 60 * 24);
+    }
+
 }

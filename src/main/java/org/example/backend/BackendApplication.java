@@ -35,16 +35,16 @@ public class BackendApplication {
             cRepo.save(c3);
 
             // Room Types
-            RoomType rt1 = new RoomType(1L, "single", 0, 1,500);
-            RoomType rt2 = new RoomType(2L, "double", 1, 3,1000);
-            RoomType rt3 = new RoomType(3L, "large_double", 2, 4,1500);
+            RoomType rt1 = new RoomType(1L, "single", 0, 1, 500);
+            RoomType rt2 = new RoomType(2L, "double", 1, 3, 1000);
+            RoomType rt3 = new RoomType(3L, "large_double", 2, 4, 1500);
             rtRepo.save(rt1);
             rtRepo.save(rt2);
             rtRepo.save(rt3);
 
             // Rooms
             Room r1 = new Room(2099, rt1);
-            Room r2 = new Room( 3049, rt2);
+            Room r2 = new Room(3049, rt2);
             Room r3 = new Room(3540, rt3);
             rRepo.save(r1);
             rRepo.save(r2);

@@ -59,7 +59,6 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getAll() {
-        System.out.println(bookingRepository.findAll().stream().toList());
         return bookingRepository.findAll().stream().map(this::bookingToBookingDto).toList();
     }
 
