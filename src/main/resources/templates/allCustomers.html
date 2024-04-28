@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Customers</title>
+</head>
+<body>
+<h1>All Customers</h1>
+<table th:unless="${#lists.isEmpty(allCustomers)}">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr th:each="c : ${allCustomers}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.name}"></td>
+        <td type=hidden th:text="${c.phone}"></td>
+        <td><a href="updateCustomer.html" th:href="@{/customers/updateForm/{id}(id=${c.id})}">Update</a></td>
+        <td><a th:href="@{/customers/delete/{id}(id=${c.id})}">Delete</a></td>
+    </tr>
+</table>
+<br><br>
+<div><a th:href="@{/customers/registerForm}">Add</a></div>
+</body>
+</html>
