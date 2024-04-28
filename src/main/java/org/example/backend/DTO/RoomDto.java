@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RoomDto {
-    private long Id;
+    private long id;
     private int roomNumber;
+    private RoomTypeDto roomType;
 }
