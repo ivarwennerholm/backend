@@ -1,5 +1,6 @@
 package org.example.backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,8 +21,9 @@ public class Booking {
     private int guestAmt;
     private int extraBedAmt;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
+    @JsonIgnore
     private Customer customer;
 
     @ManyToOne
