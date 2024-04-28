@@ -16,5 +16,9 @@ public interface CustomerService {
 
     public String deleteCustomerByName(String name);
 
+    public String deleteCustomerById(Long id);
+
+    public CustomerDto findCustomerById(Long id);
+
     public String updateCustomer(Long id, String name, String phone);
 }
