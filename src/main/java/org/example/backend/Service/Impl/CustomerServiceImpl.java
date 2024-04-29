@@ -57,10 +57,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public String updateCustomer(Long id, String name, String phone) {
         Customer c = customerRepo.findById(id).get();
-        if (name != null){
+        if (!name.isEmpty()){
             c.setName(name);
         }
-        if (phone != null){
+        if (!phone.isEmpty()){
             c.setPhone(phone);
         }
         customerRepo.save(c);

@@ -60,14 +60,7 @@ public class CustomerController {
                                  @RequestParam(required = false) String newName,
                                  @RequestParam(required = false) String newPhone,
                                  Model model){
-        CustomerDto c = cusService.findCustomerById(id);
-        if (!newName.isEmpty()){
-            c.setName(newName);
-        }
-        if (!newPhone.isEmpty()){
-            c.setPhone(newPhone);
-        }
-        cusService.updateCustomer(id,c.getName(),c.getPhone());
+        cusService.updateCustomer(id,newName,newPhone);
         return getAllCustomers(model);
     }
 
