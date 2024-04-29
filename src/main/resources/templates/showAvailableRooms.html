@@ -2,7 +2,7 @@
 <html xmlns:th="http:///www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Dummy</title>
+    <title>Available Rooms</title>
 </head>
 <body>
 <div style="border:1px solid black">
@@ -11,8 +11,7 @@
     <p th:text="'checkin: ' + ${checkin}"></p>
     <p th:text="'checkout: ' + ${checkout}"></p>
 </div>
-</body>
-</html>
+
 <div th:if="${#lists.isEmpty(list)}">
     <p>No rooms available</p>
 </div>
@@ -20,6 +19,7 @@
     <table>
         <tbody>
         <tr>
+            <td><b>Room Id</b></td>
             <td><b>Room number</b></td>
             <td><b>Room type</b></td>
             <td><b>Price per night</b></td>
@@ -28,13 +28,32 @@
             <td><b>Extra bed(s)</b></td>
         </tr>
         <tr th:each="booking : ${list}">
+            <td th:text="${booking.room.id}"></td>
             <td th:text="${booking.room.roomNumber}"></td>
             <td th:text="${booking.room.roomType.type}"></td>
             <td th:text="${booking.room.roomType.pricePerNight + 'kr'}"></td>
             <td th:text="${nights}"></td>
             <td th:text="${nights * booking.room.roomType.pricePerNight} + 'kr'"></td>
             <td th:text="${booking.extraBedAmt}"></td>
+            <td>
+                <form method="post" th:action="@{getBookingConfirmation/{id}(id=${booking.room.id})}">
+                    <input type="hidden" name="checkin" th:value="${checkin}" />
+                    <!-- <form action="getBookingConfirmation/" method="post">-->
+                    <input type="submit" value="Make reservation">
+                </form>
+
+<!--                <form method="post" th:action="@{/getBookingConfirmation}" th:object="${booking}">-->
+<!--                    <input type="submit" value="Make reservation">-->
+<!--                </form>-->
+<!--                <form action="getBookingConfirmation" method="get">-->
+<!--                    <input type="hidden" name="booking" th:value="${booking}" />-->
+<!--                     <input type="hidden" name="booking" th:value="${#json.toJson(booking)}" />-->
+<!--                    <input type="submit" value="Make reservation">-->
+<!--                </form>-->
+
+            </td>
         </tr>
+
         <!--
         private RoomDto room;
             private long id;
@@ -55,11 +74,11 @@
         private int extraBedAmt;
         -->
 
-
-
         </tbody>
     </table>
 </div>
+</body>
+</html>
 
 <!--
 <a th:href="@{/kategori/deleteById/{id}(id=${cat.id})}">Delete</a>
