@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Booking</title>
+</head>
+<style>
+    #updateForm{
+        display: none;
+    }
+    #updateBtn{
+        display: block;
+    }
+</style>
+<body>
+<h2>Update Booking</h2>
+    <table>
+        <p th:text="'Booking ID: ' + ${booking.id}"></p>
+        <p th:text="'Guest Name: ' + ${booking.customer.name}"></p>
+        <p th:text="'Guest Phone: ' + ${booking.customer.phone}"></p>
+        <tr>
+            <th>Details</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>Room Type</td>
+            <td th:text="${booking.room.roomType.type}"></td>
+        </tr>
+        <tr>
+            <td>Room Number</td>
+            <td th:text="${booking.room.roomNumber}"></td>
+        </tr>
+        <tr>
+            <td>Check In Date</td>
+            <td th:text="${booking.checkinDate}"></td>
+        </tr>
+        <tr>
+            <td>Check Out Date</td>
+            <td th:text="${booking.checkoutDate}"></td>
+        </tr>
+        <tr>
+            <td>Nos. of Guests</td>
+            <td th:text="${booking.guestAmt}"></td>
+        </tr>
+        <tr>
+            <td>Nos. of Extra Bed</td>
+            <td th:text="${booking.extraBedAmt}"></td>
+        </tr>
+    </table>
+
+<br><br>
+<input type="button" value="Update Date" id="updateBtn">
+<div id="updateForm">
+    <h3>Update Date</h3>
+    <form action="#" th:action="@{/bookings/update/{id}(id=${booking.id})}" method="post">
+        <table>
+            <tr>
+                <th></th>
+                <th>Old</th>
+                <th>New</th>
+            </tr>
+            <tr>
+                <td>Check In</td>
+                <td th:text="${booking.checkinDate}"></td>
+                <td><input type="date" name="newCheckIn" id="newCheckIn"></td>
+            </tr>
+            <tr>
+                <td>Check Out</td>
+                <td th:text="${booking.checkoutDate}"></td>
+                <td><input type="date" name="newCheckOut" id="newCheckOut"></td>
+            </tr>
+        </table>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+</body>
+<script>
+    const updateBtn = document.getElementById("updateBtn");
+    updateBtn.addEventListener("click",function (){
+        updateBtn.style.display = 'none';
+
+        let updateForm = document.getElementById("updateForm");
+        updateForm.style.display = 'block';
+    })
+</script>
+</html>

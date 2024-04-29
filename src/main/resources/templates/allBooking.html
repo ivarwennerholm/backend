@@ -16,8 +16,8 @@
     <tr th:each="b : ${allBookings}">
         <td th:text="${b.id}"></td>
         <td th:text="${b.customer.name}"></td>
-        <td><a href="">Update</a></td>
-        <td><a href="">Delete</a></td>
+        <td><a th:href="@{/bookings/updateForm/{id}(id=${b.id})}">Update</a></td>
+        <td><a th:href="@{/bookings/delete/{id}(id=${b.id})}">Delete</a></td>
     </tr>
 </table>
 </body>

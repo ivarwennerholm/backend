@@ -1,5 +1,6 @@
 package org.example.backend.Controller;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.Model.Booking;
@@ -11,15 +12,14 @@ import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Service.BookingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //@RestController
@@ -39,10 +39,37 @@ public class BookingController {
 
     @RequestMapping("all")
     public String allBookings(Model model){
+        System.out.println("here");
         allBookings = bookService.getAll();
         System.out.println(allBookings);
         model.addAttribute("allBookings",allBookings);
         return "allBooking.html";
+    }
+
+    @RequestMapping("delete/{id}")
+    public String deleteBookings(@PathVariable Long id, Model model){
+        bookService.deleteBookingById(id);
+        return allBookings(model);
+    }
+
+    @RequestMapping("updateForm/{id}")
+    public String updateForm(@PathVariable Long id, Model model){
+        BookingDto b = bookService.findBookingById(id);
+        model.addAttribute("booking",b);
+        return "updateBooking.html";
+    }
+
+    @PostMapping("update/{id}")
+    public String updateBookings(@PathVariable Long id,
+                                 @RequestParam(required = false) String newCheckIn,
+                                 @RequestParam(required = false) String newCheckOut,
+                                 Model model){
+        try {
+            bookService.updateBookingDates(id,newCheckIn,newCheckOut);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return updateForm(id,model);
     }
 
 //    private final BookingRepository repo;

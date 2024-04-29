@@ -21,7 +21,7 @@ public class Booking {
     private int guestAmt;
     private int extraBedAmt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn
     @JsonIgnore
     private Customer customer;

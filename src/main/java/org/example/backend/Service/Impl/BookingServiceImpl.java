@@ -1,5 +1,6 @@
 package org.example.backend.Service.Impl;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.CustomerDto;
@@ -15,6 +16,10 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -59,7 +64,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getAll() {
-        System.out.println(bookingRepository.findAll().stream().toList());
+//        System.out.println(bookingRepository.findAll().stream().toList());
         return bookingRepository.findAll().stream().map(this::bookingToBookingDto).toList();
     }
 
@@ -68,9 +73,36 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.deleteById(bd.getId());
     }
 
+
+
     @Override
     public void updateBooking(BookingDto bd) {
         bookingRepository.deleteById(bd.getId());
         bookingRepository.save(bookindDtoToBooking(bd));
+    }
+
+
+
+    @Override
+    public void deleteBookingById(Long id) {
+        bookingRepository.deleteById(id);
+    }
+
+    @Override
+    public BookingDto findBookingById(Long id) {
+        return bookingToBookingDto(bookingRepository.findById(id).get());
+    }
+
+    @Override
+    public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
+        Booking b = bookingRepository.findById(id).get();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        if (!newCheckIn.isEmpty()){
+            b.setCheckinDate(new java.sql.Date(df.parse(newCheckIn).getTime()));
+        }
+        if (!newCheckOut.isEmpty()){
+            b.setCheckoutDate(new java.sql.Date(df.parse(newCheckOut).getTime()));
+        }
+        bookingRepository.save(b);
     }
 }

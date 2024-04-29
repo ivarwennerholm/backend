@@ -57,10 +57,14 @@ public class BackendApplication {
 //            Booking b2 = new Booking(new java.sql.Date(df.parse("2024-08-22").getTime()),
 //                    new java.sql.Date(df.parse("2024-08-23").getTime()), 3, 1, c2, r2);
 //            Booking b3 = new Booking(new java.sql.Date(df.parse("2024-12-23").getTime()),
-//                    new java.sql.Date(df.parse("2024-12-30").getTime()), 4, 2, c3, r3);
+//                    new java.sql.Date(df.parse("2024-12-25").getTime()), 4, 2, c3, r3);
+//            Booking b4 = new Booking(new java.sql.Date(df.parse("2024-12-23").getTime()),
+//                    new java.sql.Date(df.parse("2024-12-30").getTime()), 3, 1, c2, r2);
 //            bRepo.save(b1);
 //            bRepo.save(b2);
 //            bRepo.save(b3);
+//            bRepo.save(b4);
+//
 //
 //        };
 //    }
