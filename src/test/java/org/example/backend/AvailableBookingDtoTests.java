@@ -4,6 +4,7 @@ import org.example.backend.Controller.BookingController;
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.CustomerDto;
 import org.example.backend.DTO.RoomDto;
+import org.example.backend.DTO.RoomTypeDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
@@ -152,6 +153,21 @@ public class AvailableBookingDtoTests {
         List<Date> bookingDates = bookingController.createDateInterval(checkinDateBooking, checkoutDateBooking);
         boolean result = bookingController.areDatesOverlapping(searchDates, bookingDates);
         assertFalse(result);
+    }
+
+    @Test
+    public void testGetExtraBedsForBooking() {
+        RoomDto sing = new RoomDto(1L, 101, new RoomTypeDto(1L, "single", 0, 2, 1500));
+        RoomDto doub = new RoomDto(2L, 102, new RoomTypeDto(2L, "double", 1, 3, 2500));
+        RoomDto ldoub = new RoomDto(3L, 103, new RoomTypeDto(3L, "large_double", 2, 4, 3000));
+        assertEquals(bookingController.getExtraBedsForBooking(sing, 1), 0);
+        assertEquals(bookingController.getExtraBedsForBooking(doub, 1), 0);
+        assertEquals(bookingController.getExtraBedsForBooking(doub, 2), 0);
+        assertEquals(bookingController.getExtraBedsForBooking(doub, 3), 1);
+        assertEquals(bookingController.getExtraBedsForBooking(ldoub, 1), 0);
+        assertEquals(bookingController.getExtraBedsForBooking(ldoub, 2), 0);
+        assertEquals(bookingController.getExtraBedsForBooking(ldoub, 3), 1);
+        assertEquals(bookingController.getExtraBedsForBooking(ldoub, 4), 2);
     }
 
 }
