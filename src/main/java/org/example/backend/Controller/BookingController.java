@@ -88,13 +88,31 @@ public class BookingController {
         return "getAvailableRooms";
     }
 
-    public boolean areDatesOverlapping(List<Date> list1, List<Date> list2) {
+    public boolean areDatesOverlapping(List<Date> searchDates, List<Date> bookingDates) {
         boolean output = false;
-        for (Date date: list1) {
-            if (list2.contains(date))
+        if (searchDates.getFirst() == bookingDates.getLast() || searchDates.getLast() == bookingDates.getFirst())
+            return output;
+        for (Date date: searchDates) {
+            if (bookingDates.contains(date))
                 output = true;
         }
         return output;
+    }
+
+    public List<Date> createDateInterval(String checkin, String checkout) throws ParseException {
+        List<Date> interval = new ArrayList<>();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date checkinDate = new java.sql.Date(df.parse(checkin).getTime());
+        Date checkoutDate = new java.sql.Date(df.parse(checkout).getTime());
+        Date iterateDate = checkinDate;
+        while (!iterateDate.after(checkoutDate)) {
+            interval.add(iterateDate);
+            Calendar c = Calendar.getInstance();
+            c.setTime(iterateDate);
+            c.add(Calendar.DATE, 1);
+            iterateDate = new java.sql.Date(c.getTimeInMillis());
+        }
+        return interval;
     }
 
     public Long getNumberOfNightsInDateInterval(String checkin, String checkout) throws ParseException {
