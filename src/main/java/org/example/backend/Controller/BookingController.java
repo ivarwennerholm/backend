@@ -1,5 +1,6 @@
 package org.example.backend.Controller;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.RoomDto;
@@ -28,6 +29,12 @@ public class BookingController {
     private final RoomService roomService;
     private final BookingService bookingService;
     private final CustomerService customerService;
+//
+//    public BookingController() {
+//        this.roomService = null;
+//        this.bookingService = null;
+//        this.customerService = null;
+//    }
 
     @RequestMapping("/add")
     public String addBooking() {
@@ -39,28 +46,16 @@ public class BookingController {
         model.addAttribute("guests", guests);
         model.addAttribute("checkin", checkin);
         model.addAttribute("checkout", checkout);
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date checkinDate = new java.sql.Date(df.parse(checkin).getTime());
-        Date checkoutDate = new java.sql.Date(df.parse(checkout).getTime());
-        long differenceMillis = checkoutDate.getTime() - checkinDate.getTime();
-        long differenceDays = differenceMillis / (1000 * 60 * 60 * 24);
+        long differenceDays = getNumberOfDaysBetweenTwoDates(checkin, checkout);
         model.addAttribute("nights", differenceDays);
-        
-        List<Date> allDatesInSearch = new ArrayList<>();
-        Date iterateDate = checkinDate;
-        while (!iterateDate.after(checkoutDate)) {
-            allDatesInSearch.add(iterateDate);
-            Calendar c = Calendar.getInstance();
-            c.setTime(iterateDate);
-            c.add(Calendar.DATE, 1);
-            iterateDate = new java.sql.Date(c.getTimeInMillis());
-        }
+        List<Date> allDatesInSearch = createDateInterval(checkin, checkout);
 
         List <RoomDto> roomList = roomService.
                 getAll().
                 stream().
                 filter(rd -> rd.getRoomType().getMaxPerson() >= guests).
                 toList();
+
 
         List <Long> roomIdList = roomList.
                 stream().
@@ -90,7 +85,7 @@ public class BookingController {
 
     public boolean areDatesOverlapping(List<Date> searchDates, List<Date> bookingDates) {
         boolean output = false;
-        if (searchDates.getFirst() == bookingDates.getLast() || searchDates.getLast() == bookingDates.getFirst())
+        if (searchDates.getFirst().equals(bookingDates.getLast()) || searchDates.getLast().equals(bookingDates.getFirst()))
             return output;
         for (Date date: searchDates) {
             if (bookingDates.contains(date))
@@ -115,7 +110,7 @@ public class BookingController {
         return interval;
     }
 
-    public Long getNumberOfNightsInDateInterval(String checkin, String checkout) throws ParseException {
+    public Long getNumberOfDaysBetweenTwoDates(String checkin, String checkout) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date checkinDate = new java.sql.Date(df.parse(checkin).getTime());
         Date checkoutDate = new java.sql.Date(df.parse(checkout).getTime());
