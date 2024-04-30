@@ -7,6 +7,7 @@ import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Service.CustomerService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,7 +17,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepo;
     @Override
     public Customer customerDtoToCustomer(CustomerDto c) {
-        return Customer.builder().name(c.getName()).phone(c.getPhone()).build();
+        return Customer.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).build();
     }
 
     @Override
@@ -33,20 +34,20 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public String addCustomer(CustomerDto c) {
         customerRepo.save(customerDtoToCustomer(c));
-        Customer x = customerRepo.findByName(c.getName());
-        return "added new customer " + x.getName();
+        return "added new customer";
     }
 
     @Override
     public String deleteCustomerByName(String name) {
         Customer c = customerRepo.findByName(name);
         customerRepo.delete(c);
-        return "delete customer" + c.getName();
+        return "delete customer " + c.getName();
     }
 
     @Override
     public String deleteCustomerById(Long id) {
-        customerRepo.deleteById(id);
+        Customer c = customerRepo.findById(id).get();
+        customerRepo.delete(c);
         return "delete customer";
     }
 
@@ -65,6 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
             c.setPhone(phone);
         }
         customerRepo.save(c);
-        return "update customer";
+        Customer x = customerRepo.findById(id).get();
+        return "update customer " + x.getName() + " " + x.getPhone() ;
     }
 }
