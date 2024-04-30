@@ -80,6 +80,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
+        customerService.addCustomerWithoutID(name, phone);
+        Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
+        Room room = roomRepository.findById(roomId).orElse(null);
+        Booking booking = new Booking(checkin, checkout, guests, extraBeds, customer, room);
+        bookingRepository.save(booking);
+    }
+
+    @Override
     public boolean areDatesOverlapping(List<Date> searchDates, List<Date> bookingDates) {
         boolean output = false;
         if (searchDates.getFirst().equals(bookingDates.getLast()) || searchDates.getLast().equals(bookingDates.getFirst()))

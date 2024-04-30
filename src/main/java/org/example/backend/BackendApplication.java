@@ -8,6 +8,8 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
+import org.example.backend.Service.BookingService;
+import org.example.backend.Service.CustomerService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,7 +26,12 @@ public class BackendApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(CustomerRepository cRepo, RoomTypeRepository rtRepo, RoomRepository rRepo, BookingRepository bRepo) {
+    public CommandLineRunner commandLineRunner(CustomerRepository cRepo,
+                                               RoomTypeRepository rtRepo,
+                                               RoomRepository rRepo,
+                                               BookingRepository bRepo,
+                                               CustomerService cService,
+                                               BookingService bService) {
         return (args) -> {
             // Customers
             Customer c1 = new Customer("Venus", "111-1111111");
@@ -43,9 +50,9 @@ public class BackendApplication {
             rtRepo.save(rt3);
 
             // Rooms
-            Room r1 = new Room(2099, rt1);
-            Room r2 = new Room(3049, rt2);
-            Room r3 = new Room(3540, rt3);
+            Room r1 = new Room(1L, 2099, rt1);
+            Room r2 = new Room(2L, 3049, rt2);
+            Room r3 = new Room(3L, 3540, rt3);
             rRepo.save(r1);
             rRepo.save(r2);
             rRepo.save(r3);
@@ -62,6 +69,10 @@ public class BackendApplication {
             bRepo.save(b2);
             bRepo.save(b3);
 
+            // FOR TESTING ONLY
+            // Date checkin = bService.convertStringToDate("2024-11-12");
+            // Date checkout = bService.convertStringToDate("2024-11-13");
+            // bService.createAndAddBookingToDatabase(checkin, checkout, 3, 1, 2L, "Konrad", "018-282822");
         };
     }
 

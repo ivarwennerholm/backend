@@ -7,11 +7,11 @@
 <body>
 <div style="border:1px solid black">
     <p><b>For testing</b></p>
+    <p>document: showAvailableBookings.html</p>
     <p th:text="'guests: ' + ${guests}"></p>
     <p th:text="'checkin: ' + ${checkin}"></p>
     <p th:text="'checkout: ' + ${checkout}"></p>
 </div>
-
 <div th:if="${#lists.isEmpty(list)}">
     <p>No rooms available</p>
 </div>
@@ -36,54 +36,39 @@
             <td th:text="${nights * booking.room.roomType.pricePerNight} + 'kr'"></td>
             <td th:text="${booking.extraBedAmt}"></td>
             <td>
-                <form method="post" th:action="@{getBookingConfirmation/{id}(id=${booking.room.id})}">
-                    <input type="hidden" name="checkin" th:value="${checkin}" />
-                    <!-- <form action="getBookingConfirmation/" method="post">-->
+                <form method="post" th:action="@{inputUserDetails}">
+                    <input type="hidden" name="roomid" th:value="${booking.room.id}">
+                    <input type="hidden" name="checkin" th:value="${checkin}"/>
+                    <input type="hidden" name="checkout" th:value="${checkout}"/>
+                    <input type="hidden" name="guests" th:value="${guests}"/>
+                    <input type="hidden" name="extrabeds" th:value="${booking.extraBedAmt}"/>
                     <input type="submit" value="Make reservation">
                 </form>
-
-<!--                <form method="post" th:action="@{/getBookingConfirmation}" th:object="${booking}">-->
-<!--                    <input type="submit" value="Make reservation">-->
-<!--                </form>-->
-<!--                <form action="getBookingConfirmation" method="get">-->
-<!--                    <input type="hidden" name="booking" th:value="${booking}" />-->
-<!--                     <input type="hidden" name="booking" th:value="${#json.toJson(booking)}" />-->
-<!--                    <input type="submit" value="Make reservation">-->
-<!--                </form>-->
-
             </td>
         </tr>
-
-        <!--
-        private RoomDto room;
-            private long id;
-            private int roomNumber;
-            private RoomTypeDto roomType;
-                    private Long id;
-                    private String type;
-                    private int maxExtraBed;
-                    private int maxPerson;
-                    private double pricePerNight;
-        private CustomerDto customer;
-            private Long id;
-            private String name;
-            private String phone;
-        private Date checkinDate;
-        private Date checkoutDate;
-        private int guestAmt;
-        private int extraBedAmt;
-        -->
-
         </tbody>
     </table>
 </div>
 </body>
 </html>
 
-<!--
+<!-- OLD CODE SNIPPETS FOR FUTURE REFERENCE
 <a th:href="@{/kategori/deleteById/{id}(id=${cat.id})}">Delete</a>
 <input type="hidden" id="custId" name="custId" value="3487">
 
 <td><a th:href="@{/roomtypes/deleteById/{id}(id=${item.id})}">Delete</a></td>
 <td><a th:href="@{/kategori/updateById/{id}(id=${item.id})}">Update</a></td>
+
+<form action="#" th:action="@{inputUserDetails}" th:object="${booking}"  method="post" >
+<input type="submit" value="Make reservation">
+</form>
+
+<form method="post" th:action="@{/getBookingConfirmation}" th:object="${booking}">
+<input type="submit" value="Make reservation">
+</form>
+<form action="getBookingConfirmation" method="get">
+<input type="hidden" name="booking" th:value="${booking}" />
+<input type="hidden" name="booking" th:value="${#json.toJson(booking)}" />
+<input type="submit" value="Make reservation">
+</form>
 -->

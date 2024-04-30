@@ -1,9 +1,9 @@
+// FILE FOR TESTING ONLY, CAN BE DELETED
+
 package org.example.backend.Controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
-import org.example.backend.Model.Booking;
-import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Service.BookingService;

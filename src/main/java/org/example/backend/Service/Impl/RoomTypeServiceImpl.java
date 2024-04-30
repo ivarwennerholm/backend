@@ -15,7 +15,7 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     private final RoomTypeRepository repo;
 
     @Override
-    public RoomTypeDto roomTypeToRoomTypeDtoDto(RoomType rt) {
+    public RoomTypeDto roomTypeToRoomTypeDto(RoomType rt) {
         return RoomTypeDto.builder().
                 id(rt.getId()).
                 type(rt.getType()).
@@ -38,7 +38,7 @@ public class RoomTypeServiceImpl implements RoomTypeService {
 
     @Override
     public List<RoomTypeDto> getAll() {
-        return repo.findAll().stream().map(this::roomTypeToRoomTypeDtoDto).toList();
+        return repo.findAll().stream().map(this::roomTypeToRoomTypeDto).toList();
     }
 
     @Override

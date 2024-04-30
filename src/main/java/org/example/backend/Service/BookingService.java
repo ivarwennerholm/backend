@@ -20,6 +20,8 @@ public interface BookingService {
 
     public void updateBooking (BookingDto b);
 
+    public void createAndAddBookingToDatabase (Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone);
+
     public boolean areDatesOverlapping(List<Date> searchDates, List<Date> bookingDates);
 
     public List<Date> createDateInterval(Date checkin, Date checkout);

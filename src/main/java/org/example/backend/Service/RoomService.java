@@ -9,7 +9,9 @@ public interface RoomService {
 
     public RoomDto roomToRoomDto(Room r);
 
+    public Room roomDtoToRoom(RoomDto room);
+
     public List<RoomDto> getAll();
 
-    Room roomDtoToRoom(RoomDto room);
+    public RoomDto getRoomById(long id);
 }
