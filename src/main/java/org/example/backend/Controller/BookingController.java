@@ -43,20 +43,20 @@ public class BookingController {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
         List<Date> seachedDates = bookingService.createDateInterval(checkinDate, checkoutDate);
-        List<AvailableBookingDto> availableBookings = new ArrayList<>();
+        List<AvailableBookingDto> allBookingsForRoom = new ArrayList<>();
         roomService.
                 getAll().
                 stream().
                 filter(rd -> rd.getRoomType().getMaxPerson() >= guests).
-                forEach(rd -> availableBookings.add(new AvailableBookingDto(rd, checkinDate, checkoutDate, guests, bookingService.getExtraBedsForBooking(rd, guests))));
+                forEach(rd -> allBookingsForRoom.add(new AvailableBookingDto(rd, checkinDate, checkoutDate, guests, bookingService.getExtraBedsForBooking(rd, guests))));
 
-        availableBookings.
+        List<AvailableBookingDto> availableBookingsForRoom = allBookingsForRoom.
                 stream().
-                filter(b -> !bookingService.areDatesOverlapping(seachedDates, bookingService.createDateInterval(b.getCheckinDate(), b.getCheckoutDate()))).
+                filter(b -> bookingService.isRoomAvailableOnDates(b.getRoom(), checkinDate, checkoutDate)).
                 toList();
 
 
-        model.addAttribute("list", availableBookings);
+        model.addAttribute("list", availableBookingsForRoom);
         return "showAvailableRooms";
     }
 

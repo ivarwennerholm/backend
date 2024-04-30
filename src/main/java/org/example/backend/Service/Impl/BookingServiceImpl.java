@@ -1,6 +1,5 @@
 package org.example.backend.Service.Impl;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.CustomerDto;
@@ -16,7 +15,6 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -139,19 +137,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public boolean areThereConflictingBookingsOnDates(Date checkin, Date checkout) {
-        return false;
-    }
-
-    @Override
-    public boolean areThereConflictingBookingsOnDates(Date checkin, Date checkout) {
+    public boolean isRoomAvailableOnDates(RoomDto room, Date checkin, Date checkout) {
+        long roomId = room.getId();
         List<Date> datesInterval = createDateInterval(checkin, checkout);
-//        List<BookingDto> conflictingBookings = getAll().
-//                stream().
-//                filter(b -> areDatesOverlapping(datesInterval, createDateInterval(b.getCheckinDate(), b.getCheckoutDate())).
-//                toList();
-//        return !conflictingBookings.isEmpty();
-        return true;
+        List<BookingDto> conflictingBookings = getAll().
+                stream().
+                filter(b -> b.getRoom().getId() == roomId).
+                filter(b -> areDatesOverlapping(datesInterval, createDateInterval(b.getCheckinDate(), b.getCheckoutDate()))).
+                toList();
+        return conflictingBookings.isEmpty();
     }
 
     @Override

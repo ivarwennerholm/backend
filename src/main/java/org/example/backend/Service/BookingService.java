@@ -28,7 +28,7 @@ public interface BookingService {
 
     public int getExtraBedsForBooking(RoomDto room, int guests);
 
-    public boolean areThereConflictingBookingsOnDates(Date checkin, Date checkout);
+    public boolean isRoomAvailableOnDates(RoomDto room, Date checkin, Date checkout);
 
     public Date convertStringToDate(String date) throws ParseException;
 }
