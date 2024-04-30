@@ -33,14 +33,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public String addCustomer(CustomerDto c) {
         customerRepo.save(customerDtoToCustomer(c));
-        return "added new customer";
+        Customer x = customerRepo.findByName(c.getName());
+        return "added new customer " + x.getName();
     }
 
     @Override
     public String deleteCustomerByName(String name) {
         Customer c = customerRepo.findByName(name);
         customerRepo.delete(c);
-        return "delete customer";
+        return "delete customer" + c.getName();
     }
 
     @Override
