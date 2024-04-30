@@ -16,6 +16,7 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -93,13 +94,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Date> createDateInterval(String checkin, String checkout) throws ParseException {
+    public List<Date> createDateInterval(Date checkin, Date checkout) {
         List<Date> interval = new ArrayList<>();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date checkinDate = new java.sql.Date(df.parse(checkin).getTime());
-        Date checkoutDate = new java.sql.Date(df.parse(checkout).getTime());
-        Date iterateDate = checkinDate;
-        while (!iterateDate.after(checkoutDate)) {
+        Date iterateDate = checkin;
+        while (!iterateDate.after(checkout)) {
             interval.add(iterateDate);
             Calendar c = Calendar.getInstance();
             c.setTime(iterateDate);
@@ -110,11 +108,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Long getNumberOfDaysBetweenTwoDates(String checkin, String checkout) throws ParseException {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date checkinDate = new java.sql.Date(df.parse(checkin).getTime());
-        Date checkoutDate = new java.sql.Date(df.parse(checkout).getTime());
-        long differenceMillis = checkoutDate.getTime() - checkinDate.getTime();
+    public Long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout) {
+        long differenceMillis = checkout.getTime() - checkin.getTime();
         return differenceMillis / (1000 * 60 * 60 * 24);
     }
 
@@ -141,5 +136,27 @@ public class BookingServiceImpl implements BookingService {
                     break;
         }
         return beds;
+    }
+
+    @Override
+    public boolean areThereConflictingBookingsOnDates(Date checkin, Date checkout) {
+        return false;
+    }
+
+    @Override
+    public boolean areThereConflictingBookingsOnDates(Date checkin, Date checkout) {
+        List<Date> datesInterval = createDateInterval(checkin, checkout);
+//        List<BookingDto> conflictingBookings = getAll().
+//                stream().
+//                filter(b -> areDatesOverlapping(datesInterval, createDateInterval(b.getCheckinDate(), b.getCheckoutDate())).
+//                toList();
+//        return !conflictingBookings.isEmpty();
+        return true;
+    }
+
+    @Override
+    public Date convertStringToDate(String date) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return new java.sql.Date(df.parse(date).getTime());
     }
 }

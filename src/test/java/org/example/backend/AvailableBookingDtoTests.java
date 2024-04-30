@@ -1,16 +1,11 @@
 package org.example.backend;
 
-import org.example.backend.Controller.BookingController;
 import org.example.backend.DTO.BookingDto;
-import org.example.backend.DTO.CustomerDto;
 import org.example.backend.DTO.RoomDto;
 import org.example.backend.DTO.RoomTypeDto;
 import org.example.backend.Model.Booking;
-import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
 import org.example.backend.Service.BookingService;
-import org.example.backend.Service.CustomerService;
-import org.example.backend.Service.Impl.BookingServiceImpl;
 import org.example.backend.Service.RoomService;
 import org.junit.jupiter.api.Test;
 
@@ -70,12 +65,12 @@ public class AvailableBookingDtoTests {
         }
 
         @Override
-        public List<Date> createDateInterval(String checkin, String checkout) {
+        public List<Date> createDateInterval(Date checkin, Date checkout) {
             return List.of();
         }
 
         @Override
-        public Long getNumberOfDaysBetweenTwoDates(String checkin, String checkout) {
+        public Long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout) {
             return 0L;
         }
 
@@ -83,15 +78,25 @@ public class AvailableBookingDtoTests {
         public int getExtraBedsForBooking(RoomDto room, int guests) {
             return 0;
         }
+
+        @Override
+        public boolean areThereConflictingBookingsOnDates(Date checkin, Date checkout) {
+            return false;
+        }
+
+        @Override
+        public Date convertStringToDate(String date) throws ParseException {
+            return null;
+        }
     };
 
     //BookingController bookingController = new BookingController(roomService, bookingService);
 
     @Test
     public void testTotallyOverlapping() throws ParseException {
-        String checkinDate = "2024-01-01";
-        String checkoutDate = "2024-01-10";
-        List<Date> searchDates = bookingService.createDateInterval(checkinDate, checkoutDate);
+        Date checkin = bookingService.convertStringToDate("2024-01-01");
+        Date checkout = bookingService.convertStringToDate("2024-01-10");
+        List<Date> searchDates = bookingService.createDateInterval(checkin, checkout);
         List<Date> bookingDates = searchDates;
         boolean result = bookingService.areDatesOverlapping(searchDates, bookingDates);
         assertTrue(result);
@@ -99,10 +104,10 @@ public class AvailableBookingDtoTests {
 
     @Test
     public void testPartiallyOverlapping1() throws ParseException {
-        String checkinDateSearch = "2024-01-01";
-        String checkoutDateSearch = "2024-01-10";
-        String checkinDateBooking = "2024-01-06";
-        String checkoutDateBooking = "2024-01-12";
+        Date checkinDateSearch = bookingService.convertStringToDate("2024-01-01");
+        Date checkoutDateSearch = bookingService.convertStringToDate("2024-01-10");
+        Date checkinDateBooking = bookingService.convertStringToDate("2024-01-06");
+        Date checkoutDateBooking = bookingService.convertStringToDate("2024-01-12");
         List<Date> searchDates = bookingService.createDateInterval(checkinDateSearch, checkoutDateSearch);
         List<Date> bookingDates = bookingService.createDateInterval(checkinDateBooking, checkoutDateBooking);
         boolean result = bookingService.areDatesOverlapping(searchDates, bookingDates);
@@ -111,10 +116,10 @@ public class AvailableBookingDtoTests {
 
     @Test
     public void testPartiallyOverlapping2() throws ParseException {
-        String checkinDateSearch = "2024-01-06";
-        String checkoutDateSearch = "2024-01-12";
-        String checkinDateBooking = "2024-01-01";
-        String checkoutDateBooking = "2024-01-10";
+        Date checkinDateSearch = bookingService.convertStringToDate("2024-01-06");
+        Date checkoutDateSearch = bookingService.convertStringToDate("2024-01-12");
+        Date checkinDateBooking = bookingService.convertStringToDate("2024-01-01");
+        Date checkoutDateBooking = bookingService.convertStringToDate("2024-01-10");
         List<Date> searchDates = bookingService.createDateInterval(checkinDateSearch, checkoutDateSearch);
         List<Date> bookingDates = bookingService.createDateInterval(checkinDateBooking, checkoutDateBooking);
         boolean result = bookingService.areDatesOverlapping(searchDates, bookingDates);
@@ -123,10 +128,10 @@ public class AvailableBookingDtoTests {
 
     @Test
     public void testSearchCheckinSameDayAsBookingCheckout() throws ParseException {
-        String checkinDateSearch = "2024-01-01";
-        String checkoutDateSearch = "2024-01-10";
-        String checkinDateBooking = "2024-01-10";
-        String checkoutDateBooking = "2024-01-12";
+        Date checkinDateSearch = bookingService.convertStringToDate("2024-01-01");
+        Date checkoutDateSearch = bookingService.convertStringToDate("2024-01-10");
+        Date checkinDateBooking = bookingService.convertStringToDate("2024-01-10");
+        Date checkoutDateBooking = bookingService.convertStringToDate("2024-01-12");
         List<Date> searchDates = bookingService.createDateInterval(checkinDateSearch, checkoutDateSearch);
         List<Date> bookingDates = bookingService.createDateInterval(checkinDateBooking, checkoutDateBooking);
         boolean result = bookingService.areDatesOverlapping(searchDates, bookingDates);
@@ -135,10 +140,10 @@ public class AvailableBookingDtoTests {
 
     @Test
     public void testBookingCheckoutSameDayAsSearchCheckin() throws ParseException {
-        String checkinDateSearch = "2024-01-12";
-        String checkoutDateSearch = "2024-01-14";
-        String checkinDateBooking = "2024-01-10";
-        String checkoutDateBooking = "2024-01-12";
+        Date checkinDateSearch = bookingService.convertStringToDate("2024-01-12");
+        Date checkoutDateSearch = bookingService.convertStringToDate("2024-01-14");
+        Date checkinDateBooking = bookingService.convertStringToDate("2024-01-10");
+        Date checkoutDateBooking = bookingService.convertStringToDate("2024-01-12");
         List<Date> searchDates = bookingService.createDateInterval(checkinDateSearch, checkoutDateSearch);
         List<Date> bookingDates = bookingService.createDateInterval(checkinDateBooking, checkoutDateBooking);
         boolean result = bookingService.areDatesOverlapping(searchDates, bookingDates);

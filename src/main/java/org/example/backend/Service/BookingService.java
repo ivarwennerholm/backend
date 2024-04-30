@@ -22,9 +22,13 @@ public interface BookingService {
 
     public boolean areDatesOverlapping(List<Date> searchDates, List<Date> bookingDates);
 
-    public List<Date> createDateInterval(String checkin, String checkout) throws ParseException;
+    public List<Date> createDateInterval(Date checkin, Date checkout);
 
-    public Long getNumberOfDaysBetweenTwoDates(String checkin, String checkout) throws ParseException;
+    public Long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout);
 
     public int getExtraBedsForBooking(RoomDto room, int guests);
+
+    public boolean areThereConflictingBookingsOnDates(Date checkin, Date checkout);
+
+    public Date convertStringToDate(String date) throws ParseException;
 }

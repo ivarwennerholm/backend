@@ -36,18 +36,25 @@ public class BookingController {
         model.addAttribute("guests", guests);
         model.addAttribute("checkin", checkin);
         model.addAttribute("checkout", checkout);
-        long differenceDays = bookingService.getNumberOfDaysBetweenTwoDates(checkin, checkout);
+        Date checkinDate = bookingService.convertStringToDate(checkin);
+        Date checkoutDate = bookingService.convertStringToDate(checkout);
+        long differenceDays = bookingService.getNumberOfDaysBetweenTwoDates(checkinDate, checkoutDate);
         model.addAttribute("nights", differenceDays);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date checkinDate = new java.sql.Date(df.parse(checkin).getTime());
-        Date checkoutDate = new java.sql.Date(df.parse(checkout).getTime());
+
+        List<Date> seachedDates = bookingService.createDateInterval(checkinDate, checkoutDate);
         List<AvailableBookingDto> availableBookings = new ArrayList<>();
         roomService.
                 getAll().
                 stream().
                 filter(rd -> rd.getRoomType().getMaxPerson() >= guests).
-                //filter(are dates requested overlapping with existing reservation?).
                 forEach(rd -> availableBookings.add(new AvailableBookingDto(rd, checkinDate, checkoutDate, guests, bookingService.getExtraBedsForBooking(rd, guests))));
+
+        availableBookings.
+                stream().
+                filter(b -> !bookingService.areDatesOverlapping(seachedDates, bookingService.createDateInterval(b.getCheckinDate(), b.getCheckoutDate()))).
+                toList();
+
 
         model.addAttribute("list", availableBookings);
         return "showAvailableRooms";
