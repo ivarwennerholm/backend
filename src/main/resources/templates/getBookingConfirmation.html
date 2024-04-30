@@ -3,7 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Booking Confirmation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .custom-width-25 {
+            width: 25%;
+            margin: 0 auto;
+        }
+    </style>
 </head>
+<body>
+<div class="container text-center m-5">
+    <div class="mt-2 mb-4">
+        <img src="/logo.png">
+    </div>
+    <div class="my-3">
+        <h4>Booking complete! ✌️</h4>
+    </div>
+    <div class="rounded border border-dark custom-width-25 text-center p-3">
+        <p th:text="'Name: ' + ${name}"></p>
+        <p th:text="'Phone: ' + ${phone}"></p>
+        <p th:text="'Room number: ' + ${roomnumber}"></p>
+        <p th:text="'Checkin: ' + ${checkin}"></p>
+        <p th:text="'Checkout: ' + ${checkout}"></p>
+        <p th:text="'Guests: ' + ${guests}"></p>
+        <p th:text="'Extra beds: ' + ${extrabeds}"></p>
+    </div>
+</div>
+<!-- FOR TESTING ONLY
 <div style="border:1px solid black">
     <p><b>For testing</b></p>
     <p>document: getBookingConfirmation.html</p>
@@ -15,7 +42,6 @@
     <p th:text="'guests: ' + ${guests}"></p>
     <p th:text="'extrabeds: ' + ${extrabeds}"></p>
 </div>
-<body>
-<p><b>Booking complete! ✌️</b></p>
+-->
 </body>
 </html>
