@@ -35,8 +35,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto bookingToBookingDto(Booking b) {
-        RoomDto roomDto = roomService.roomToRoomDto(roomRepository.getReferenceById(b.getRoom().getId()));
-        CustomerDto customerDto = customerService.customerToCustomerDto(customerRepository.getReferenceById(b.getCustomer().getId()));
+        RoomDto roomDto = roomService.roomToRoomDto(roomRepository.findById(b.getRoom().getId()).orElse(null));
+        CustomerDto customerDto = customerService.customerToCustomerDto(customerRepository.findById(b.getCustomer().getId()).orElse(null));
         return BookingDto.builder().
                 id(b.getId()).
                 checkinDate(b.getCheckinDate()).

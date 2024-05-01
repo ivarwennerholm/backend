@@ -31,9 +31,7 @@ public class BookingController {
 
     @RequestMapping("all")
     public String allBookings(Model model){
-        System.out.println("here");
         allBookings = bookService.getAll();
-        System.out.println(allBookings);
         model.addAttribute("allBookings",allBookings);
         return "allBooking.html";
     }
