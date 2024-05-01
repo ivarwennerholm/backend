@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http:///www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Input User details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .center-align {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container text-center m-5">
+    <div class="mt-2 mb-4">
+        <img src="/logo.png">
+    </div>
+    <div class="my-3">
+        <h4>Please fill in your details 👇 </h4>
+    </div>
+    <form method="post" th:action="@{getBookingConfirmation}">
+        <div class="my-1 center-align"> <!-- Apply center-align class -->
+            <div>
+                <label for="name">Name:</label><br>
+                <input type="text"
+                       onchange="valAllFieldsAndUpdateConfirmBtn();"
+                       onpaste="this.onchange();"
+                       oninput="this.onchange();"
+                       class="form-control"
+                       id="name"
+                       name="name">
+                <br>
+            </div>
+        </div>
+        <div class="my-1 center-align"> <!-- Apply center-align class -->
+            <div>
+                <label for="phone">Phone:</label><br>
+                <input type="text"
+                       onchange="valAllFieldsAndUpdateConfirmBtn();"
+                       onpaste="this.onchange();"
+                       oninput="this.onchange();"
+                       class="form-control"
+                       id="phone"
+                       name="phone">
+                <br>
+            </div>
+        </div>
+        <input type="hidden" id="roomid" name="roomid" th:value="${roomid}">
+        <input type="hidden" id="checkin" name="checkin" th:value="${checkin}">
+        <input type="hidden" id="checkout" name="checkout" th:value="${checkout}">
+        <input type="hidden" id="guests" name="guests" th:value="${guests}">
+        <input type="hidden" id="extrabeds" name="extrabeds" th:value="${extrabeds}">
+        <div class="mt-3">
+            <input id="confirmButton" type="submit" value="Book" disabled>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" th:src="@{/js/inputUserDetails.js}"></script>
+<!-- FOR TESTING ONLY
+<div style="border:1px solid black">
+    <p><b>For testing</b></p>
+    <p>document: inputUserDetails.html</p>
+    <p th:text="'room-id: ' + ${roomid}"></p>
+    <p th:text="'checkin: ' + ${checkin}"></p>
+    <p th:text="'checkout: ' + ${checkout}"></p>
+    <p th:text="'guests: ' + ${guests}"></p>
+    <p th:text="'extrabeds: ' + ${extrabeds}"></p>
+</div>
+-->
+</body>
+</html>

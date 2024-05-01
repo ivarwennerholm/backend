@@ -15,28 +15,30 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     private final RoomTypeRepository repo;
 
     @Override
-    public RoomTypeDto roomTypeToRoomTypeDtoDto(RoomType rt) {
-        return RoomTypeDto.builder().id(rt.getId())
-                .type(rt.getType())
-                .maxExtraBed(rt.getMaxExtraBed())
-                .maxPerson(rt.getMaxPerson())
-                .pricePerNight(rt.getPricePerNight())
-                .build();
+    public RoomTypeDto roomTypeToRoomTypeDto(RoomType rt) {
+        return RoomTypeDto.builder().
+                id(rt.getId()).
+                type(rt.getType()).
+                maxExtraBed(rt.getMaxExtraBed()).
+                maxPerson(rt.getMaxPerson()).
+                pricePerNight(rt.getPricePerNight()).
+                build();
     }
 
     @Override
     public RoomType roomTypeDtoToRoomType(RoomTypeDto rtd) {
-        return RoomType.builder().id(rtd.getId())
-                .type(rtd.getType())
-                .maxExtraBed(rtd.getMaxExtraBed())
-                .maxPerson(rtd.getMaxPerson())
-                .pricePerNight(rtd.getPricePerNight())
-                .build();
+        return RoomType.builder().
+                id(rtd.getId()).
+                type(rtd.getType()).
+                maxExtraBed(rtd.getMaxExtraBed()).
+                maxPerson(rtd.getMaxPerson()).
+                pricePerNight(rtd.getPricePerNight()).
+                build();
     }
 
     @Override
     public List<RoomTypeDto> getAll() {
-        return repo.findAll().stream().map(this::roomTypeToRoomTypeDtoDto).toList();
+        return repo.findAll().stream().map(this::roomTypeToRoomTypeDto).toList();
     }
 
     @Override

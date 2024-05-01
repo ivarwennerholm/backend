@@ -7,12 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/*
-enum Type {
-    SINGLE, DOUBLE, LARGE_DOUBLE
-}
-*/
-
 @Entity
 @Data
 @AllArgsConstructor

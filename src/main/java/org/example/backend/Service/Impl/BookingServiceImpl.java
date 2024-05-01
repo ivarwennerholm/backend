@@ -1,6 +1,5 @@
 package org.example.backend.Service.Impl;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.CustomerDto;
@@ -16,10 +15,12 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -64,7 +65,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getAll() {
-//        System.out.println(bookingRepository.findAll().stream().toList());
+        System.out.println(bookingRepository.findAll().stream().toList());
         return bookingRepository.findAll().stream().map(this::bookingToBookingDto).toList();
     }
 
@@ -73,15 +74,11 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.deleteById(bd.getId());
     }
 
-
-
     @Override
     public void updateBooking(BookingDto bd) {
         bookingRepository.deleteById(bd.getId());
         bookingRepository.save(bookindDtoToBooking(bd));
     }
-
-
 
     @Override
     public void deleteBookingById(Long id) {
@@ -105,4 +102,89 @@ public class BookingServiceImpl implements BookingService {
         }
         bookingRepository.save(b);
     }
+
+    @Override
+    public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
+        customerService.addCustomerWithoutID(name, phone);
+        Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
+        Room room = roomRepository.findById(roomId).orElse(null);
+        Booking booking = new Booking(checkin, checkout, guests, extraBeds, customer, room);
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public boolean areDatesOverlapping(List<Date> searchDates, List<Date> bookingDates) {
+        boolean output = false;
+        if (searchDates.getFirst().equals(bookingDates.getLast()) || searchDates.getLast().equals(bookingDates.getFirst()))
+            return output;
+        for (Date date : searchDates) {
+            if (bookingDates.contains(date))
+                output = true;
+        }
+        return output;
+    }
+
+    @Override
+    public List<Date> createDateInterval(Date checkin, Date checkout) {
+        List<Date> interval = new ArrayList<>();
+        Date iterateDate = checkin;
+        while (!iterateDate.after(checkout)) {
+            interval.add(iterateDate);
+            Calendar c = Calendar.getInstance();
+            c.setTime(iterateDate);
+            c.add(Calendar.DATE, 1);
+            iterateDate = new java.sql.Date(c.getTimeInMillis());
+        }
+        return interval;
+    }
+
+    @Override
+    public Long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout) {
+        long differenceMillis = checkout.getTime() - checkin.getTime();
+        return differenceMillis / (1000 * 60 * 60 * 24);
+    }
+
+    @Override
+    public int getExtraBedsForBooking(RoomDto room, int guests) {
+        int beds = 0;
+        switch (room.getRoomType().getType()) {
+            case "single":
+                break;
+            case "double":
+                if (guests == 3) {
+                    beds = 1;
+                    break;
+                } else
+                    break;
+            case "large_double":
+                if (guests == 4) {
+                    beds = 2;
+                    break;
+                } else if (guests == 3) {
+                    beds = 1;
+                    break;
+                } else
+                    break;
+        }
+        return beds;
+    }
+
+    @Override
+    public boolean isRoomAvailableOnDates(RoomDto room, Date checkin, Date checkout) {
+        long roomId = room.getId();
+        List<Date> datesInterval = createDateInterval(checkin, checkout);
+        List<BookingDto> conflictingBookings = getAll().
+                stream().
+                filter(b -> b.getRoom().getId() == roomId).
+                filter(b -> areDatesOverlapping(datesInterval, createDateInterval(b.getCheckinDate(), b.getCheckoutDate()))).
+                toList();
+        return conflictingBookings.isEmpty();
+    }
+
+    @Override
+    public Date convertStringToDate(String date) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return new java.sql.Date(df.parse(date).getTime());
+    }
+
 }

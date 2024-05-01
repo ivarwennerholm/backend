@@ -6,7 +6,7 @@ import org.example.backend.Model.RoomType;
 import java.util.List;
 
 public interface RoomTypeService {
-    public RoomTypeDto roomTypeToRoomTypeDtoDto(RoomType rt);
+    public RoomTypeDto roomTypeToRoomTypeDto(RoomType rt);
 
     public RoomType roomTypeDtoToRoomType(RoomTypeDto rtd);
 

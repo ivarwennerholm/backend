@@ -1,8 +1,8 @@
 package org.example.backend.Controller;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
+import org.example.backend.DTO.AvailableBookingDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
@@ -10,6 +10,7 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Service.BookingService;
+import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +20,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-//@RestController
 @Controller
 @RequestMapping("bookings")
 @RequiredArgsConstructor
 public class BookingController {
 
+    private final RoomService roomService;
     private final BookingService bookService;
     private List<BookingDto> allBookings = new ArrayList<>();
 
@@ -72,30 +72,82 @@ public class BookingController {
         return updateForm(id,model);
     }
 
-//    private final BookingRepository repo;
-//    private final RoomRepository rRepo;
-//    private final CustomerRepository cRepo;
-//
-//    public BookingController(BookingRepository repo, RoomRepository rRepo, CustomerRepository cRepo) {
-//        this.repo = repo;
-//        this.rRepo = rRepo;
-//        this.cRepo = cRepo;
-//    }
-//
-//    @RequestMapping("getAll")
-//    public List<Booking> getAllBookings(){
-//        return repo.findAll();
-//    }
-//
-//    @RequestMapping("add")
-//    public String addBooking(@RequestParam String checkin, @RequestParam String checkout, @RequestParam int guests, @RequestParam int extrabed,  @RequestParam Long custid, @RequestParam Long roomid) throws ParseException {
-//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-//        Date checkinDate = new java.sql.Date(df.parse(checkin).getTime());
-//        Date checkoutDate = new java.sql.Date(df.parse(checkout).getTime());
-//        Customer cust = cRepo.findById(custid).get();
-//        Room room = rRepo.findById(roomid).get();
-//        Booking booking = new Booking(checkinDate, checkoutDate, guests, extrabed, cust, room);
-//        repo.save(booking);
-//        return "Booking (" + checkin + " - " + checkout + ") added successfully";
-//    }
+    @RequestMapping("search")
+    public String searchBooking() {
+        return "searchBooking";
+    }
+
+    @PostMapping("getAvailableRooms")
+    public String getAvailableRooms(@RequestParam int guests,
+                                    @RequestParam String checkin,
+                                    @RequestParam String checkout,
+                                    Model model) throws ParseException {
+        model.addAttribute("guests", guests);
+        model.addAttribute("checkin", checkin);
+        model.addAttribute("checkout", checkout);
+        Date checkinDate = bookService.convertStringToDate(checkin);
+        Date checkoutDate = bookService.convertStringToDate(checkout);
+        long differenceDays = bookService.getNumberOfDaysBetweenTwoDates(checkinDate, checkoutDate);
+        model.addAttribute("nights", differenceDays);
+        List<AvailableBookingDto> allBookingsForRoom = new ArrayList<>();
+        roomService.
+                getAll().
+                stream().
+                filter(rd -> rd.getRoomType().getMaxPerson() >= guests).
+                forEach(rd -> allBookingsForRoom.add(new AvailableBookingDto(rd, checkinDate, checkoutDate, guests, bookService.getExtraBedsForBooking(rd, guests))));
+
+        List<AvailableBookingDto> availableBookingsForRoom = allBookingsForRoom.
+                stream().
+                filter(b -> bookService.isRoomAvailableOnDates(b.getRoom(), checkinDate, checkoutDate)).
+                toList();
+
+        model.addAttribute("list", availableBookingsForRoom);
+        return "getAvailableRooms";
+    }
+
+    @PostMapping("inputUserDetails")
+    public String inputUserDetails(@RequestParam String roomid,
+                                   @RequestParam String checkin,
+                                   @RequestParam String checkout,
+                                   @RequestParam String guests,
+                                   @RequestParam String extrabeds,
+                                   Model model) {
+        model.addAttribute("roomid", roomid);
+        model.addAttribute("checkin", checkin);
+        model.addAttribute("checkout", checkout);
+        model.addAttribute("guests", guests);
+        model.addAttribute("extrabeds", extrabeds);
+        return "inputUserDetails";
+    }
+
+    @PostMapping("getBookingConfirmation")
+    public String getBookingConfirmation(@RequestParam String roomid,
+                                         @RequestParam String checkin,
+                                         @RequestParam String checkout,
+                                         @RequestParam String guests,
+                                         @RequestParam String extrabeds,
+                                         @RequestParam String name,
+                                         @RequestParam String phone,
+                                         Model model) throws ParseException {
+
+        model.addAttribute("checkin", checkin);
+        model.addAttribute("checkout", checkout);
+        model.addAttribute("guests", guests);
+        model.addAttribute("extrabeds", extrabeds);
+        model.addAttribute("name", name);
+        model.addAttribute("phone", phone);
+
+        // Add booking to database
+        Date checkinDate = bookService.convertStringToDate(checkin);
+        Date checkoutDate = bookService.convertStringToDate(checkout);
+        int guestsAmt = Integer.parseInt(guests);
+        int extrabedsAmt = Integer.parseInt(extrabeds);
+        long roomId = Long.parseLong(roomid);
+        int roomNumber = roomService.getRoomById(roomId).getRoomNumber();
+        model.addAttribute("roomnumber", roomNumber);
+        bookService.createAndAddBookingToDatabase(checkinDate, checkoutDate, guestsAmt, extrabedsAmt, roomNumber, name, phone);
+        return "getBookingConfirmation";
+    }
+
+
 }

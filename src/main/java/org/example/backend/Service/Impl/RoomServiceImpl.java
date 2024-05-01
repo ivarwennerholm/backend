@@ -27,6 +27,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public RoomDto getRoomById(long id) {
+        return roomToRoomDto(roomRepository.findById(id).orElse(null));
+
+    }
+
+    @Override
     public Room roomDtoToRoom(RoomDto rd) {
         RoomType roomType = roomTypeService.roomTypeDtoToRoomType(rd.getRoomType());
         return Room.builder().
@@ -38,7 +44,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomDto roomToRoomDto(Room r){
-        RoomTypeDto roomTypeDto = roomTypeService.roomTypeToRoomTypeDtoDto(roomTypeRepository.getReferenceById(r.getId()));
+        RoomTypeDto roomTypeDto = roomTypeService.roomTypeToRoomTypeDto(roomTypeRepository.findById(r.getId()).orElse(null));
         return RoomDto.builder().
                 id(r.getId()).
                 roomNumber(r.getRoomNumber()).

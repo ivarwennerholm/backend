@@ -38,6 +38,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public void addCustomerWithoutID(String name, String phone) {
+        Customer customer = Customer.builder().name(name).phone(phone).build();
+        customerRepo.save(customer);
+    }
+
+    @Override
+    public Customer getCustomerByNameAndPhone(String name, String phone) {
+        return customerRepo.getCustomerByNameAndPhone(name, phone);
+    }
+
+    @Override
     public String deleteCustomerByName(String name) {
         Customer c = customerRepo.findByName(name);
         customerRepo.delete(c);

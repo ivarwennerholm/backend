@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,4 +24,5 @@ public class BookingDto {
     private int extraBedAmt;
     private CustomerDto customer;
     private RoomDto room;
+
 }
