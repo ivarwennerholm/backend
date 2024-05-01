@@ -168,9 +168,9 @@ public class AvailableBookingDtoTests {
 
     @Test
     public void testGetExtraBedsForBooking() {
-        RoomDto sing = new RoomDto(1L, 101, new RoomTypeDto(1L, "single", 0, 2, 1500));
-        RoomDto doub = new RoomDto(2L, 102, new RoomTypeDto(2L, "double", 1, 3, 2500));
-        RoomDto ldoub = new RoomDto(3L, 103, new RoomTypeDto(3L, "large_double", 2, 4, 3000));
+        RoomDto sing = new RoomDto(1L, 101, new RoomTypeDto(1L, "Single", 0, 2, 1500));
+        RoomDto doub = new RoomDto(2L, 102, new RoomTypeDto(2L, "Double", 1, 3, 2500));
+        RoomDto ldoub = new RoomDto(3L, 103, new RoomTypeDto(3L, "Large double", 2, 4, 3000));
         assertEquals(bookingService.getExtraBedsForBooking(sing, 1), 0);
         assertEquals(bookingService.getExtraBedsForBooking(doub, 1), 0);
         assertEquals(bookingService.getExtraBedsForBooking(doub, 2), 0);
