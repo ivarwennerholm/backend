@@ -147,15 +147,15 @@ public class BookingServiceImpl implements BookingService {
     public int getExtraBedsForBooking(RoomDto room, int guests) {
         int beds = 0;
         switch (room.getRoomType().getType()) {
-            case "single":
+            case "Single":
                 break;
-            case "double":
+            case "Double":
                 if (guests == 3) {
                     beds = 1;
                     break;
                 } else
                     break;
-            case "large_double":
+            case "Large double":
                 if (guests == 4) {
                     beds = 2;
                     break;
