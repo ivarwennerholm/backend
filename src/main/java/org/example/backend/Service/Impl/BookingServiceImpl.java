@@ -84,8 +84,10 @@ public class BookingServiceImpl implements BookingService {
 
 
     @Override
-    public void deleteBookingById(Long id) {
-        bookingRepository.deleteById(id);
+    public String deleteBookingById(Long id) {
+        Booking b = bookingRepository.findById(id).get();
+        bookingRepository.delete(b);
+        return "delete customer"+b.getCustomer().getName();
     }
 
     @Override

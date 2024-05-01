@@ -19,7 +19,7 @@ public interface BookingService {
 
     public void updateBooking (BookingDto b);
 
-    public void deleteBookingById(Long id);
+    public String deleteBookingById(Long id);
 
     public BookingDto findBookingById(Long id);
 
