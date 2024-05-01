@@ -38,7 +38,7 @@ public class BookingController {
 
     @RequestMapping("delete/{id}")
     public String deleteBookings(@PathVariable Long id, Model model){
-        bookService.deleteBookingById(id);
+        String s = bookService.deleteBookingById(id);
         return allBookings(model);
     }
 
