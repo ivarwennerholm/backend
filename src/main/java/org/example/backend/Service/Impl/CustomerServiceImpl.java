@@ -7,7 +7,6 @@ import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Service.CustomerService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

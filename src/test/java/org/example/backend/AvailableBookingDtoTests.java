@@ -55,13 +55,21 @@ public class AvailableBookingDtoTests {
         }
 
         @Override
-        public void deleteBooking(BookingDto b) {
+        public void deleteBooking(BookingDto b) {}
 
+        @Override
+        public void updateBooking(BookingDto b) {}
+
+        @Override
+        public void deleteBookingById(Long id) {}
+
+        @Override
+        public BookingDto findBookingById(Long id) {
+            return null;
         }
 
         @Override
-        public void updateBooking(BookingDto b) {
-
+        public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
         }
 
         @Override
@@ -99,7 +107,7 @@ public class AvailableBookingDtoTests {
         }
     };
 
-    /* TEST NOT WORKING BECAUSE OF SERVICE METHODS @Override ABOVE
+    /* TODO: TEST NOT WORKING BECAUSE OF SERVICE METHODS @Override ABOVE
     @Test
     public void testTotallyOverlapping() throws ParseException {
         Date checkin = bookingService.convertStringToDate("2024-01-01");

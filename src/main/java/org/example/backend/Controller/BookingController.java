@@ -3,12 +3,6 @@ package org.example.backend.Controller;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.AvailableBookingDto;
-import org.example.backend.Model.Booking;
-import org.example.backend.Model.Customer;
-import org.example.backend.Model.Room;
-import org.example.backend.Repository.BookingRepository;
-import org.example.backend.Repository.CustomerRepository;
-import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Service.BookingService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Controller;
@@ -16,9 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

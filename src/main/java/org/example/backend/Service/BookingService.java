@@ -4,22 +4,9 @@ import org.example.backend.DTO.BookingDto;
 import org.example.backend.Model.Booking;
 
 import java.sql.Date;
-
 import java.util.List;
-
-import org.example.backend.DTO.BookingDto;
-import org.example.backend.Model.Booking;
-
 import java.text.ParseException;
-import java.util.List;
-
-
-import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.RoomDto;
-import org.example.backend.Model.Booking;
-
-import java.text.ParseException;
-import java.util.List;
 
 public interface BookingService {
 
