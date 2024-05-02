@@ -116,7 +116,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public boolean areDatesOverlapping(List<Date> searchDates, List<Date> bookingDates) {
         boolean output = false;
-        if (searchDates.getFirst().equals(bookingDates.getLast()) || searchDates.getLast().equals(bookingDates.getFirst()))
+        if (searchDates.get(0).equals(bookingDates.get(bookingDates.size() -1)) || searchDates.get(searchDates.size() - 1).equals(bookingDates.get(0)))
             return output;
         for (Date date : searchDates) {
             if (bookingDates.contains(date))
