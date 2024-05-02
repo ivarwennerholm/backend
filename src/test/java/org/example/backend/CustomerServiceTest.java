@@ -1,7 +1,10 @@
 package org.example.backend;
 
 import org.example.backend.DTO.CustomerDto;
+import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
+import org.example.backend.Model.Room;
+import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Service.Impl.CustomerServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -13,12 +16,16 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +36,8 @@ public class CustomerServiceTest {
 
     @InjectMocks
     private CustomerServiceImpl cusService;
+
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @Test
     public void customerDtoToCustomerTest(){
@@ -90,12 +99,27 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void deleteCustomerByIdTest(){
+    public void deleteCustomerByIdTest() throws ParseException {
+        Booking b1 = Booking.builder()
+                .id(1L)
+                .checkinDate(new java.sql.Date(df.parse("2024-06-01").getTime()))
+                .checkoutDate(new java.sql.Date(df.parse("2024-06-07").getTime()))
+                .guestAmt(1)
+                .extraBedAmt(0)
+                .customer(new Customer(1L,"Peter C", "+0722222",null))
+                .room(new Room(1L,2099, new RoomType(1L, "single", 0, 1,500)))
+                .build();
+
         Customer c = Customer.builder().id(1L).name("Venus P").phone("+0711111").bookingList(new ArrayList<>()).build();
+        Customer c1 = Customer.builder().id(2L).name("Peter C").phone("+0722222").bookingList(new ArrayList<>(Arrays.asList(b1))).build();
+
 
         when(cusRepo.findById(1L)).thenReturn(Optional.of(c));
+        when(cusRepo.findById(2L)).thenReturn(Optional.of(c1));
 
+        Exception ex = assertThrows(RuntimeException.class,() -> cusService.deleteCustomerById(2L));
         Assertions.assertTrue(cusService.deleteCustomerById(1L).equals("delete customer"));
+        Assertions.assertEquals("This customer has existing booking(s)",ex.getMessage());
     }
 
     @Test
