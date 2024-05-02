@@ -66,4 +66,15 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepo.save(c);
         return "update customer";
     }
+
+    @Override
+    public String updateForm(CustomerDto customerDto) {
+        customerRepo.save(customerDtoToCustomer(customerDto));
+        return "updated customer";
+    }
+
+    @Override
+    public Customer getCustomerById(Long id) {
+        return null;
+    }
 }

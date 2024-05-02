@@ -1,11 +1,13 @@
 package org.example.backend.Controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.CustomerDto;
+import org.example.backend.Model.Customer;
 import org.example.backend.Service.CustomerService;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,23 +30,85 @@ public class CustomerController {
         return "allCustomers.html";
     }
 
+
+    /*
     @PostMapping("add")
-    public String addCustomer(@RequestParam String name,
-                                 @RequestParam String phone,
+    public String addCustomer(@Valid @RequestBody CustomerDto customerDto,
+                              BindingResult bindingResult,
+                              Model model) {
+        // Check if there are validation errors
+        if (bindingResult.hasErrors()) {
+            // If there are validation errors, return to the form with error messages
+            return "Error"; // Return to the form page with errors
+        } else {
+            // If there are no validation errors, proceed with adding the customer
+            cusService.addCustomer(customerDto);
+            return getAllCustomers(model); // Return to the page showing all customers
+        }
+    }
+     */
+
+    /*
+    @PostMapping("add1")
+    public String addCustomer2(@Valid @RequestParam String name,
+                              @Valid @RequestParam String phone,
                                  Model model){
         cusService.addCustomer(new CustomerDto(name,phone));
         return getAllCustomers(model);
     }
+     */
+
+    @PostMapping("add")
+    public String addCustomer(@Valid Customer customer, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "addNewCustomer.html";
+        }
+        cusService.addCustomer(new CustomerDto(customer.getName(),customer.getPhone()));
+        return getAllCustomers(model);
+    }
 
     @RequestMapping("registerForm")
-    public String registerForm(){
+    public String registerForm(Model model){
+        model.addAttribute("customer", new Customer());
         return "addNewCustomer.html";
     }
 
-    @RequestMapping("delete/{id}")
+    @RequestMapping(value = "delete/{id}")
     public String deleteCustomer(@PathVariable Long id, Model model){
         cusService.deleteCustomerById(id);
         return getAllCustomers(model);
+    }
+
+    /*
+    @PostMapping("updateForm/{id}")
+    public String updateForm(@Valid Customer customer, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "updateCustomer.html";
+        }
+        CustomerDto customer = cusService.findCustomerById(customer.getId());
+        model.addAttribute("customer", customer);
+        return "updateCustomer.html";
+    }
+     */
+
+    @PostMapping("updateForm7/{id}")
+    public String updateForm7(@Valid Customer customer, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "updateCustomer.html";
+        }
+        cusService.updateForm(new CustomerDto(customer.getName(),customer.getPhone()));
+        return getAllCustomers(model);
+        //CustomerDto customer = cusService.findCustomerById(id);
+        //model.addAttribute("customer", customer);
+        //return getAllCustomers(model);
+    }
+
+    @RequestMapping("updateForm3/{id}")
+    public String updateForm3(@PathVariable Long id,
+                             Model model){
+        CustomerDto customer = cusService.findCustomerById(id);
+        model.addAttribute("customer", customer);
+        return "updateCustomer.html";
     }
 
     @RequestMapping("updateForm/{id}")
@@ -55,12 +119,14 @@ public class CustomerController {
         return "updateCustomer.html";
     }
 
-    @PostMapping("update/{id}")
-    public String updateCustomer(@PathVariable Long id,
-                                 @RequestParam(required = false) String newName,
-                                 @RequestParam(required = false) String newPhone,
-                                 Model model){
-        cusService.updateCustomer(id,newName,newPhone);
+    @PostMapping("update/")
+    public String updateCustomer(@Valid Customer customer, BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("customer", customer);
+            model.addAttribute("id", customer.getId());
+            return "updateCustomer.html";
+        }
+        cusService.updateCustomer(customer.getId(), customer.getName(), customer.getPhone());
         return getAllCustomers(model);
     }
 

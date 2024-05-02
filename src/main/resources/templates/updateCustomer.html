@@ -1,32 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Update Customer</title>
 </head>
 <body>
 <h2>Update Customer</h2>
-<form action="#" th:action="@{/customers/update/{id}(id=${customer.id})}" method="post">
+<form action="#" th:action="@{/customers/update/(id=${id})}" th:object="${customer}" method="post">
+    <input type="hidden" th:if="${customer != null}" th:name="id" th:value="${customer.id}"
     <table>
         <tr>
             <th>Guest</th>
-            <th>Old</th>
-            <th>New</th>
+            <th>Client details</th>
         </tr>
         <p th:text="'Guest ID: ' + ${customer.id}"></p>
         <tr>
             <td>Name</td>
-            <td th:text="${customer.name}">/td>
-            <td><input type="text" name="newName"></td>
+            <td><input type="text" th:field="*{name}" /></td>
+            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
         </tr>
         <tr>
             <td>Phone</td>
-            <td th:text="${customer.phone}"></td>
-            <td><input type="text" name="newPhone"></td>
+            <td><input type="text" th:field="*{phone}" /></td>
+            <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</td>
         </tr>
     </table>
     <br><br>
-    <input type="submit" value="Update">
+    <input type="submit">
 </form>
 </body>
 </html>
