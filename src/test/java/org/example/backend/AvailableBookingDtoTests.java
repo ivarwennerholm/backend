@@ -61,7 +61,9 @@ public class AvailableBookingDtoTests {
         public void updateBooking(BookingDto b) {}
 
         @Override
-        public void deleteBookingById(Long id) {}
+        public String deleteBookingById(Long id) {
+            return "";
+        }
 
         @Override
         public BookingDto findBookingById(Long id) {

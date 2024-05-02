@@ -23,11 +23,12 @@ public class Customer {
     private Long id;
     @NotEmpty(message = "Name is mandatory")
     @Size(min = 2, message = "Type a name that is at least 2 characters")
-    @Pattern(regexp = "^[A-Öa-ö]*$", message = "Only letters for name")
+    @Pattern(regexp = "^[A-Za-zÅÄÖåäö\\s]*$", message = "Only letters and whitespace for name")
+//    @Pattern(regexp = "^[A-Öa-ö]*$", message = "Only letters for name")
     private String name;
     @NotEmpty(message = "Telephone number is mandatory")
     @Size(min = 5, max = 16, message = "You must type a telephone number of at least 5 but not more than 16 digits")
-    @Pattern(regexp = "^\\d{1,5}(?:-\\d{3,11})?$", message = "Telephone numbers need to be of the format xxx-xxx")
+    @Pattern(regexp = "^[\\d+-]*$", message = "Telephone numbers can only contain digits and hyphens")
     private String phone;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
