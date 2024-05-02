@@ -25,4 +25,8 @@ public interface CustomerService {
     public CustomerDto findCustomerById(Long id);
 
     public String updateCustomer(Long id, String name, String phone);
+
+    public String updateForm(CustomerDto customerDto);
+
+    Customer getCustomerById(Long id);
 }
