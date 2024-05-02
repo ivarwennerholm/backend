@@ -29,6 +29,7 @@
             <td><a th:href="@{/customers/delete/{id}(id=${c.id})}">Delete</a></td>
         </tr>
     </table>
+    <p th:unless="${#strings.isEmpty(error)}" th:text="${error}"></p>
     <br><br>
     <div>
         <a th:href="@{/customers/registerForm}">Add</a>

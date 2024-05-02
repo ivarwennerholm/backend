@@ -2,6 +2,7 @@ package org.example.backend.Service.Impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.CustomerDto;
+import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Service.CustomerService;
@@ -57,7 +58,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public String deleteCustomerById(Long id) {
         Customer c = customerRepo.findById(id).get();
-        customerRepo.delete(c);
+        List<Booking> bList = c.getBookingList();
+        if (bList.size()==0){
+            customerRepo.delete(c);
+        } else {
+            throw new RuntimeException("This customer has existing booking(s)");
+        }
         return "delete customer";
     }
 
