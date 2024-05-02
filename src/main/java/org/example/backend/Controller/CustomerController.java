@@ -76,6 +76,7 @@ public class CustomerController {
     public String deleteCustomer(@PathVariable Long id, Model model){
         try{
             cusService.deleteCustomerById(id);
+            model.addAttribute("success","Customer is delete sucessfully");
         } catch (RuntimeException e){
             model.addAttribute("error",e.getMessage());
         }
