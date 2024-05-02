@@ -27,6 +27,9 @@
     </div>
     <div class="mb-3">
         <h2>Update Booking</h2>
+        <br>
+        <p th:unless="${#strings.isEmpty(failBook)}" th:text="${failBook}" style="color: red"></p>
+        <p th:unless="${#strings.isEmpty(okBook)}"th:text="${okBook}" style="color: blue"></p>
     </div>
     <div class="center-align">
         <table class="table w-50">
@@ -103,6 +106,7 @@
         </form>
     </div>
 </div>
+
 </body>
 <script>
     const updateBtn = document.getElementById("updateBtn");

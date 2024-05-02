@@ -91,17 +91,55 @@ public class BookingServiceImpl implements BookingService {
         return bookingToBookingDto(bookingRepository.findById(id).get());
     }
 
+//    @Override
+//    public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
+//        Booking b = bookingRepository.findById(id).get();
+//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+//        if (!newCheckIn.isEmpty()){
+//            b.setCheckinDate(new java.sql.Date(df.parse(newCheckIn).getTime()));
+//        }
+//        if (!newCheckOut.isEmpty()){
+//            b.setCheckoutDate(new java.sql.Date(df.parse(newCheckOut).getTime()));
+//        }
+//        bookingRepository.save(b);
+//    }
+
     @Override
     public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
-        Booking b = bookingRepository.findById(id).get();
+        Room r = bookingRepository.findById(id).get().getRoom();
+        Booking originBooking = bookingRepository.findById(id).get();
+
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date wantedCheckIn = originBooking.getCheckinDate();
+        Date wantedCheckOut = originBooking.getCheckoutDate();
+
+
+
         if (!newCheckIn.isEmpty()){
-            b.setCheckinDate(new java.sql.Date(df.parse(newCheckIn).getTime()));
+            wantedCheckIn = new java.sql.Date (df.parse(newCheckIn).getTime());
         }
         if (!newCheckOut.isEmpty()){
-            b.setCheckoutDate(new java.sql.Date(df.parse(newCheckOut).getTime()));
+            wantedCheckOut = new java.sql.Date (df.parse(newCheckOut).getTime());
         }
-        bookingRepository.save(b);
+        List<Date> datesInterval = createDateInterval(wantedCheckIn, wantedCheckOut);
+
+        List<Booking> rmBookListTemp =
+                bookingRepository.findAll().stream()
+                .filter(k -> k.getRoom().getId()==r.getId())
+                .filter(k -> k.getId()!=id)
+                .toList();
+
+        List<Booking> conflictBookList = rmBookListTemp.stream()
+                .filter(k -> areDatesOverlapping(datesInterval, createDateInterval(k.getCheckinDate(), k.getCheckoutDate())))
+                .toList();
+
+        if (conflictBookList.size()==0){
+            originBooking.setCheckinDate(wantedCheckIn);
+            originBooking.setCheckoutDate(wantedCheckOut);
+            bookingRepository.save(originBooking);
+        } else {
+            throw new RuntimeException("The room is occupied during this new booking period");
+        }
     }
 
     @Override
