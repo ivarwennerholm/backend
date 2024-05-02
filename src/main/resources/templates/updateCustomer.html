@@ -20,7 +20,8 @@
         <h2>Update Customer</h2>
     </div>
     <div class="center-align">
-        <form action="#" th:action="@{/customers/update/{id}(id=${customer.id})}" method="post">
+        <form action="#" th:action="@{/customers/update/(id=${id})}" th:object="${customer}" method="post">
+            <input type="hidden" th:if="${customer != null}" th:name="id" th:value="${customer.id}"
             <div class="my-2">
                 <table class="table w-50">
                     <tr>
@@ -33,13 +34,13 @@
                     </div>
                     <tr>
                         <td>Name</td>
-                        <td th:text="${customer.name}">/td>
-                        <td><input type="text" name="newName"></td>
+                        <td><input type="text" th:field="*{name}" /></td>
+                        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
                     </tr>
                     <tr>
                         <td>Phone</td>
-                        <td th:text="${customer.phone}"></td>
-                        <td><input type="text" name="newPhone"></td>
+                        <td><input type="text" th:field="*{phone}" /></td>
+                        <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</td>
                     </tr>
                 </table>
             </div>

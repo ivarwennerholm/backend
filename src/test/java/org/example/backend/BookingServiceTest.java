@@ -102,7 +102,7 @@ public class BookingServiceTest {
 //        when(rmRepo.getReferenceById(1L)).thenReturn(r);
 //        when(cusRepo.getReferenceById(1L)).thenReturn(c);
 //
-//        when(rmTypeService.roomTypeToRoomTypeDtoDto(Mockito.any(RoomType.class))).thenReturn(rtDto);
+//        when(rmTypeService.roomTypeToRoomTypeDto(Mockito.any(RoomType.class))).thenReturn(rtDto);
 //        when(rmService.roomToRoomDto(Mockito.any(Room.class))).thenReturn(rDto);
 //        when(cusService.customerToCustomerDto(Mockito.any(Customer.class))).thenReturn(cDto);
 //
