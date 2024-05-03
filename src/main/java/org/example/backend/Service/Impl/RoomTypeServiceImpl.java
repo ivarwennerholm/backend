@@ -42,7 +42,8 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     }
 
     @Override
-    public void addRoomType(RoomTypeDto rtd) {
+    public String addRoomType(RoomTypeDto rtd) {
         repo.save(roomTypeDtoToRoomType(rtd));
+        return "new room type is added";
     }
 }

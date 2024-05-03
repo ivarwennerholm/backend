@@ -12,5 +12,5 @@ public interface RoomTypeService {
 
     public List<RoomTypeDto> getAll();
 
-    public void addRoomType(RoomTypeDto rtd);
+    public String addRoomType(RoomTypeDto rtd);
 }
