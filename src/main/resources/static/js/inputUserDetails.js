@@ -1,5 +1,7 @@
 function validateName() {
     nameInput = document.getElementById("name");
+    if (nameInput.value === "")
+        return false;
     var custName = nameInput.value;
     var nameRegex = /^[A-Za-zÅÄÖåäö\s]+$/;
     if (!nameRegex.test(custName) || custName.length < 2) {
@@ -18,6 +20,8 @@ function validateName() {
 function validatePhone() {
     phoneInput = document.getElementById("phone");
     custPhone = phoneInput.value;
+    if (custPhone === "")
+        return false;
     var phoneRegex = /^[\d-]+$/;
     if (!phoneRegex.test(custPhone) || custPhone.length < 5 || custPhone.length > 15) {
         phoneInput.className = "form-control w-auto text-center is-invalid";
