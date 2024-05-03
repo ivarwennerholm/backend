@@ -83,7 +83,7 @@ public class BookingServiceImpl implements BookingService {
     public String deleteBookingById(Long id) {
         Booking b = bookingRepository.findById(id).get();
         bookingRepository.delete(b);
-        return "delete customer"+b.getCustomer().getName();
+        return "delete booking id " + b.getId();
     }
 
     //venus tar

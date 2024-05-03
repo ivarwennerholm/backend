@@ -72,9 +72,11 @@ public class BookingServiceTest {
 
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
+    Booking b1;
+    Booking b2;
     @BeforeEach
     public void init() throws ParseException {
-        Booking b1 = Booking.builder()
+        b1 = Booking.builder()
                 .id(1L)
                 .checkinDate(new java.sql.Date(df.parse("2024-06-01").getTime()))
                 .checkoutDate(new java.sql.Date(df.parse("2024-06-07").getTime()))
@@ -84,7 +86,7 @@ public class BookingServiceTest {
                 .room(new Room(1L,2099, new RoomType(1L, "single", 0, 1,500)))
                 .build();
 
-        Booking b2 = Booking.builder()
+        b2 = Booking.builder()
                 .id(2L)
                 .checkinDate(new java.sql.Date(df.parse("2024-07-01").getTime()))
                 .checkoutDate(new java.sql.Date(df.parse("2024-07-07").getTime()))
@@ -95,15 +97,15 @@ public class BookingServiceTest {
                 .build();
 
         when(bookRepo.findById(1L)).thenReturn(Optional.of(b1));
-        when(bookRepo.findAll()).thenReturn(Arrays.asList(b1,b2));
     }
     @Test
     public void deleteBookingByIdTest(){
-        Assertions.assertTrue(bookService.deleteBookingById(1L).equals("delete customerVenus"));
+        Assertions.assertTrue(bookService.deleteBookingById(1L).equals("delete booking id 1"));
     }
 
     @Test
     public void updateBookingDatesTest() throws ParseException {
+        when(bookRepo.findAll()).thenReturn(Arrays.asList(b1,b2));
         Assertions.assertTrue(bookService.updateBookingDates(1L, "2024-06-08", "2024-06-31").equals("booking is updated"));
 
         Exception ex = assertThrows(RuntimeException.class,() -> bookService.updateBookingDates(1L, "2024-07-01", "2024-07-31"));
