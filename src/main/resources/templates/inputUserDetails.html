@@ -22,7 +22,7 @@
         <h4>Please fill in your details 👇 </h4>
     </div>
     <form method="post" th:action="@{getBookingConfirmation}">
-        <div class="my-1 center-align"> <!-- Apply center-align class -->
+        <div class="mt-1 center-align">
             <div>
                 <label for="name">Name:</label><br>
                 <input type="text"
@@ -32,10 +32,10 @@
                        class="form-control"
                        id="name"
                        name="name">
-                <br>
             </div>
         </div>
-        <div class="my-1 center-align"> <!-- Apply center-align class -->
+        <div id="name-error"></div>
+        <div class="my-1 center-align">
             <div>
                 <label for="phone">Phone:</label><br>
                 <input type="text"
@@ -45,9 +45,9 @@
                        class="form-control"
                        id="phone"
                        name="phone">
-                <br>
             </div>
         </div>
+        <div id="phone-error"></div>
         <input type="hidden" id="roomid" name="roomid" th:value="${roomid}">
         <input type="hidden" id="checkin" name="checkin" th:value="${checkin}">
         <input type="hidden" id="checkout" name="checkout" th:value="${checkout}">
