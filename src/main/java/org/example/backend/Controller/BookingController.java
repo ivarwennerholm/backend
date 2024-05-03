@@ -50,8 +50,9 @@ public class BookingController {
                                  Model model){
         try {
             bookService.updateBookingDates(id,newCheckIn,newCheckOut);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+            model.addAttribute("okBook","Successfully update booking dates");
+        } catch (RuntimeException | ParseException e) {
+            model.addAttribute("failBook",e.getMessage());
         }
         return updateForm(id,model);
     }
