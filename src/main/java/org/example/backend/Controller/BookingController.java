@@ -23,12 +23,6 @@ public class BookingController {
     private final BookingService bookService;
     private List<BookingDto> allBookings = new ArrayList<>();
 
-    @RequestMapping("test")
-    public String testPage(Model model){
-        model.addAttribute("test","testingtesting");
-        return "testBooking.html";
-    }
-
     @RequestMapping("all")
     public String allBookings(Model model){
         allBookings = bookService.getAll();

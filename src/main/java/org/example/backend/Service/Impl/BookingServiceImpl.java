@@ -79,6 +79,7 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.save(bookindDtoToBooking(bd));
     }
 
+    //venus tar
     @Override
     public String deleteBookingById(Long id) {
         Booking b = bookingRepository.findById(id).get();
@@ -86,11 +87,13 @@ public class BookingServiceImpl implements BookingService {
         return "delete customer"+b.getCustomer().getName();
     }
 
+    //venus tar
     @Override
     public BookingDto findBookingById(Long id) {
         return bookingToBookingDto(bookingRepository.findById(id).get());
     }
 
+    //venus tar
     @Override
     public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
         Booking b = bookingRepository.findById(id).get();
