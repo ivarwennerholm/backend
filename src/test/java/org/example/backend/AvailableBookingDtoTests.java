@@ -71,8 +71,8 @@ public class AvailableBookingDtoTests {
         }
 
         @Override
-        public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
-        }
+        public String updateBookingDates(Long id, String newCheckIn, String newCheckOut){
+        return null;}
 
         @Override
         public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {

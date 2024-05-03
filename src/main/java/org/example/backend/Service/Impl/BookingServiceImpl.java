@@ -107,15 +107,13 @@ public class BookingServiceImpl implements BookingService {
 //    }
 
     @Override
-    public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
+    public String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
         Room r = bookingRepository.findById(id).get().getRoom();
         Booking originBooking = bookingRepository.findById(id).get();
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date wantedCheckIn = originBooking.getCheckinDate();
         Date wantedCheckOut = originBooking.getCheckoutDate();
-
-
 
         if (!newCheckIn.isEmpty()){
             wantedCheckIn = new java.sql.Date (df.parse(newCheckIn).getTime());
@@ -125,13 +123,10 @@ public class BookingServiceImpl implements BookingService {
         }
         List<Date> datesInterval = createDateInterval(wantedCheckIn, wantedCheckOut);
 
-        List<Booking> rmBookListTemp =
+        List<Booking> conflictBookList =
                 bookingRepository.findAll().stream()
                 .filter(k -> k.getRoom().getId()==r.getId())
                 .filter(k -> k.getId()!=id)
-                .toList();
-
-        List<Booking> conflictBookList = rmBookListTemp.stream()
                 .filter(k -> areDatesOverlapping(datesInterval, createDateInterval(k.getCheckinDate(), k.getCheckoutDate())))
                 .toList();
 
@@ -139,6 +134,7 @@ public class BookingServiceImpl implements BookingService {
             originBooking.setCheckinDate(wantedCheckIn);
             originBooking.setCheckoutDate(wantedCheckOut);
             bookingRepository.save(originBooking);
+            return "booking is updated";
         } else {
             throw new RuntimeException("The room is occupied during this new booking period");
         }
