@@ -1,13 +1,13 @@
 package org.example.backend;
 
-import org.example.backend.DTO.RoomDto;
+import org.example.backend.DTO.RoomTypeDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
 import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Service.BookingService;
-import org.example.backend.Service.RoomService;
+import org.example.backend.Service.RoomTypeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -25,6 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.example.backend.Service.RoomService;
+import org.example.backend.DTO.RoomDto;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -32,21 +33,36 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 public class BookingServiceTest2 {
 
+    // @Mock
+    // private RoomTypeServiceImpl mockRoomTypeService;
+
+    // @Mock
+    // private RoomTypeRepository mockRoomTypeRepository;
+
+    // @Mock
+    // private RoomRepository mockRoomRepository;
+
+    // @InjectMocks
+    // private RoomServiceImpl roomService;
+
+    // @Autowired
+    // private MockMvc mockMvc;
+
+     @Autowired
+     private RoomService roomService;
+
     @Autowired
-    private MockMvc mockMvc;
+    private RoomTypeService roomTypeService;
 
     @Autowired
     private BookingService bookingService;
 
-    @Autowired
-    private RoomService roomService;
-
     @MockBean
-    private BookingRepository mockRepo;
+    private BookingRepository mockBookingRepo;
 
-    private DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-    // Items for repo:
+    // ITEMS FOR REPO:
     // Customers
     Customer c1 = new Customer("Venus", "111-1111111");
     Customer c2 = new Customer("Alex", "222-2222222");
@@ -57,10 +73,20 @@ public class BookingServiceTest2 {
     RoomType rt2 = new RoomType(2L, "Double", 1, 3, 1000);
     RoomType rt3 = new RoomType(3L, "Large double", 2, 4, 1500);
 
+    // Room Type DTO:S
+    RoomTypeDto rtdto1;
+    RoomTypeDto rtdto2;
+    RoomTypeDto rtdto3;
+
     // Rooms
-    Room r1 = new Room(101, rt1);
-    Room r2 = new Room(102, rt2);
-    Room r3 = new Room(103, rt3);
+    Room r1 = new Room(1L, 101, rt1);
+    Room r2 = new Room(2L, 102, rt2);
+    Room r3 = new Room(3L, 103, rt3);
+
+    // Room DTO:s
+    RoomDto rdto1;
+    RoomDto rdto2;
+    RoomDto rdto3;
 
     // Bookings
     Booking b1 = new Booking(1L, new java.sql.Date(df.parse("2024-06-01").getTime()),
@@ -77,22 +103,47 @@ public class BookingServiceTest2 {
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_PURPLE = "\u001B[35m";
 
+    // Constructor, throws ParseException
     public BookingServiceTest2() throws ParseException {
     }
 
     @BeforeEach // WORKING 👍
     public void init() throws ParseException {
-        when(mockRepo.findById(1L)).thenReturn(Optional.of(b1));
-        when(mockRepo.findById(2L)).thenReturn(Optional.of(b2));
-        when(mockRepo.findById(3L)).thenReturn(Optional.of(b3));
-        when(mockRepo.findAll()).thenReturn(Arrays.asList(b1, b2, b3));
+        // MockitoAnnotations.openMocks(this);
+        // MockitoAnnotations.initMocks(this); // Deprecated? Use the one above ↑
+
+        rtdto1 = roomTypeService.roomTypeToRoomTypeDto(rt1);
+        rtdto2 = roomTypeService.roomTypeToRoomTypeDto(rt2);
+        rtdto3 = roomTypeService.roomTypeToRoomTypeDto(rt3);
+
+        rdto1 = roomService.roomToRoomDto(r1);
+        rdto2 = roomService.roomToRoomDto(r2);
+        rdto3 = roomService.roomToRoomDto(r3);
+
+        System.out.println(ANSI_GREEN + "Room Type DTO: " + rtdto1 + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "Room DTO: " + rdto1 + ANSI_RESET);
+
+        when(mockBookingRepo.findById(1L)).thenReturn(Optional.of(b1));
+        when(mockBookingRepo.findById(2L)).thenReturn(Optional.of(b2));
+        when(mockBookingRepo.findById(3L)).thenReturn(Optional.of(b3));
+        when(mockBookingRepo.findAll()).thenReturn(Arrays.asList(b1, b2, b3));
+
+        // when(mockRoomTypeRepository.findById(1L)).thenReturn(Optional.of(rt1));
+        // when(mockRoomTypeRepository.findById(2L)).thenReturn(Optional.of(rt2));
+        // when(mockRoomTypeRepository.findById(3L)).thenReturn(Optional.of(rt3));
+        // when(mockRoomTypeRepository.findAll()).thenReturn(Arrays.asList(rt1, rt2, rt3));
+        // when(mockRoomRepository.findById(1L)).thenReturn(Optional.of(r1));
+        // when(mockRoomRepository.findById(2L)).thenReturn(Optional.of(r2));
+        // when(mockRoomRepository.findById(3L)).thenReturn(Optional.of(r3));
+        // when(mockRoomRepository.findAll()).thenReturn(Arrays.asList(r1, r2, r3));
         // System.out.println(ANSI_GREEN + "@BeforeEach completed" + ANSI_RESET); // FOR READABILITY ONLY
     }
 
     @Test // WORKING 👍
     public void contextLoads() throws Exception {
         assertThat(bookingService).isNotNull();
-        assertThat(mockRepo).isNotNull();
+        assertThat(mockBookingRepo).isNotNull();
+        assertThat(roomTypeService).isNotNull();
     }
 
     @Test // WORKING 👍
@@ -100,10 +151,10 @@ public class BookingServiceTest2 {
         Booking expected1 = b1;
         Booking expected2 = b2;
         Booking expected3 = b3;
-        Optional<Booking> optional1 = mockRepo.findById(1L);
-        Optional<Booking> optional2 = mockRepo.findById(2L);
-        Optional<Booking> optional3 = mockRepo.findById(3L);
-        List<Booking> actualList = mockRepo.findAll();
+        Optional<Booking> optional1 = mockBookingRepo.findById(1L);
+        Optional<Booking> optional2 = mockBookingRepo.findById(2L);
+        Optional<Booking> optional3 = mockBookingRepo.findById(3L);
+        List<Booking> actualList = mockBookingRepo.findAll();
         if (optional1.isPresent() && optional2.isPresent() && optional3.isPresent()) {
             Booking actual1 = optional1.get();
             Booking actual2 = optional2.get();
@@ -118,7 +169,7 @@ public class BookingServiceTest2 {
         }
     }
 
-    @Test
+    @Test // NOT WORKING 👎
     public void testCreateAndAddBookingToDatabase() {
         /*
         public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
@@ -183,11 +234,11 @@ public class BookingServiceTest2 {
         Assertions.assertNotEquals(actual2, notExpected);
     }
 
-    @Test
+    @Test // WORKING 👍
     public void testGetExtraBedsForBooking() {
-        RoomDto singleRoom = roomService.roomToRoomDto(r1);
-        RoomDto doubleRoom = roomService.roomToRoomDto(r2);
-        RoomDto largeDoubleRoom = roomService.roomToRoomDto(r3);
+        RoomDto singleRoom = rdto1;
+        RoomDto doubleRoom = rdto2;
+        RoomDto largeDoubleRoom = rdto3;
         int expectedSingle = 0;
         int expectedDouble2Guests = 0;
         int expectedDouble3Guests = 1;
@@ -195,14 +246,14 @@ public class BookingServiceTest2 {
         int expectedLargeDouble3Guests = 1;
         int expectedLargeDouble4Guests = 2;
         int notExpected = 4;
-//        int actualSingle = bookingService.getExtraBedsForBooking(singleRoom, 1);
+        int actualSingle = bookingService.getExtraBedsForBooking(singleRoom, 1);
         int actualDouble2Guests = bookingService.getExtraBedsForBooking(doubleRoom, 2);
         int actualDouble3Guests = bookingService.getExtraBedsForBooking(doubleRoom, 3);
         int actualLargeDouble2Guests = bookingService.getExtraBedsForBooking(largeDoubleRoom, 2);
         int actualLargeDouble3Guests = bookingService.getExtraBedsForBooking(largeDoubleRoom, 3);
         int actualLargeDouble4Guests = bookingService.getExtraBedsForBooking(largeDoubleRoom, 4);
-//        Assertions.assertEquals(actualSingle, expectedSingle);
-//        Assertions.assertNotEquals(actualSingle, notExpected);
+        Assertions.assertEquals(actualSingle, expectedSingle);
+        Assertions.assertNotEquals(actualSingle, notExpected);
         Assertions.assertEquals(actualDouble2Guests, expectedDouble2Guests);
         Assertions.assertNotEquals(actualDouble2Guests, notExpected);
         Assertions.assertEquals(actualDouble3Guests, expectedDouble3Guests);
@@ -213,34 +264,10 @@ public class BookingServiceTest2 {
         Assertions.assertNotEquals(actualLargeDouble3Guests, notExpected);
         Assertions.assertEquals(actualLargeDouble4Guests, expectedLargeDouble4Guests);
         Assertions.assertNotEquals(actualLargeDouble4Guests, notExpected);
-    /*
-    public int getExtraBedsForBooking(RoomDto room, int guests) {
-        int beds = 0;
-        switch (room.getRoomType().getType()) {
-            case "Single":
-                break;
-            case "Double":
-                if (guests == 3) {
-                    beds = 1;
-                    break;
-                } else
-                    break;
-            case "Large double":
-                if (guests == 4) {
-                    beds = 2;
-                    break;
-                } else if (guests == 3) {
-                    beds = 1;
-                    break;
-                } else
-                    break;
-        }
-        return beds;
-    }
-    */
+
     }
 
-    @Test
+    @Test // NOT WORKING 👎
     public void testIsRoomAvailableOnDates() {
 
         /*
