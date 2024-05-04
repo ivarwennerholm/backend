@@ -1,11 +1,13 @@
 package org.example.backend;
 
+import org.example.backend.DTO.RoomDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
 import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Service.BookingService;
+import org.example.backend.Service.RoomService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,9 @@ public class BookingServiceTest2 {
 
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private RoomService roomService;
 
     @MockBean
     private BookingRepository mockRepo;
@@ -75,7 +80,7 @@ public class BookingServiceTest2 {
     public BookingServiceTest2() throws ParseException {
     }
 
-    @BeforeEach
+    @BeforeEach // WORKING 👍
     public void init() throws ParseException {
         when(mockRepo.findById(1L)).thenReturn(Optional.of(b1));
         when(mockRepo.findById(2L)).thenReturn(Optional.of(b2));
@@ -84,13 +89,13 @@ public class BookingServiceTest2 {
         // System.out.println(ANSI_GREEN + "@BeforeEach completed" + ANSI_RESET); // FOR READABILITY ONLY
     }
 
-    @Test
+    @Test // WORKING 👍
     public void contextLoads() throws Exception {
         assertThat(bookingService).isNotNull();
         assertThat(mockRepo).isNotNull();
     }
 
-    @Test
+    @Test // WORKING 👍
     public void checkMockRepo() throws ParseException {
         Booking expected1 = b1;
         Booking expected2 = b2;
@@ -126,7 +131,7 @@ public class BookingServiceTest2 {
     */
     }
 
-    @Test // WORKING
+    @Test // WORKING 👍
     public void testAreDatesOverlapping() throws ParseException {
         Date d1 = bookingService.convertStringToDate("2024-07-01");
         Date d2 = bookingService.convertStringToDate("2024-07-30");
@@ -151,7 +156,7 @@ public class BookingServiceTest2 {
         Assertions.assertFalse(bookingService.areDatesOverlapping(notOverLapping4, search));
     }
 
-    @Test // WORKING
+    @Test // WORKING 👍
     public void testCreateDateInterval() throws ParseException {
         Date d1 = bookingService.convertStringToDate("2024-07-31");
         Date d2 = bookingService.convertStringToDate("2024-08-01");
@@ -162,18 +167,52 @@ public class BookingServiceTest2 {
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test
-    public void testGetNumberOfDaysBetweenTwoDates() {
-    /*
-    public Long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout) {
-        long differenceMillis = checkout.getTime() - checkin.getTime();
-        return differenceMillis / (1000 * 60 * 60 * 24);
-    }
-    */
+    @Test // WORKING 👍
+    public void testGetNumberOfDaysBetweenTwoDates() throws ParseException {
+        Date d1 = bookingService.convertStringToDate("2024-07-30");
+        Date d2 = bookingService.convertStringToDate("2024-07-31");
+        Date d3 = bookingService.convertStringToDate("2024-08-01");
+        long expected1 = 1;
+        long expected2 = 2;
+        long notExpected = 3;
+        long actual1 = bookingService.getNumberOfDaysBetweenTwoDates(d1, d2);
+        long actual2 = bookingService.getNumberOfDaysBetweenTwoDates(d1, d3);
+        Assertions.assertEquals(actual1, expected1);
+        Assertions.assertNotEquals(actual1, notExpected);
+        Assertions.assertEquals(actual2, expected2);
+        Assertions.assertNotEquals(actual2, notExpected);
     }
 
     @Test
     public void testGetExtraBedsForBooking() {
+        RoomDto singleRoom = roomService.roomToRoomDto(r1);
+        RoomDto doubleRoom = roomService.roomToRoomDto(r2);
+        RoomDto largeDoubleRoom = roomService.roomToRoomDto(r3);
+        int expectedSingle = 0;
+        int expectedDouble2Guests = 0;
+        int expectedDouble3Guests = 1;
+        int expectedLargeDouble2Guests = 0;
+        int expectedLargeDouble3Guests = 1;
+        int expectedLargeDouble4Guests = 2;
+        int notExpected = 4;
+//        int actualSingle = bookingService.getExtraBedsForBooking(singleRoom, 1);
+        int actualDouble2Guests = bookingService.getExtraBedsForBooking(doubleRoom, 2);
+        int actualDouble3Guests = bookingService.getExtraBedsForBooking(doubleRoom, 3);
+        int actualLargeDouble2Guests = bookingService.getExtraBedsForBooking(largeDoubleRoom, 2);
+        int actualLargeDouble3Guests = bookingService.getExtraBedsForBooking(largeDoubleRoom, 3);
+        int actualLargeDouble4Guests = bookingService.getExtraBedsForBooking(largeDoubleRoom, 4);
+//        Assertions.assertEquals(actualSingle, expectedSingle);
+//        Assertions.assertNotEquals(actualSingle, notExpected);
+        Assertions.assertEquals(actualDouble2Guests, expectedDouble2Guests);
+        Assertions.assertNotEquals(actualDouble2Guests, notExpected);
+        Assertions.assertEquals(actualDouble3Guests, expectedDouble3Guests);
+        Assertions.assertNotEquals(actualDouble3Guests, notExpected);
+        Assertions.assertEquals(actualLargeDouble2Guests, expectedLargeDouble2Guests);
+        Assertions.assertNotEquals(actualLargeDouble2Guests, notExpected);
+        Assertions.assertEquals(actualLargeDouble3Guests, expectedLargeDouble3Guests);
+        Assertions.assertNotEquals(actualLargeDouble3Guests, notExpected);
+        Assertions.assertEquals(actualLargeDouble4Guests, expectedLargeDouble4Guests);
+        Assertions.assertNotEquals(actualLargeDouble4Guests, notExpected);
     /*
     public int getExtraBedsForBooking(RoomDto room, int guests) {
         int beds = 0;
@@ -217,12 +256,15 @@ public class BookingServiceTest2 {
         */
     }
 
-    @Test // WORKING
+    @Test // WORKING 👍
     public void testConvertStringToDate() throws ParseException {
-        String string = "2024-06-01";
-        java.sql.Date expected = new java.sql.Date(df.parse(string).getTime());
-        java.sql.Date actual = bookingService.convertStringToDate(string);
-        Assertions.assertEquals(expected, actual);
+        String expected = "2024-06-01";
+        String notExpected = "2023-12-13";
+        java.sql.Date expectedDate = new java.sql.Date(df.parse(expected).getTime());
+        java.sql.Date notExpectedDate = new java.sql.Date(df.parse(notExpected).getTime());
+        java.sql.Date actualDate = bookingService.convertStringToDate(expected);
+        Assertions.assertEquals(expectedDate, actualDate);
+        Assertions.assertNotEquals(notExpectedDate, actualDate);
     }
 
 }
