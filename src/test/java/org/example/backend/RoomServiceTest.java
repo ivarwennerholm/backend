@@ -36,6 +36,39 @@ public class RoomServiceTest {
 
     @InjectMocks
     private RoomTypeServiceImpl rtService;
+
+    @InjectMocks
+    private RoomServiceImpl rmService;
+
+    @Test
+    public void roomToRoomDtoTest(){
+        RoomType rt = RoomType.builder().
+                id(1L).
+                type("single").
+                maxExtraBed(0).
+                maxPerson(1).
+                pricePerNight(500).
+                build();
+
+        Room rm = Room.builder().
+                id(1L).
+                roomNumber(101).
+                roomType(rt).
+                build();
+
+        when(rtRepo.findById(1L)).thenReturn(Optional.of(rt));
+        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo,rtService);
+
+        RoomDto rmDto = rmService2.roomToRoomDto(rm);
+
+        assertEquals(1L, rmDto.getId());
+        assertEquals(101, rmDto.getRoomNumber());
+        assertEquals(1L, rmDto.getRoomType().getId());
+        assertEquals("single", rmDto.getRoomType().getType());
+        assertEquals(0, rmDto.getRoomType().getMaxExtraBed());
+        assertEquals(1, rmDto.getRoomType().getMaxPerson());
+        assertEquals(500, rmDto.getRoomType().getPricePerNight());
+    }
     @Test
     void roomDtoToRoomTest() {
         RoomType rt = RoomType.builder().
