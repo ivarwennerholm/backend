@@ -9,6 +9,7 @@ import org.example.backend.Repository.RoomTypeRepository;
 import org.example.backend.Service.Impl.RoomServiceImpl;
 import org.example.backend.Service.Impl.RoomTypeServiceImpl;
 import org.example.backend.Service.RoomService;
+import org.example.backend.Service.RoomTypeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +18,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -36,90 +39,80 @@ public class RoomServiceTest {
 
     @InjectMocks
     private RoomTypeServiceImpl rtService;
+    @Test
+    void roomDtoToRoomTest() {
+        RoomType rt = RoomType.builder().
+                id(1L).
+                type("single").
+                maxExtraBed(0).
+                maxPerson(1).
+                pricePerNight(500).
+                build();
+
+        RoomTypeDto rtDto = rtService.roomTypeToRoomTypeDto(rt);
+        RoomDto roomDto = new RoomDto(1L, 101, rtDto);
+
+        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo,rtService);
+
+        Room room = rmService2.roomDtoToRoom(roomDto);
+
+        assertEquals(1L, room.getId());
+        assertEquals(101, room.getRoomNumber());
+        assertEquals(1L, room.getRoomType().getId());
+        assertEquals("single", room.getRoomType().getType());
+        assertEquals(0, room.getRoomType().getMaxExtraBed());
+        assertEquals(1, room.getRoomType().getMaxPerson());
+        assertEquals(500, room.getRoomType().getPricePerNight());
+    }
 
 //    @Override
 //    public List<RoomDto> getAll() {
 //        return roomRepository.findAll().stream().map(r -> roomToRoomDto(r)).toList();
 //    }
-//
-//    @Override
-//    public RoomDto getRoomById(long id) {
-//        return roomToRoomDto(roomRepository.findById(id).orElse(null));
-//
-//    }
-//
-//    @Override
-//    public Room roomDtoToRoom(RoomDto rd) {
-//        RoomType roomType = roomTypeService.roomTypeDtoToRoomType(rd.getRoomType());
-//        return Room.builder().
-//                id(rd.getId()).
-//                roomNumber(rd.getRoomNumber()).
-//                roomType(roomType).
-//                build();
-//    }
-
-//    @Test
-//    public void roomDtoToRoomTest(){
-//        RoomTypeDto rtDto = RoomTypeDto.builder().
-//                id(1L).
-//                type("single").
-//                maxExtraBed(0).
-//                maxPerson(1).
-//                pricePerNight(500).
-//                build();
-//
-//        RoomType rt = RoomType.builder().
-//                id(1L).
-//                type("single").
-//                maxExtraBed(0).
-//                maxPerson(1).
-//                pricePerNight(500).
-//                build();
-//
-//        RoomDto rmDto = RoomDto.builder().
-//                id(1L).
-//                roomNumber(2099).
-//                roomType(rtDto).
-//                build();
-//
-//        when(rtService.roomTypeDtoToRoomType(rmDto.getRoomType())).thenReturn(rt);
-//
-//
-//        Room rm = rmService.roomDtoToRoom(rmDto);
-//
-//        Assertions.assertTrue(rm.getId()==1L);
-//        Assertions.assertTrue(rm.getRoomNumber()==2099);
-//        Assertions.assertTrue(rm.getRoomType().getId()==1L);
-//        Assertions.assertTrue(rm.getRoomType().getType().equals("single"));
-//        Assertions.assertTrue(rm.getRoomType().getMaxExtraBed()==0);
-//        Assertions.assertTrue(rm.getRoomType().getMaxPerson()==1);
-//        Assertions.assertTrue(rm.getRoomType().getPricePerNight()==500);
-//    }
-
-//
-//    @Override
-//    public RoomDto roomToRoomDto(Room r){
-//        RoomTypeDto roomTypeDto = roomTypeService.roomTypeToRoomTypeDto(roomTypeRepository.findById(r.getId()).orElse(null));
-//        return RoomDto.builder().
-//                id(r.getId()).
-//                roomNumber(r.getRoomNumber()).
-//                roomType(roomTypeDto).
-//                build();
-//    }
 
     @Test
-    void roomDtoToRoom_ConvertsRoomDtoToRoom() {
-        // Given
-        RoomType roomType = new RoomType(1L, "Single", 1, 1, 100.0);
-        RoomDto roomDto = new RoomDto(1L, 101, new RoomTypeDto(1L, "Single", 1, 1, 100.0));
-        when(rtService.roomTypeDtoToRoomType(Mockito.any(RoomTypeDto.class))).thenReturn(roomType);
+    public void getAllTest(){
+        RoomType rt1 = RoomType.builder().
+                id(1L).
+                type("single").
+                maxExtraBed(0).
+                maxPerson(1).
+                pricePerNight(500).
+                build();
 
-        // When
-        Room room = rmService.roomDtoToRoom(roomDto);
+        RoomType rt2 = RoomType.builder().
+                id(2L).
+                type("double").
+                maxExtraBed(1).
+                maxPerson(2).
+                pricePerNight(1000).
+                build();
 
-        // Then
-        assertEquals(roomDto.getId(), room.getId());
-        assertEquals(roomDto.getRoomNumber(), room.getRoomNumber());
-        assertEquals(roomType, room.getRoomType());
+
+        when(rtRepo.findById(1L)).thenReturn(Optional.of(rt1));
+        RoomTypeDto rtDto1 = rtService.roomTypeToRoomTypeDto(rt1);
+
+        when(rtRepo.findById(1L)).thenReturn(Optional.of(rt2));
+        RoomTypeDto rtDto2 = rtService.roomTypeToRoomTypeDto(rt2);
+
+        Room rm1 = Room.builder().
+                id(1L).
+                roomNumber(101).
+                roomType(rt1).
+                build();
+
+        Room rm2 = Room.builder().
+                id(2L).
+                roomNumber(202).
+                roomType(rt2).
+                build();
+
+        when(rmRepo.findAll()).thenReturn(Arrays.asList(rm1,rm2));
+
+        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo,rtService);
+
+        List<RoomDto> rmDtoList = rmService2.getAll();
+
+        Assertions.assertEquals(2,rmDtoList.size());
     }
 }
