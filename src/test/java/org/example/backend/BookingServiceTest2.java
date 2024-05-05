@@ -56,7 +56,7 @@ public class BookingServiceTest2 {
 
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-    // Rooms, customers, roomtypes and bookings
+    // Customers, roomtypes, rooms and bookings
     Customer c1; Customer c2; Customer c3;
     CustomerDto cdto1; CustomerDto cdto2; CustomerDto cdto3;
     RoomType rt1; RoomType rt2; RoomType rt3;
@@ -66,7 +66,7 @@ public class BookingServiceTest2 {
     Booking b1; Booking b2; Booking b3;
     BookingDto bdto1; BookingDto bdto2; BookingDto bdto3;
 
-    // Ansi colors for readability
+    // ANSI colors for readability
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -114,23 +114,23 @@ public class BookingServiceTest2 {
         b3 = new Booking(3L, new java.sql.Date(df.parse("2024-12-23").getTime()),
                 new java.sql.Date(df.parse("2024-12-25").getTime()), 4, 2, c3, r3);
 
-        // MOCK RETURNS
-        // roomTypeRepository:
+        // MOCK RETURNS:
+        // roomTypeRepository
         when(roomTypeRepository.findById(1L)).thenReturn(Optional.of(rt1));
         when(roomTypeRepository.findById(2L)).thenReturn(Optional.of(rt2));
         when(roomTypeRepository.findById(3L)).thenReturn(Optional.of(rt3));
         when(roomTypeRepository.findAll()).thenReturn(Arrays.asList(rt1, rt2, rt3));
-        // customerRepository:
+        // customerRepository
         when(customerRepository.findById(1L)).thenReturn(Optional.of(c1));
         when(customerRepository.findById(2L)).thenReturn(Optional.of(c2));
         when(customerRepository.findById(3L)).thenReturn(Optional.of(c3));
         when(customerRepository.findAll()).thenReturn(Arrays.asList(c1, c2, c3));
-        // roomRepository:
+        // roomRepository
         when(roomRepository.findById(1L)).thenReturn(Optional.of(r1));
         when(roomRepository.findById(2L)).thenReturn(Optional.of(r2));
         when(roomRepository.findById(3L)).thenReturn(Optional.of(r3));
         when(roomRepository.findAll()).thenReturn(Arrays.asList(r1, r2, r3));
-        // bookingRepository:
+        // bookingRepository
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(b1));
         when(bookingRepository.findById(2L)).thenReturn(Optional.of(b2));
         when(bookingRepository.findById(3L)).thenReturn(Optional.of(b3));
@@ -159,47 +159,26 @@ public class BookingServiceTest2 {
         assertThat(bookingService).isNotNull();
     }
 
-    @Test // NOT WORKING 👎
-    public void testIsRoomAvailableOnDates() {
-        List<BookingDto> list = bookingService.getAll(); // FOR TESTING
-        System.out.println(ANSI_GREEN + list + ANSI_RESET); // FOR TESTING
-        /*
-        public boolean isRoomAvailableOnDates(RoomDto room, Date checkin, Date checkout) {
-        long roomId = room.getId();
-        List<Date> datesInterval = createDateInterval(checkin, checkout);
-        List<BookingDto> conflictingBookings = getAll().
-                stream().
-                filter(b -> b.getRoom().getId() == roomId).
-                filter(b -> areDatesOverlapping(datesInterval, createDateInterval(b.getCheckinDate(), b.getCheckoutDate()))).
-                toList();
-        return conflictingBookings.isEmpty();
-        */
+    @Test // WORKING 👍
+    public void testIsRoomAvailableOnDates() throws ParseException {
+        Date d1 = bookingService.convertStringToDate("2024-05-25");
+        Date d2 = bookingService.convertStringToDate("2024-05-31");
+        Date d3 = bookingService.convertStringToDate("2024-06-01");
+        Date d4 = bookingService.convertStringToDate("2024-06-04");
+        Date d5 = bookingService.convertStringToDate("2024-06-07");
+        Date d6 = bookingService.convertStringToDate("2024-06-08");
+        Date d7 = bookingService.convertStringToDate("2024-06-13");
+        Assertions.assertTrue(bookingService.isRoomAvailableOnDates(rdto1, d1, d2));
+        Assertions.assertTrue(bookingService.isRoomAvailableOnDates(rdto1, d1, d3));
+        Assertions.assertFalse(bookingService.isRoomAvailableOnDates(rdto1, d1, d4));
+        Assertions.assertFalse(bookingService.isRoomAvailableOnDates(rdto1, d3, d5));
+        Assertions.assertFalse(bookingService.isRoomAvailableOnDates(rdto1, d4, d7));
+        Assertions.assertTrue(bookingService.isRoomAvailableOnDates(rdto1, d5, d7));
+        Assertions.assertTrue(bookingService.isRoomAvailableOnDates(rdto1, d6, d7));
     }
 
-    @Test // NOT WORKING 👎
-    public void testCreateAndAddBookingToDatabase() throws ParseException {
-        /*
-        Date checkin = new java.sql.Date(df.parse("2024-11-14").getTime());
-        Date checkout = new java.sql.Date(df.parse("2024-11-17").getTime());
-        int guestAmt = 1;
-        int extraBedAmt = 0;
-        Customer customer = c1;
-        Room room = r1;
-        Long roomId = r1.getId();
-        String name = c1.getName();
-        String phone = c1.getPhone();
-        Booking expected = new Booking(checkin, checkout, guestAmt, extraBedAmt, customer, room);
-        Mockito.doNothing().when(customerService).addCustomerWithoutID(name, phone);
-        when(bookingRepository.save(expected)).thenReturn(expected);
-        Optional<Booking> optional = bookingService.createAndAddBookingToDatabase(checkin, checkout, guestAmt, extraBedAmt, roomId, name, phone);
-        if (optional.isPresent()) {
-            Booking actual = optional.get();
-            Assertions.assertEquals(expected, actual);
-        } else {
-            Assertions.fail(ANSI_RED + "Booking not found" + ANSI_RESET);
-        }
-        */
-    }
+    @Test // TODO: Very complicated...
+    public void testCreateAndAddBookingToDatabase() throws ParseException {}
 
     @Test // WORKING 👍
     public void testAreDatesOverlapping() throws ParseException {
