@@ -39,7 +39,15 @@ public class Customer {
         this.phone = phone;
     }
 
-    public Customer(long l, String venusP, String s) {
+    // Added while working on tests - Ivar
+    public Customer(Long id, String name, String phone) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
     }
+
+    // Commented out while working on tests - Ivar
+    // public Customer(long l, String venusP, String s) {
+    // }
 }
 

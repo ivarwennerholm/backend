@@ -12,6 +12,7 @@ import org.example.backend.Service.RoomService;
 import java.sql.Date;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 //import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,7 +76,8 @@ public class AvailableBookingDtoTests {
         }
 
         @Override
-        public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
+        public Optional<Booking> createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
+            return null;
         }
 
         @Override

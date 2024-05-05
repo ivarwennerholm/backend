@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -145,12 +146,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
+    public Optional<Booking> createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
         customerService.addCustomerWithoutID(name, phone);
         Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
         Room room = roomRepository.findById(roomId).orElse(null);
         Booking booking = new Booking(checkin, checkout, guests, extraBeds, customer, room);
         bookingRepository.save(booking);
+        return null;
     }
 
     @Override
