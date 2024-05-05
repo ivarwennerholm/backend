@@ -35,9 +35,6 @@ public class RoomServiceTest {
     private RoomTypeRepository rtRepo;
 
     @InjectMocks
-    private RoomServiceImpl rmService;
-
-    @InjectMocks
     private RoomTypeServiceImpl rtService;
     @Test
     void roomDtoToRoomTest() {
@@ -64,11 +61,37 @@ public class RoomServiceTest {
         assertEquals(1, room.getRoomType().getMaxPerson());
         assertEquals(500, room.getRoomType().getPricePerNight());
     }
+    @Test
+    public void getroomByIdTest(){
+        RoomType rt = RoomType.builder().
+                id(1L).
+                type("single").
+                maxExtraBed(0).
+                maxPerson(1).
+                pricePerNight(500).
+                build();
 
-//    @Override
-//    public List<RoomDto> getAll() {
-//        return roomRepository.findAll().stream().map(r -> roomToRoomDto(r)).toList();
-//    }
+        when(rtRepo.findById(1L)).thenReturn(Optional.of(rt));
+
+        Room rm1 = Room.builder().
+                id(1L).
+                roomNumber(101).
+                roomType(rt).
+                build();
+
+        when(rmRepo.findById(1L)).thenReturn(Optional.of(rm1));
+        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo,rtService);
+
+        RoomDto rmDto = rmService2.getRoomById(1L);
+
+        assertEquals(1L, rmDto.getId());
+        assertEquals(101, rmDto.getRoomNumber());
+        assertEquals(1L, rmDto.getRoomType().getId());
+        assertEquals("single", rmDto.getRoomType().getType());
+        assertEquals(0, rmDto.getRoomType().getMaxExtraBed());
+        assertEquals(1, rmDto.getRoomType().getMaxPerson());
+        assertEquals(500, rmDto.getRoomType().getPricePerNight());
+    }
 
     @Test
     public void getAllTest(){
@@ -88,13 +111,9 @@ public class RoomServiceTest {
                 pricePerNight(1000).
                 build();
 
-
         when(rtRepo.findById(1L)).thenReturn(Optional.of(rt1));
-        RoomTypeDto rtDto1 = rtService.roomTypeToRoomTypeDto(rt1);
 
-        when(rtRepo.findById(1L)).thenReturn(Optional.of(rt2));
-        RoomTypeDto rtDto2 = rtService.roomTypeToRoomTypeDto(rt2);
-
+        when(rtRepo.findById(2L)).thenReturn(Optional.of(rt2));
         Room rm1 = Room.builder().
                 id(1L).
                 roomNumber(101).
