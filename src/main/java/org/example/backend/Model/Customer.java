@@ -39,15 +39,16 @@ public class Customer {
         this.phone = phone;
     }
 
-    // Added while working on tests - Ivar
+    // Added while working on branch 'feature-iw-fix-tests-bookingservice' - Ivar
     public Customer(Long id, String name, String phone) {
         this.id = id;
         this.name = name;
         this.phone = phone;
     }
 
-    // Commented out while working on tests - Ivar
+    // Commented out while working on branch 'feature-iw-fix-tests-bookingservice' - Ivar
     // public Customer(long l, String venusP, String s) {
     // }
+
 }
 
