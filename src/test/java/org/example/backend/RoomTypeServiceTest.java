@@ -24,16 +24,6 @@ public class RoomTypeServiceTest {
     @InjectMocks
     private RoomTypeServiceImpl rtService;
 
-//    @Override
-//    public RoomTypeDto roomTypeToRoomTypeDto(RoomType rt) {
-//        return RoomTypeDto.builder().
-//                id(rt.getId()).
-//                type(rt.getType()).
-//                maxExtraBed(rt.getMaxExtraBed()).
-//                maxPerson(rt.getMaxPerson()).
-//                pricePerNight(rt.getPricePerNight()).
-//                build();
-//    }
     @Test
     public void roomTypeToRoomTypeDtoTest(){
         RoomType rt = RoomType.builder().
@@ -52,17 +42,6 @@ public class RoomTypeServiceTest {
         Assertions.assertTrue(actual.getMaxPerson()==1);
         Assertions.assertTrue(actual.getPricePerNight()==500);
     }
-//
-//    @Override
-//    public RoomType roomTypeDtoToRoomType(RoomTypeDto rtd) {
-//        return RoomType.builder().
-//                id(rtd.getId()).
-//                type(rtd.getType()).
-//                maxExtraBed(rtd.getMaxExtraBed()).
-//                maxPerson(rtd.getMaxPerson()).
-//                pricePerNight(rtd.getPricePerNight()).
-//                build();
-//    }
 
     @Test
     public void roomTypeDtoToRoomTypeTest(){
@@ -82,11 +61,6 @@ public class RoomTypeServiceTest {
         Assertions.assertTrue(actual.getMaxPerson()==1);
         Assertions.assertTrue(actual.getPricePerNight()==500);
     }
-//
-//    @Override
-//    public List<RoomTypeDto> getAll() {
-//        return repo.findAll().stream().map(this::roomTypeToRoomTypeDto).toList();
-//    }
 
     @Test
     public void getAllTest(){
@@ -124,11 +98,6 @@ public class RoomTypeServiceTest {
         Assertions.assertTrue(rtList.get(1).getMaxPerson()==2);
         Assertions.assertTrue(rtList.get(1).getPricePerNight()==1000);
     }
-//
-//    @Override
-//    public void addRoomType(RoomTypeDto rtd) {
-//        repo.save(roomTypeDtoToRoomType(rtd));
-//    }
 
     @Test
     public void addRoomTypeTest(){
@@ -142,6 +111,4 @@ public class RoomTypeServiceTest {
 
         Assertions.assertTrue(rtService.addRoomType(rtDto).equals("new room type is added"));
     }
-
-
 }
