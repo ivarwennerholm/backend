@@ -24,7 +24,7 @@ public class Customer {
     @NotEmpty(message = "Name is mandatory")
     @Size(min = 2, message = "Type a name that is at least 2 characters")
     @Pattern(regexp = "^[A-Za-zÅÄÖåäö\\s]*$", message = "Only letters and whitespace for name")
-//    @Pattern(regexp = "^[A-Öa-ö]*$", message = "Only letters for name")
+    // @Pattern(regexp = "^[A-Öa-ö]*$", message = "Only letters for name")
     private String name;
     @NotEmpty(message = "Telephone number is mandatory")
     @Size(min = 5, max = 16, message = "You must type a telephone number of at least 5 but not more than 16 digits")
@@ -39,16 +39,10 @@ public class Customer {
         this.phone = phone;
     }
 
-    // Added while working on branch 'feature-iw-fix-tests-bookingservice' - Ivar
     public Customer(Long id, String name, String phone) {
         this.id = id;
         this.name = name;
         this.phone = phone;
     }
 
-    // Commented out while working on branch 'feature-iw-fix-tests-bookingservice' - Ivar
-    // public Customer(long l, String venusP, String s) {
-    // }
-
 }
-

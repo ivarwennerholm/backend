@@ -76,9 +76,7 @@ public class AvailableBookingDtoTests {
         }
 
         @Override
-        public Optional<Booking> createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
-            return null;
-        }
+        public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {}
 
         @Override
         public boolean areDatesOverlapping(List<Date> searchDates, List<Date> bookingDates) {

@@ -36,7 +36,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 public class BookingServiceTest2 {
 
@@ -57,14 +58,30 @@ public class BookingServiceTest2 {
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     // Customers, roomtypes, rooms and bookings
-    Customer c1; Customer c2; Customer c3;
-    CustomerDto cdto1; CustomerDto cdto2; CustomerDto cdto3;
-    RoomType rt1; RoomType rt2; RoomType rt3;
-    RoomTypeDto rtdto1; RoomTypeDto rtdto2; RoomTypeDto rtdto3;
-    Room r1; Room r2; Room r3;
-    RoomDto rdto1; RoomDto rdto2; RoomDto rdto3;
-    Booking b1; Booking b2; Booking b3;
-    BookingDto bdto1; BookingDto bdto2; BookingDto bdto3;
+    Customer c1;
+    Customer c2;
+    Customer c3;
+    CustomerDto cdto1;
+    CustomerDto cdto2;
+    CustomerDto cdto3;
+    RoomType rt1;
+    RoomType rt2;
+    RoomType rt3;
+    RoomTypeDto rtdto1;
+    RoomTypeDto rtdto2;
+    RoomTypeDto rtdto3;
+    Room r1;
+    Room r2;
+    Room r3;
+    RoomDto rdto1;
+    RoomDto rdto2;
+    RoomDto rdto3;
+    Booking b1;
+    Booking b2;
+    Booking b3;
+    BookingDto bdto1;
+    BookingDto bdto2;
+    BookingDto bdto3;
 
     // ANSI colors for readability
     public static final String ANSI_RESET = "\u001B[0m";
@@ -177,8 +194,48 @@ public class BookingServiceTest2 {
         Assertions.assertTrue(bookingService.isRoomAvailableOnDates(rdto1, d6, d7));
     }
 
-    @Test // TODO: Very complicated...
-    public void testCreateAndAddBookingToDatabase() throws ParseException {}
+    @Test // TODO: Not working
+    public void testCreateAndAddBookingToDatabase() throws ParseException {
+        // Setup
+        String checkinStr = "2024-06-01";
+        String checkoutStr = "2024-06-07";
+        Date checkin = new java.sql.Date(df.parse(checkinStr).getTime());
+        Date checkout = new java.sql.Date(df.parse(checkoutStr).getTime());
+        int guests = 1;
+        int extraBeds = 0;
+        Room mockRoom = r1;
+        long roomId = mockRoom.getId();
+        Customer mockCustomer = c1;
+        String customerName = mockCustomer.getName();
+        String customerPhone = mockCustomer.getPhone();
+
+        // Mock necessary behavior
+        // when(customerService.getCustomerByNameAndPhone(customerName, customerPhone)).thenReturn(mockCustomer);
+        // when(roomRepository.findById(roomId)).thenReturn(Optional.of(mockRoom));
+
+        // Execution
+        // bookingService.createAndAddBookingToDatabase(checkin, checkout, guests, extraBeds, roomId, customerName, customerPhone);
+
+        // Verification
+        // verify(customerService).getCustomerByNameAndPhone(customerName, customerPhone);
+        // verify(roomRepository).findById(roomId);
+        // verify(bookingRepository).save(any(Booking.class)); // Ensure that the save method is called with a Booking object
+
+
+
+        /*
+        Date checkin = new java.sql.Date(df.parse("2024-06-01").getTime());
+        Date checkout = new java.sql.Date(df.parse("2024-06-07").getTime());
+        int guestAmt = 1;
+        int extraBedAmt = 0;
+        Room room = r1;
+        Long roomId = room.getId();
+        Customer customer = c1;
+        String name = customer.getName();
+        String phone = customer.getPhone();
+        Booking booking = new Booking(checkin, checkout, guestAmt, extraBedAmt, customer, room);
+        */
+    }
 
     @Test // WORKING 👍
     public void testAreDatesOverlapping() throws ParseException {
@@ -290,8 +347,7 @@ public class BookingServiceTest2 {
             Assertions.assertEquals(actual2, rt2);
             Assertions.assertEquals(actual3, rt3);
             Assertions.assertEquals(actualList, expectedList);
-        }
-        else
+        } else
             Assertions.fail(ANSI_RED + "Roomtype(s) not found" + ANSI_RESET);
     }
 
@@ -317,8 +373,7 @@ public class BookingServiceTest2 {
             Assertions.assertEquals(actual2, c2);
             Assertions.assertEquals(actual3, c3);
             Assertions.assertEquals(actualList, expectedList);
-        }
-        else
+        } else
             Assertions.fail(ANSI_RED + "Customer(s) not found" + ANSI_RESET);
     }
 
@@ -344,8 +399,7 @@ public class BookingServiceTest2 {
             Assertions.assertEquals(actual2, r2);
             Assertions.assertEquals(actual3, r3);
             Assertions.assertEquals(actualList, expectedList);
-        }
-        else
+        } else
             Assertions.fail(ANSI_RED + "Room(s) not found" + ANSI_RESET);
     }
 
@@ -371,8 +425,7 @@ public class BookingServiceTest2 {
             Assertions.assertEquals(actual2, b2);
             Assertions.assertEquals(actual3, b3);
             Assertions.assertEquals(actualList, expectedList);
-        }
-        else
+        } else
             Assertions.fail(ANSI_RED + "Booking(s) not found" + ANSI_RESET);
     }
 

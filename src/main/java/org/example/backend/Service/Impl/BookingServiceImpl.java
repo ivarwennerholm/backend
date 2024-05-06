@@ -146,13 +146,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Optional<Booking> createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
+    public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
         customerService.addCustomerWithoutID(name, phone);
         Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
         Room room = roomRepository.findById(roomId).orElse(null);
         Booking booking = new Booking(checkin, checkout, guests, extraBeds, customer, room);
         bookingRepository.save(booking);
-        return null;
     }
 
     @Override
