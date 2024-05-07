@@ -23,12 +23,6 @@ public class BookingController {
     private final BookingService bookService;
     private List<BookingDto> allBookings = new ArrayList<>();
 
-    @RequestMapping("test")
-    public String testPage(Model model){
-        model.addAttribute("test","testingtesting");
-        return "testBooking.html";
-    }
-
     @RequestMapping("all")
     public String allBookings(Model model){
         allBookings = bookService.getAll();
@@ -56,8 +50,9 @@ public class BookingController {
                                  Model model){
         try {
             bookService.updateBookingDates(id,newCheckIn,newCheckOut);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+            model.addAttribute("okBook","Successfully update booking dates");
+        } catch (RuntimeException | ParseException e) {
+            model.addAttribute("failBook",e.getMessage());
         }
         return updateForm(id,model);
     }

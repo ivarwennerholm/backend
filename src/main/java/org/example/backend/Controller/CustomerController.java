@@ -74,7 +74,12 @@ public class CustomerController {
 
     @RequestMapping(value = "delete/{id}")
     public String deleteCustomer(@PathVariable Long id, Model model){
-        cusService.deleteCustomerById(id);
+        try{
+            cusService.deleteCustomerById(id);
+            model.addAttribute("success","Customer is delete sucessfully");
+        } catch (RuntimeException e){
+            model.addAttribute("error",e.getMessage());
+        }
         return getAllCustomers(model);
     }
 

@@ -32,8 +32,10 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,9 +72,11 @@ public class BookingServiceTest {
 
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
+    Booking b1;
+    Booking b2;
     @BeforeEach
     public void init() throws ParseException {
-        Booking b1 = Booking.builder()
+        b1 = Booking.builder()
                 .id(1L)
                 .checkinDate(new java.sql.Date(df.parse("2024-06-01").getTime()))
                 .checkoutDate(new java.sql.Date(df.parse("2024-06-07").getTime()))
@@ -82,12 +86,35 @@ public class BookingServiceTest {
                 .room(new Room(1L,2099, new RoomType(1L, "single", 0, 1,500)))
                 .build();
 
+        b2 = Booking.builder()
+                .id(2L)
+                .checkinDate(new java.sql.Date(df.parse("2024-07-01").getTime()))
+                .checkoutDate(new java.sql.Date(df.parse("2024-07-07").getTime()))
+                .guestAmt(1)
+                .extraBedAmt(0)
+                .customer(new Customer(1L,"Venus", "111-1111111",null))
+                .room(new Room(1L,2099, new RoomType(1L, "single", 0, 1,500)))
+                .build();
+
         when(bookRepo.findById(1L)).thenReturn(Optional.of(b1));
     }
     @Test
-    public void deleteBookingByIdTest() throws ParseException {
-        Assertions.assertTrue(bookService.deleteBookingById(1L).equals("delete customerVenus"));
+    public void deleteBookingByIdTest(){
+        Assertions.assertTrue(bookService.deleteBookingById(1L).equals("delete booking id 1"));
     }
+
+    @Test
+    public void updateBookingDatesTest() throws ParseException {
+        when(bookRepo.findAll()).thenReturn(Arrays.asList(b1,b2));
+        Assertions.assertTrue(bookService.updateBookingDates(1L, "2024-06-08", "2024-06-31").equals("booking is updated"));
+
+        Exception ex = assertThrows(RuntimeException.class,() -> bookService.updateBookingDates(1L, "2024-07-01", "2024-07-31"));
+        Assertions.assertEquals("The room is occupied during this new booking period",ex.getMessage());
+    }
+
+
+
+
 //    @Test
 //    public void findBookingByIdTest() throws ParseException {
 //        Room r = new Room(1L, 2099, new RoomType(1L, "single", 1, 0, 500));
