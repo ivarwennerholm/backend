@@ -10,17 +10,26 @@ import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 @SpringBootApplication
 public class BackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BackendApplication.class, args);
+
+        if (args.length == 0) {
+            SpringApplication.run(BackendApplication.class, args);
+        } else if (Objects.equals(args[0], "fetchcontractcustomers")) {
+            SpringApplication application = new SpringApplication(FetchContractCustomers.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
+        }
     }
 
     @Bean
