@@ -3,40 +3,39 @@ package org.example.backend.Model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.NoArgsConstructor;
 
-public class customers {
+@Entity
+@NoArgsConstructor
+public class ContractCustomer {
+    @Id
+    @GeneratedValue
+    public Long id;
     @JacksonXmlProperty(localName = "id")
     public int customerId;
-    @JacksonXmlProperty(localName = "companyName")
     public String companyName;
-    @JacksonXmlProperty(localName = "contactName")
     public String contactName;
-    @JacksonXmlProperty(localName = "contactTitle")
     public String contactTitle;
-    @JacksonXmlProperty(localName = "streetAddress")
     public String streetAddress;
-    @JacksonXmlProperty(localName = "city")
     public String city;
-    @JacksonXmlProperty(localName = "postalCode")
     public int postalCode;
-    @JacksonXmlProperty(localName = "country")
     public String country;
-    @JacksonXmlProperty(localName = "phone")
     public String phone;
-    @JacksonXmlProperty(localName = "fax")
     public String fax;
 
-    @JsonCreator
-    public customers(@JsonProperty("id") int customerId,
-                     @JsonProperty("companyName") String companyName,
-                     @JsonProperty("contactName") String contactName,
-                     @JsonProperty("contactTitle") String contactTitle,
-                     @JsonProperty("streetAddress") String streetAddress,
-                     @JsonProperty("city") String city,
-                     @JsonProperty("postalCode") int postalCode,
-                     @JsonProperty("country") String country,
-                     @JsonProperty("phone") String phone,
-                     @JsonProperty("fax") String fax) {
+    public ContractCustomer(@JacksonXmlProperty(localName = "id") int customerId,
+                            @JacksonXmlProperty(localName = "companyName") String companyName,
+                            @JacksonXmlProperty(localName = "contactName") String contactName,
+                            @JacksonXmlProperty(localName = "contactTitle") String contactTitle,
+                            @JsonProperty("streetAddress") String streetAddress,
+                            @JacksonXmlProperty(localName = "city") String city,
+                            @JacksonXmlProperty(localName = "postalCode") int postalCode,
+                            @JacksonXmlProperty(localName = "country") String country,
+                            @JacksonXmlProperty(localName = "phone") String phone,
+                            @JacksonXmlProperty(localName = "fax") String fax) {
         this.customerId = customerId;
         this.companyName = companyName;
         this.contactName = contactName;
@@ -48,6 +47,7 @@ public class customers {
         this.phone = phone;
         this.fax = fax;
     }
+
 }
 
 

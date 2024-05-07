@@ -3,7 +3,7 @@ package org.example.backend;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.example.backend.Model.AllContractCustomers;
-import org.example.backend.Model.customers;
+import org.example.backend.Model.ContractCustomer;
 //import org.example.backend.Repository.ContractCustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,7 +31,7 @@ public class FetchContractCustomers implements CommandLineRunner {
                 AllContractCustomers.class
         );
 //
-        for (customers cc : allContractCustomers.list){
+        for (ContractCustomer cc : allContractCustomers.list){
             System.out.println(ANSI_GREEN + cc.companyName + ANSI_RESET); // FOR TESTING ONLY
             //repo.save(cc);
         }

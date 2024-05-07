@@ -8,5 +8,5 @@ import java.util.List;
 @JacksonXmlRootElement(localName = "allcustomers")
 public class AllContractCustomers {
      @JacksonXmlProperty(localName = "customers")
-     public List<customers> list;
+     public List<ContractCustomer> list;
 }
