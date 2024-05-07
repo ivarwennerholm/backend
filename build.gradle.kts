@@ -31,6 +31,9 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    // added in branch s1-wi1-contractcustomer - Ivar
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.1")
+
 }
 
 tasks.withType<Test> {
