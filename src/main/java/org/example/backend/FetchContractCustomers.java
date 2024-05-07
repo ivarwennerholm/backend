@@ -4,7 +4,8 @@ import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.example.backend.Model.AllContractCustomers;
 import org.example.backend.Model.ContractCustomer;
-//import org.example.backend.Repository.ContractCustomerRepository;
+import org.example.backend.Repository.ContractCustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -13,7 +14,8 @@ import java.net.URL;
 @ComponentScan
 public class FetchContractCustomers implements CommandLineRunner {
 
-//    ContractCustomerRepository repo;
+    @Autowired
+    ContractCustomerRepository repo;
 
     // ANSI colors for readability
     public static final String ANSI_RESET = "\u001B[0m";
@@ -23,17 +25,16 @@ public class FetchContractCustomers implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println(ANSI_YELLOW + "Running FetchContractCustomers" + ANSI_RESET);
+        System.out.println(ANSI_YELLOW + "Running FetchContractCustomers" + ANSI_RESET); // FOR TESTING ONLY
         JacksonXmlModule module = new JacksonXmlModule();
         module.setDefaultUseWrapper(false);
         XmlMapper xmlMapper = new XmlMapper(module);
         AllContractCustomers allContractCustomers = xmlMapper.readValue(new URL("https://javaintegration.systementor.se/customers"),
                 AllContractCustomers.class
         );
-//
+
         for (ContractCustomer cc : allContractCustomers.list){
-            System.out.println(ANSI_GREEN + cc.companyName + ANSI_RESET); // FOR TESTING ONLY
-            //repo.save(cc);
+            repo.save(cc);
         }
 
 
