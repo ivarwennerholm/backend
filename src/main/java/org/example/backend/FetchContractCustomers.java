@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.example.backend.Model.AllContractCustomers;
 import org.example.backend.Model.ContractCustomer;
 import org.example.backend.Repository.ContractCustomerRepository;
+import org.example.backend.Service.ContractCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,6 +17,9 @@ public class FetchContractCustomers implements CommandLineRunner {
 
     @Autowired
     ContractCustomerRepository repo;
+
+    @Autowired
+    ContractCustomerService service;
 
     // ANSI colors for readability
     public static final String ANSI_RESET = "\u001B[0m";
@@ -32,12 +36,9 @@ public class FetchContractCustomers implements CommandLineRunner {
         AllContractCustomers allContractCustomers = xmlMapper.readValue(new URL("https://javaintegration.systementor.se/customers"),
                 AllContractCustomers.class
         );
-
         for (ContractCustomer cc : allContractCustomers.list){
             repo.save(cc);
         }
-
-
     }
 
 }
