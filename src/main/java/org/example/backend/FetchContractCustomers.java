@@ -3,8 +3,8 @@ package org.example.backend;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.example.backend.Model.AllContractCustomers;
-import org.example.backend.Model.ContractCustomer;
-import org.example.backend.Repository.ContractCustomerRepository;
+import org.example.backend.Model.customers;
+//import org.example.backend.Repository.ContractCustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -13,7 +13,7 @@ import java.net.URL;
 @ComponentScan
 public class FetchContractCustomers implements CommandLineRunner {
 
-    ContractCustomerRepository repo;
+//    ContractCustomerRepository repo;
 
     // ANSI colors for readability
     public static final String ANSI_RESET = "\u001B[0m";
@@ -30,10 +30,10 @@ public class FetchContractCustomers implements CommandLineRunner {
         AllContractCustomers allContractCustomers = xmlMapper.readValue(new URL("https://javaintegration.systementor.se/customers"),
                 AllContractCustomers.class
         );
-
-        for (ContractCustomer cc : allContractCustomers.contractCustomers ){
+//
+        for (customers cc : allContractCustomers.list){
             System.out.println(ANSI_GREEN + cc.companyName + ANSI_RESET); // FOR TESTING ONLY
-            repo.save(cc);
+            //repo.save(cc);
         }
 
 

@@ -32,7 +32,12 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     // added in branch s1-wi1-contractcustomer - Ivar
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.1")
+    //implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.1")
+
+    // added in branch s1-wi1-iw-integraiton - Ivar
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
+
 
 }
 
