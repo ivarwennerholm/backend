@@ -36,6 +36,7 @@ public class FetchContractCustomers implements CommandLineRunner {
         AllContractCustomers allContractCustomers = xmlMapper.readValue(new URL("https://javaintegration.systementor.se/customers"),
                 AllContractCustomers.class
         );
+        repo.deleteAll();
         for (ContractCustomer cc : allContractCustomers.list){
             repo.save(cc);
         }

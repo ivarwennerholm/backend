@@ -35,6 +35,12 @@ public class BackendApplication {
     @Bean
     public CommandLineRunner commandLineRunner(CustomerRepository cRepo, RoomTypeRepository rtRepo, RoomRepository rRepo, BookingRepository bRepo) {
         return (args) -> {
+            // Delete all
+            cRepo.deleteAll();
+            bRepo.deleteAll();
+            rRepo.deleteAll();
+            rtRepo.deleteAll();
+
             // Customers
             Customer c1 = new Customer("Venus", "111-1111111");
             Customer c2 = new Customer("Alex", "222-2222222");
