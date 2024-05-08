@@ -8,6 +8,7 @@ import org.example.backend.Service.ContractCustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -35,11 +36,18 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     @Override
     public List<ContractCustomerDto> getAll() {
-        return repo.
+        List<ContractCustomerDto> all = repo.
                 findAll().
                 stream().
                 map(this::contractCustomerToContractCustomerDto).
                 toList();
+
+        for (ContractCustomerDto customerDto : all) {
+            System.out.println(customerDto);
+        }
+
+        return all;
+
     }
 
     @Override
@@ -50,7 +58,7 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                 findAll().
                 stream().
                 map(this::contractCustomerToContractCustomerDto).
-                filter(cc -> cc.id == id).
+                filter(cc -> Objects.equals(cc.id, id)).
                 findFirst();
     }
 }
