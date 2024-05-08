@@ -30,16 +30,32 @@ public class ContractCustomerController {
 */
 
     @GetMapping
-    public String getAllContractCustomer(@RequestParam(name = "search", required = false) String search, Model model) {
+    public String getAllContractCustomer(@RequestParam(name = "search", required = false) String search,
+                                         @RequestParam(name = "sort", required = false) String sort,
+                                         @RequestParam(name = "cat", required = false) String cat,
+                                         Model model) {
         List<ContractCustomerDto> list;
+//        System.out.println("Search = " + search);
+//        System.out.println("Sort = " + sort);
+//        System.out.println("Cat = " + cat);
+        if (search != null || sort != null)
+            list = service.getFilteredList(search, sort, cat);
+        else
+            list = service.getAll();
+        /*
         if (search != null && !search.isEmpty()) {
             System.out.println("search is not null or empty");
-            list = service.findAllByCompanyNameContaining(search);
+            list = service.getFilteredList(search, sort, cat);
         } else {
             System.out.println("search is null or empty");
             list = service.getAll();
         }
+        */
+
         model.addAttribute("list", list);
+        model.addAttribute("search", search);
+        model.addAttribute("sort", sort);
+        model.addAttribute("cat", cat);
         return "allContractCustomers.html";
     }
 

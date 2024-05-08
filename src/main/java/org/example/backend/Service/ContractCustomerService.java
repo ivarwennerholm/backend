@@ -13,5 +13,5 @@ public interface ContractCustomerService {
 
     public Optional<ContractCustomerDto> getById(Long id);
 
-    public List<ContractCustomerDto> findAllByCompanyNameContaining(String name);
+    public List<ContractCustomerDto> getFilteredList(String search, String sort, String cat);
 }

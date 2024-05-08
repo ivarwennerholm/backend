@@ -7,6 +7,7 @@ import org.example.backend.Repository.ContractCustomerRepository;
 import org.example.backend.Service.ContractCustomerService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,8 +55,54 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     }
 
     @Override
-    public List<ContractCustomerDto> findAllByCompanyNameContaining(String search) {
-        return repo.findByCompanyNameContaining(search).
+    public List<ContractCustomerDto> getFilteredList(String search, String sort, String cat) {
+        List<ContractCustomer> list = new ArrayList<>();
+        if (search != null && !search.isEmpty()) {
+            if (sort == null) {
+                list = repo.search(search);
+            } else {
+                if (sort.equals("desc")) {
+                    if (cat.equals("company")) {
+                        list = repo.searchDescCompany(search);
+                    } else if (cat.equals("contact")) {
+                        list = repo.searchDescContact(search);
+                    } else if (cat.equals("country")) {
+                        list = repo.searchDescCountry(search);
+                    }
+                } else if (sort.equals("asc")) {
+                    if (cat.equals("company")) {
+                        list = repo.searchAscCompany(search);
+                    } else if (cat.equals("contact")) {
+                        list = repo.searchAscContact(search);
+                    } else if (cat.equals("country")) {
+                        list = repo.searchAscCountry(search);
+                    }
+                }
+            }
+        } else {
+            if (sort == null) {
+                list = repo.findAll();
+            } else {
+                if (sort.equals("desc")) {
+                    if (cat.equals("company")) {
+                        list = repo.descCompany();
+                    } else if (cat.equals("contact")) {
+                        list = repo.descContact();
+                    } else if (cat.equals("country")) {
+                        list = repo.descCountry();
+                    }
+                } else if (sort.equals("asc")) {
+                    if (cat.equals("company")) {
+                        list = repo.ascCompany();
+                    } else if (cat.equals("contact")) {
+                        list = repo.ascContact();
+                    } else if (cat.equals("country")) {
+                        list = repo.ascCountry();
+                    }
+                }
+            }
+        }
+        return list.
                 stream().
                 map(this::contractCustomerToContractCustomerDto).
                 toList();
