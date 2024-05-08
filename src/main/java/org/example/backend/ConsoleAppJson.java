@@ -30,7 +30,7 @@ public class ConsoleAppJson implements CommandLineRunner{
         httpConn.setRequestMethod("HEAD");
         try {
             httpConn.connect();
-            System.out.println("connect success");
+            System.out.println("\nJson server connection ok\n");
             shipperRepo.deleteAll();
             JsonMapper jsonMapper = new JsonMapper();
             jsonMapper.registerModule(new JavaTimeModule());
@@ -41,7 +41,7 @@ public class ConsoleAppJson implements CommandLineRunner{
                 shipperRepo.save(new Shipper(s));
             }
         }catch (UnknownHostException | java.net.ConnectException ex){
-            System.out.println("json server down");
+            System.out.println("\nJson server down\n");
         }
     }
 }
