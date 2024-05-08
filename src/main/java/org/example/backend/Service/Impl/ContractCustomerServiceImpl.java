@@ -36,24 +36,15 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     @Override
     public List<ContractCustomerDto> getAll() {
-        List<ContractCustomerDto> all = repo.
+        return repo.
                 findAll().
                 stream().
                 map(this::contractCustomerToContractCustomerDto).
                 toList();
-
-        for (ContractCustomerDto customerDto : all) {
-            System.out.println(customerDto);
-        }
-
-        return all;
-
     }
 
     @Override
     public Optional<ContractCustomerDto> getById(Long id) {
-        System.out.println("Service: CustomerId = " + id);
-        System.out.println(repo.findAll().stream().map(this::contractCustomerToContractCustomerDto).toList());
         return repo.
                 findAll().
                 stream().
@@ -61,4 +52,13 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                 filter(cc -> Objects.equals(cc.id, id)).
                 findFirst();
     }
+
+    @Override
+    public List<ContractCustomerDto> findAllByCompanyNameContaining(String search) {
+        return repo.findByCompanyNameContaining(search).
+                stream().
+                map(this::contractCustomerToContractCustomerDto).
+                toList();
+    }
+
 }

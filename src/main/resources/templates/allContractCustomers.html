@@ -10,17 +10,30 @@
             justify-content: center;
             align-items: center;
         }
+
         a:link {
             text-decoration: none;
         }
+
         a:visited {
             text-decoration: none;
         }
+
         a:hover {
             text-decoration: none;
         }
+
         a:active {
             text-decoration: none;
+        }
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 200px;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -29,25 +42,34 @@
     <div class="mt-2 mb-4">
         <a href="http://localhost:8080/"><img src="/logo.png"></a>
     </div>
-    <div class="mb-3">
+    <div class="mb-5">
         <h2>All Contract Customers 👇</h2>
     </div>
     <div class="center-align">
-        <table class="table w-75" th:unless="${#lists.isEmpty(list)}">
-            <tr>
-                <th>Company</th>
-                <th>Contact</th>
-                <th>Country</th>
-                <th>View</th>
-            </tr>
-            <tr th:each="cc : ${list}">
-                <td th:text="${cc.companyName}"></td>
-                <td th:text="${cc.contactName}"></td>
-                <td th:text="${cc.country}"></td>
-                <td><a th:href="@{/contractcustomers/{id}(id=${cc.id})}">View</a></td>
-            </tr>
-        </table>
+        <form class="form-inline search-form" th:action="@{/contractcustomers}" method="get">
+            <div class="form-group">
+                <input type="text" class="form-control search-input" name="search" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
     </div>
+</div>
+<div class="center-align">
+    <table class="table w-75" th:unless="${#lists.isEmpty(list)}">
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+            <th>View</th>
+        </tr>
+        <tr th:each="cc : ${list}">
+            <td th:text="${cc.companyName}"></td>
+            <td th:text="${cc.contactName}"></td>
+            <td th:text="${cc.country}"></td>
+            <td><a th:href="@{/contractcustomers/{id}(id=${cc.id})}">View</a></td>
+        </tr>
+    </table>
+</div>
 </div>
 </body>
 </html>

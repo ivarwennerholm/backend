@@ -12,4 +12,6 @@ public interface ContractCustomerService {
     public List<ContractCustomerDto> getAll();
 
     public Optional<ContractCustomerDto> getById(Long id);
+
+    public List<ContractCustomerDto> findAllByCompanyNameContaining(String name);
 }
