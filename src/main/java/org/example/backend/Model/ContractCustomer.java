@@ -1,12 +1,11 @@
 package org.example.backend.Model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
@@ -16,8 +15,11 @@ public class ContractCustomer {
     @Id
     @GeneratedValue
     public Long id;
+
     @JacksonXmlProperty(localName = "id")
+    @Column(name = "customer_id")
     public int customerId;
+
     public String companyName;
     public String contactName;
     public String contactTitle;
@@ -32,7 +34,7 @@ public class ContractCustomer {
                             @JacksonXmlProperty(localName = "companyName") String companyName,
                             @JacksonXmlProperty(localName = "contactName") String contactName,
                             @JacksonXmlProperty(localName = "contactTitle") String contactTitle,
-                            @JsonProperty("streetAddress") String streetAddress,
+                            @JacksonXmlProperty(localName = "streetAddress") String streetAddress,
                             @JacksonXmlProperty(localName = "city") String city,
                             @JacksonXmlProperty(localName = "postalCode") int postalCode,
                             @JacksonXmlProperty(localName = "country") String country,

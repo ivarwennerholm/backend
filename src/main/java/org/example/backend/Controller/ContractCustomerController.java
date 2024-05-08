@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("contractcustomers")
@@ -27,7 +28,15 @@ public class ContractCustomerController {
 
     @GetMapping("/{id}")
     public String getContractCustomer(@PathVariable Long id, Model model) {
-        return null;
+        Optional<ContractCustomerDto> ccOptional = service.getById(id);
+        if (ccOptional.isPresent()) {
+            ContractCustomerDto cc = ccOptional.get();
+            model.addAttribute("cc", cc);
+        } else {
+            model.addAttribute("error", "Customer not found");
+        }
+        return "contractCustomer.html";
     }
+
 
 }
