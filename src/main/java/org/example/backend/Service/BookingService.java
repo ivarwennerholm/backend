@@ -28,7 +28,7 @@ public interface BookingService {
 
     public String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException;
 
-    public void createAndAddBookingToDatabase (Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone);
+    public void createAndAddBookingToDatabase (Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email);
 
     public boolean areDatesOverlapping(List<java.sql.Date> searchDates, List<java.sql.Date> bookingDates);
 
