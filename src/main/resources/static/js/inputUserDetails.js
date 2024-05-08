@@ -36,9 +36,14 @@ function validatePhone() {
     }
 }
 
+function validateEmail(){
+    //todo....
+}
+
 function valAllFieldsAndUpdateConfirmBtn() {
     validateName();
     validatePhone();
+    validateEmail();
     updateConfirmButton();
 }
 

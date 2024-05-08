@@ -48,6 +48,19 @@
             </div>
         </div>
         <div id="phone-error"></div>
+        <div class="my-1 center-align">
+            <div>
+                <label for="email">Email:</label><br>
+                <input type="text"
+                       onchange="valAllFieldsAndUpdateConfirmBtn();"
+                       onpaste="this.onchange();"
+                       oninput="this.onchange();"
+                       class="form-control"
+                       id="email"
+                       name="email">
+            </div>
+        </div>
+        <div id="email-error"></div>
         <input type="hidden" id="roomid" name="roomid" th:value="${roomid}">
         <input type="hidden" id="checkin" name="checkin" th:value="${checkin}">
         <input type="hidden" id="checkout" name="checkout" th:value="${checkout}">

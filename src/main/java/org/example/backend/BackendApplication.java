@@ -42,9 +42,9 @@ public class BackendApplication {
             rRepo.deleteAll();
             rtRepo.deleteAll();
             // Customers
-            Customer c1 = new Customer("Venus", "111-1111111");
-            Customer c2 = new Customer("Alex", "222-2222222");
-            Customer c3 = new Customer("Ivar", "333-3333333");
+            Customer c1 = new Customer("Venus", "111-1111111", "venus@pear.com");
+            Customer c2 = new Customer("Alex", "222-2222222", "alex@apple.com");
+            Customer c3 = new Customer("Ivar", "333-3333333", "ivar@orange.com");
             cRepo.save(c1);
             cRepo.save(c2);
             cRepo.save(c3);
