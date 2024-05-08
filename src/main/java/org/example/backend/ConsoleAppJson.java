@@ -6,33 +6,42 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.ShipperDto;
 import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.ShipperRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.logging.Logger;
 
 @ComponentScan
 @RequiredArgsConstructor
 public class ConsoleAppJson implements CommandLineRunner{
-    private final ShipperRepository shipperRepository;
+    private final ShipperRepository shipperRepo;
 
-//    @Autowired
-//    public ConsoleAppJson(ShipperRepository shipperRepository) {
-//        this.shipperRepository = shipperRepository;
-//    }
     @Override
     public void run(String... args) throws Exception {
 
         URL url = new URL("https://javaintegration.systementor.se/shippers");
-        JsonMapper jsonMapper = new JsonMapper();
-        jsonMapper.registerModule(new JavaTimeModule());
+        HttpURLConnection httpConn = (HttpURLConnection)url.openConnection();
+        httpConn.setInstanceFollowRedirects(false);
+        httpConn.setRequestMethod("HEAD");
+        try {
+            httpConn.connect();
+            System.out.println("connect success");
+            shipperRepo.deleteAll();
+            JsonMapper jsonMapper = new JsonMapper();
+            jsonMapper.registerModule(new JavaTimeModule());
 
-        ShipperDto[]theShippers = jsonMapper.readValue(url, ShipperDto[].class);
+            ShipperDto[]theShippers = jsonMapper.readValue(url, ShipperDto[].class);
 
-        System.out.println("json hello");
-        for (ShipperDto s : theShippers){
-            shipperRepository.save(new Shipper(s));
+            for (ShipperDto s : theShippers){
+                shipperRepo.save(new Shipper(s));
+            }
+        }catch (UnknownHostException | java.net.ConnectException ex){
+            System.out.println("json server down");
         }
     }
 }
