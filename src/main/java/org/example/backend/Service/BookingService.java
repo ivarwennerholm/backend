@@ -42,7 +42,6 @@ public interface BookingService {
 
     public Date convertStringToDate(String date) throws ParseException;
 
-    public boolean isEmailValid(String email) throws Exception;
 
 
 }
