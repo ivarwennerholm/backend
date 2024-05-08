@@ -142,7 +142,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
-        if (!isEmailBlacklisted(email)){
+        if (isEmailValid(email)){
             customerService.addCustomerWithoutID(name, phone, email);
             Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
             Room room = roomRepository.findById(roomId).orElse(null);
@@ -230,7 +230,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public boolean isEmailBlacklisted(String email) throws Exception {
+    public boolean isEmailValid(String email) throws Exception {
         URL url = new URL("https://javabl.systementor.se/api/stefan/blacklistcheck/"+email);
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());
