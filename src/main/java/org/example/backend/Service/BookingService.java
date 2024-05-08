@@ -28,7 +28,7 @@ public interface BookingService {
 
     public String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException;
 
-    public void createAndAddBookingToDatabase (Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email);
+    public void createAndAddBookingToDatabase (Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception;
 
     public boolean areDatesOverlapping(List<java.sql.Date> searchDates, List<java.sql.Date> bookingDates);
 
@@ -41,6 +41,8 @@ public interface BookingService {
     public boolean isRoomAvailableOnDates(RoomDto room, java.sql.Date checkin, java.sql.Date checkout);
 
     public Date convertStringToDate(String date) throws ParseException;
+
+    public boolean isEmailBlacklisted(String email) throws Exception;
 
 
 }

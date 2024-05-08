@@ -132,7 +132,11 @@ public class BookingController {
         long roomId = Long.parseLong(roomid);
         int roomNumber = roomService.getRoomById(roomId).getRoomNumber();
         model.addAttribute("roomnumber", roomNumber);
-        bookService.createAndAddBookingToDatabase(checkinDate, checkoutDate, guestsAmt, extrabedsAmt, roomId, name, phone, email);
+        try {
+            bookService.createAndAddBookingToDatabase(checkinDate, checkoutDate, guestsAmt, extrabedsAmt, roomId, name, phone, email);
+        } catch (Exception e) {
+            model.addAttribute("blacklistMsg",e.getMessage());
+        }
         return "getBookingConfirmation";
     }
 
