@@ -22,12 +22,14 @@ import java.util.Objects;
 public class BackendApplication {
 
     public static void main(String[] args) {
-//        SpringApplication.run(BackendApplication.class, args);
-
         if(args.length == 0) {
             SpringApplication.run(BackendApplication.class, args);
-        }else if(Objects.equals(args[0], "consoleAppJson")){
+        } else if (Objects.equals(args[0], "consoleAppJson")){
             SpringApplication application = new SpringApplication(ConsoleAppJson.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
+        } else if (Objects.equals(args[0], "fetchcontractcustomers")) {
+            SpringApplication application = new SpringApplication(FetchContractCustomers.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
         }
@@ -36,11 +38,6 @@ public class BackendApplication {
     @Bean
     public CommandLineRunner commandLineRunner(CustomerRepository cRepo, RoomTypeRepository rtRepo, RoomRepository rRepo, BookingRepository bRepo) {
         return (args) -> {
-            // Delete all
-            cRepo.deleteAll();
-            bRepo.deleteAll();
-            rRepo.deleteAll();
-            rtRepo.deleteAll();
             // Customers
             Customer c1 = new Customer("Venus", "111-1111111");
             Customer c2 = new Customer("Alex", "222-2222222");

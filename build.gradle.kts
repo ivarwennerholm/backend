@@ -31,13 +31,12 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
-
-    //json
-// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+    // JSON
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
+    // XML
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0")
+    // DATABIND
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
 
 
 }
