@@ -62,7 +62,7 @@ public class BlacklistController {
         System.out.println(email + " " + name + " " + isOk);
         try {
             blackService.updateBlacklistedPerson(email,name,isOk);
-            model.addAttribute("updateSuccessfulMsg","Blacklisted record is updated");
+            model.addAttribute("updateSuccessMsg","Blacklisted record is updated");
         } catch (JsonProcessingException e) {
             System.out.println(e.getMessage());
         }
