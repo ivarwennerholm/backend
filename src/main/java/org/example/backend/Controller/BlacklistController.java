@@ -31,7 +31,6 @@ public class BlacklistController {
 
     @PostMapping("add")
     public String addNewToBlacklist(@RequestParam String email, @RequestParam String name, @RequestParam boolean isOk, Model model){
-        System.out.println(email + " " + name + " " + isOk);
         try {
             blackService.addNewBlacklistPerson(name,email,isOk);
             model.addAttribute("addSuccessMsg","New person is added to the blacklsit.");
@@ -59,7 +58,6 @@ public class BlacklistController {
 
     @PostMapping("update")
     public String updateBlacklist(@RequestParam String email, @RequestParam String name, @RequestParam boolean isOk, Model model){
-        System.out.println(email + " " + name + " " + isOk);
         try {
             blackService.updateBlacklistedPerson(email,name,isOk);
             model.addAttribute("updateSuccessMsg","Blacklisted record is updated");

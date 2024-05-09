@@ -128,7 +128,6 @@ public class CustomerController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("customer", customer);
             model.addAttribute("id", customer.getId());
-            System.out.println(customer.getId() + customer.getName() + customer.getPhone() + customer.getEmail());
             return "updateCustomer.html";
         }
         cusService.updateCustomer(customer.getId(), customer.getName(), customer.getPhone());
