@@ -13,4 +13,6 @@ public interface ContractCustomerService {
 
     public Optional<ContractCustomerDto> getById(Long id);
 
+    public List<ContractCustomerDto> sortListWithSwedishLetters(List<ContractCustomerDto> list, String sort, String cat);
+
 }
