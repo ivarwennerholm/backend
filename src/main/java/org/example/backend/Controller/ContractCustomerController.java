@@ -26,6 +26,9 @@ public class ContractCustomerController {
                                          @RequestParam(name = "cat", required = false) String cat,
                                          Model model) {
         List<ContractCustomerDto> list = service.getContractCustomers(search, sort, cat);
+        if (list.isEmpty()) {
+            model.addAttribute("message", "No contract customers found");
+        }
         model.addAttribute("list", list);
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
@@ -40,7 +43,7 @@ public class ContractCustomerController {
             ContractCustomerDto cc = ccOptional.get();
             model.addAttribute("cc", cc);
         } else {
-            model.addAttribute("error", "Customer not found");
+            model.addAttribute("error", "Contract customer not found");
         }
         return "contractCustomer.html";
     }
