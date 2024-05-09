@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Existing Blacklist</title>
+</head>
+<body>
+<div class="container text-center m-5">
+    <div class="mt-2 mb-4">
+        <a href="http://localhost:8080/"><img src="/logo.png"></a>
+    </div>
+    <div class="mb-3">
+        <h2>Update Existing Blacklist</h2>
+    </div>
+    <form th:action="@{/blacklist/update}" method="post">
+        <label th:text="'Email: ' + ${person.email}"></label><br>
+        <input type="hidden" name="email" id="email" th:value="${person.email}"><br>
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" th:value="${person.name}"><br>
+        <label>Ok:</label>
+        <input type="radio" name="isOk" value="true" id="isTrue" th:checked="${person.ok}">
+        <label for="isTrue">True</label>
+        <input type="radio" name="isOk" value="false" id="isFalse" th:checked="${!person.ok}">
+        <label for="isFalse">False</label>
+        <br><br>
+        <input type="submit" value="Update">
+    </form>
+</div>
+</body>
+</html>

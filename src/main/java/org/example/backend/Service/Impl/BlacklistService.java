@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.DTO.BlacklistCustomerDto;
+import org.example.backend.DTO.BlacklistPersonDto;
 import org.example.backend.DTO.BlacklistStatusDto;
 import org.springframework.stereotype.Service;
 
@@ -24,17 +24,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BlacklistService {
 
-    public List<BlacklistCustomerDto> getAll() throws IOException {
+    public static List<BlacklistPersonDto> getAll() throws IOException {
         URL url = new URL("https://javabl.systementor.se/api/stefan/blacklist");
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());
 
-        BlacklistCustomerDto[] theblacklist = jsonMapper.readValue(url, BlacklistCustomerDto[].class);
+        BlacklistPersonDto[] theblacklist = jsonMapper.readValue(url, BlacklistPersonDto[].class);
 
         return List.of(theblacklist);
     }
 
-    public void addNewBlacklistCustomer(String name, String email, boolean isOk) throws JsonProcessingException {
+    public void addNewBlacklistPerson(String name, String email, boolean isOk) throws JsonProcessingException {
 
         // Create ObjectMapper instance
         ObjectMapper mapper = new ObjectMapper();
@@ -55,6 +55,36 @@ public class BlacklistService {
                 .build();
 
         // receive http post response
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(System.out::println)
+                .join();
+    }
+
+    public static BlacklistPersonDto getBlacklistPerson(String email) throws IOException {
+        return getAll().stream().filter(k -> k.getEmail().equals(email)).findFirst().orElse(null);
+    }
+
+    public void updateBlacklistedPerson(String email, String name, boolean isOk) throws JsonProcessingException {
+
+        // Create ObjectMapper instance
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Create JSON payload using Java objects
+        String jsonPayload = mapper.writeValueAsString(Map.of(
+                "name", name,
+                "isOk", isOk
+        ));
+
+        // send http put request
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://javabl.systementor.se/api/stefan/blacklist/"+email))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                .build();
+
+        // receive http put response
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenAccept(System.out::println)

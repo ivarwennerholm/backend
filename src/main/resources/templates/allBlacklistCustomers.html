@@ -13,6 +13,8 @@
     <div class="mb-3">
         <h2>All Blacklist Customers</h2>
     </div>
+    <p th:unless="${#strings.isEmpty(addSuccessMsg)}" th:text="${addSuccessMsg}" style="color: green"></p>
+    <p th:unless="${#strings.isEmpty(updateSuccessMsg)}" th:text="${updateSuccessMsg}" style="color: green"></p>
     <table class="table" th:unless="${#lists.isEmpty(allBlacklist)}">
         <tr>
             <th>ID</th>
@@ -31,12 +33,11 @@
             <td th:text="${b.group}"></td>
             <td th:text="${b.created}"></td>
             <td th:text="${b.ok}"></td>
-            <td><a>Update</a></td>
+            <td><a th:href="@{/blacklist/updateForm/{email}(email=${b.email})}">Update</a></td>
             <td><a>Delete</a></td>
         </tr>
     </table>
     <br><br>
-    <p th:unless="${#strings.isEmpty(successMsg)}" th:text="${successMsg}" style="color: green"></p>
     <div>
         <a th:href="@{/blacklist/blacklistForm}">Add</a>
     </div>

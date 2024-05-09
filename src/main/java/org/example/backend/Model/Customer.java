@@ -55,4 +55,10 @@ public class Customer {
         this.email = email;
     }
 
+    public Customer(Long id, String name, String phone, List<Booking> bookingList) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.bookingList = bookingList;
+    }
 }
