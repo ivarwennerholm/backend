@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,15 +37,6 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     }
 
     @Override
-    public List<ContractCustomerDto> getAll() {
-        return repo.
-                findAll().
-                stream().
-                map(this::contractCustomerToContractCustomerDto).
-                toList();
-    }
-
-    @Override
     public Optional<ContractCustomerDto> getById(Long id) {
         return repo.
                 findAll().
@@ -55,70 +47,29 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     }
 
     @Override
-    public List<ContractCustomerDto> getFilteredList(String search, String sort, String cat) {
-        List<ContractCustomer> list = new ArrayList<>();
+    public List<ContractCustomerDto> getContractCustomers(String search, String sort, String cat) {
+        List<ContractCustomer> list;
         if (search != null && !search.isEmpty()) {
-            if (sort == null || cat == null) {
-                list = repo.search(search);
-                System.out.println("repo.search(" + search+ ") called");
+            if (sort != null && sort.equals("desc")) {
+                list = repo.searchAndSortDesc(search, cat);
+            } else if (sort != null && sort.equals("asc")) {
+                list = repo.searchAndSortAsc(search, cat);
             } else {
-                if (sort.equals("desc")) {
-                    if (cat.equals("company")) {
-                        list = repo.searchAndSortDesc(search, "company");
-                        System.out.println("repo.searchAndSortDesc(" + search + ", \"company\") called"); // FOR TESTING ONLY
-                    } else if (cat.equals("contact")) {
-                        list = repo.searchAndSortDesc(search, "contact");
-                        System.out.println("repo.searchAndSortDesc(" + search + ", \"contact\") called"); // FOR TESTING ONLY
-                    } else if (cat.equals("country")) {
-                        list = repo.searchAndSortDesc(search, "country");
-                        System.out.println("repo.searchAndSortDesc(" + search + ", \"country\") called"); // FOR TESTING ONLY
-                    }
-                } else if (sort.equals("asc")) {
-                    if (cat.equals("company")) {
-                        list = repo.searchAndSortAsc(search, "company");
-                        System.out.println("repo.searchAndSortAsc(" + search + ", \"company\") called"); // FOR TESTING ONLY
-                    } else if (cat.equals("contact")) {
-                        list = repo.searchAndSortAsc(search, "contact");
-                        System.out.println("repo.searchAndSortAsc(" + search + ", \"contact\") called"); // FOR TESTING ONLY
-                    } else if (cat.equals("country")) {
-                        list = repo.searchAndSortAsc(search, "country");
-                        System.out.println("repo.searchAndSortAsc(" + search + ", \"country\") called"); // FOR TESTING ONLY
-                    }
-                }
+                list = repo.search(search);
             }
         } else {
-            if (sort == null || cat == null) {
-                list = repo.findAll();
+            if (sort != null && sort.equals("desc")) {
+                list = repo.sortDesc(cat);
+            } else if (sort != null && sort.equals("asc")) {
+                list = repo.sortAsc(cat);
             } else {
-                if (sort.equals("desc")) {
-                    if (cat.equals("company")) {
-                        list = repo.sortDesc("company");
-                        System.out.println("repo.sortDesc(\"company\") called"); // FOR TESTING ONLY
-                    } else if (cat.equals("contact")) {
-                        list = repo.sortDesc("contact");
-                        System.out.println("repo.sortDesc(\"contact\") called"); // FOR TESTING ONLY
-                    } else if (cat.equals("country")) {
-                        list = repo.sortDesc("country");
-                        System.out.println("repo.sortDesc(\"country\") called"); // FOR TESTING ONLY
-                    }
-                } else if (sort.equals("asc")) {
-                    if (cat.equals("company")) {
-                        list = repo.sortAsc("company");
-                        System.out.println("repo.sortAsc(\"company\") called"); // FOR TESTING ONLY
-                    } else if (cat.equals("contact")) {
-                        list = repo.sortAsc("contact");
-                        System.out.println("repo.sortAsc(\"contact\") called"); // FOR TESTING ONLY
-                    } else if (cat.equals("country")) {
-                        list = repo.sortAsc("country");
-                        System.out.println("repo.sortAsc(\"country\") called"); // FOR TESTING ONLY
-                    }
-                }
+                list = repo.findAll();
             }
         }
-        return list.
-                stream().
-                map(this::contractCustomerToContractCustomerDto).
-                toList();
+
+        return list.stream()
+                .map(this::contractCustomerToContractCustomerDto)
+                .collect(Collectors.toList());
     }
 
 }

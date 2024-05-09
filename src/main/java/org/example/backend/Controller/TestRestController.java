@@ -16,13 +16,8 @@ import java.util.List;
 public class TestRestController {
     private final ContractCustomerService service;
 
-    @RequestMapping("contractcustomers")
-    public List<ContractCustomerDto> test() {
-        return service.getAll();
-    }
-
     @RequestMapping("/simple")
-    public String test2() {
+    public String test1() {
         return "TEST";
     }
 }

@@ -9,9 +9,8 @@ import java.util.Optional;
 public interface ContractCustomerService {
     public ContractCustomerDto contractCustomerToContractCustomerDto(ContractCustomer cc);
 
-    public List<ContractCustomerDto> getAll();
+    public List<ContractCustomerDto> getContractCustomers(String search, String sort, String cat);
 
     public Optional<ContractCustomerDto> getById(Long id);
 
-    public List<ContractCustomerDto> getFilteredList(String search, String sort, String cat);
 }
