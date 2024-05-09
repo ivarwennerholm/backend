@@ -3,47 +3,58 @@ package org.example.backend.Repository;
 import org.example.backend.Model.ContractCustomer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface ContractCustomerRepository extends JpaRepository<ContractCustomer, Long> {
 
-    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :search, '%'))")
-    List<ContractCustomer> search(String search);
+    // For search term without sorting
+    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :searchTerm, '%')) " +
+            "OR LOWER(cc.contactName) LIKE LOWER(concat('%', :searchTerm, '%')) " +
+            "OR LOWER(cc.country) LIKE LOWER(concat('%', :searchTerm, '%'))")
+    List<ContractCustomer> search(@Param("searchTerm") String searchTerm);
 
-    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :search, '%')) ORDER BY cc.companyName DESC")
-    List<ContractCustomer> searchDescCompany(String search);
+    // For descending order with search term
+    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :searchTerm, '%')) " +
+            "OR LOWER(cc.contactName) LIKE LOWER(concat('%', :searchTerm, '%')) " +
+            "OR LOWER(cc.country) LIKE LOWER(concat('%', :searchTerm, '%')) " +
+            "ORDER BY " +
+            "CASE :column " +
+            "WHEN 'company' THEN cc.companyName " +
+            "WHEN 'contact' THEN cc.contactName " +
+            "WHEN 'country' THEN cc.country " +
+            "END DESC")
+    List<ContractCustomer> searchAndSortDesc(@Param("searchTerm") String searchTerm, @Param("column") String column);
 
-    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :search, '%')) ORDER BY cc.companyName ASC")
-    List<ContractCustomer> searchAscCompany(String search);
+    // For ascending order with search term
+    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :searchTerm, '%')) " +
+            "OR LOWER(cc.contactName) LIKE LOWER(concat('%', :searchTerm, '%')) " +
+            "OR LOWER(cc.country) LIKE LOWER(concat('%', :searchTerm, '%')) " +
+            "ORDER BY " +
+            "CASE :column " +
+            "WHEN 'company' THEN cc.companyName " +
+            "WHEN 'contact' THEN cc.contactName " +
+            "WHEN 'country' THEN cc.country " +
+            "END ASC")
+    List<ContractCustomer> searchAndSortAsc(@Param("searchTerm") String searchTerm, @Param("column") String column);
 
-    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :search, '%')) ORDER BY cc.contactName DESC")
-    List<ContractCustomer> searchDescContact(String search);
+    // For descending order without search term
+    @Query("SELECT cc FROM ContractCustomer cc ORDER BY " +
+            "CASE :column " +
+            "WHEN 'company' THEN cc.companyName " +
+            "WHEN 'contact' THEN cc.contactName " +
+            "WHEN 'country' THEN cc.country " +
+            "END DESC")
+    List<ContractCustomer> sortDesc(@Param("column") String column);
 
-    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :search, '%')) ORDER BY cc.contactName ASC")
-    List<ContractCustomer> searchAscContact(String search);
+    // For ascending order without search term
+    @Query("SELECT cc FROM ContractCustomer cc ORDER BY " +
+            "CASE :column " +
+            "WHEN 'company' THEN cc.companyName " +
+            "WHEN 'contact' THEN cc.contactName " +
+            "WHEN 'country' THEN cc.country " +
+            "END ASC")
+    List<ContractCustomer> sortAsc(@Param("column") String column);
 
-    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :search, '%')) ORDER BY cc.country DESC")
-    List<ContractCustomer> searchDescCountry(String search);
-
-    @Query("SELECT cc FROM ContractCustomer cc WHERE LOWER(cc.companyName) LIKE LOWER(concat('%', :search, '%')) ORDER BY cc.country ASC")
-    List<ContractCustomer> searchAscCountry(String search);
-
-    @Query("SELECT cc FROM ContractCustomer cc ORDER BY cc.companyName DESC")
-    List<ContractCustomer> descCompany();
-
-    @Query("SELECT cc FROM ContractCustomer cc ORDER BY cc.companyName ASC")
-    List<ContractCustomer> ascCompany();
-
-    @Query("SELECT cc FROM ContractCustomer cc ORDER BY cc.contactName DESC")
-    List<ContractCustomer> descContact();
-
-    @Query("SELECT cc FROM ContractCustomer cc ORDER BY cc.contactName ASC")
-    List<ContractCustomer> ascContact();
-
-    @Query("SELECT cc FROM ContractCustomer cc ORDER BY cc.country DESC")
-    List<ContractCustomer> descCountry();
-
-    @Query("SELECT cc FROM ContractCustomer cc ORDER BY cc.country ASC")
-    List<ContractCustomer> ascCountry();
 }

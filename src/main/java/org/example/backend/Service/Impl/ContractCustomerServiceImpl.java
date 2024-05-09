@@ -58,46 +58,59 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     public List<ContractCustomerDto> getFilteredList(String search, String sort, String cat) {
         List<ContractCustomer> list = new ArrayList<>();
         if (search != null && !search.isEmpty()) {
-            if (sort == null) {
+            if (sort == null || cat == null) {
                 list = repo.search(search);
+                System.out.println("repo.search(" + search+ ") called");
             } else {
                 if (sort.equals("desc")) {
                     if (cat.equals("company")) {
-                        list = repo.searchDescCompany(search);
+                        list = repo.searchAndSortDesc(search, "company");
+                        System.out.println("repo.searchAndSortDesc(" + search + ", \"company\") called"); // FOR TESTING ONLY
                     } else if (cat.equals("contact")) {
-                        list = repo.searchDescContact(search);
+                        list = repo.searchAndSortDesc(search, "contact");
+                        System.out.println("repo.searchAndSortDesc(" + search + ", \"contact\") called"); // FOR TESTING ONLY
                     } else if (cat.equals("country")) {
-                        list = repo.searchDescCountry(search);
+                        list = repo.searchAndSortDesc(search, "country");
+                        System.out.println("repo.searchAndSortDesc(" + search + ", \"country\") called"); // FOR TESTING ONLY
                     }
                 } else if (sort.equals("asc")) {
                     if (cat.equals("company")) {
-                        list = repo.searchAscCompany(search);
+                        list = repo.searchAndSortAsc(search, "company");
+                        System.out.println("repo.searchAndSortAsc(" + search + ", \"company\") called"); // FOR TESTING ONLY
                     } else if (cat.equals("contact")) {
-                        list = repo.searchAscContact(search);
+                        list = repo.searchAndSortAsc(search, "contact");
+                        System.out.println("repo.searchAndSortAsc(" + search + ", \"contact\") called"); // FOR TESTING ONLY
                     } else if (cat.equals("country")) {
-                        list = repo.searchAscCountry(search);
+                        list = repo.searchAndSortAsc(search, "country");
+                        System.out.println("repo.searchAndSortAsc(" + search + ", \"country\") called"); // FOR TESTING ONLY
                     }
                 }
             }
         } else {
-            if (sort == null) {
+            if (sort == null || cat == null) {
                 list = repo.findAll();
             } else {
                 if (sort.equals("desc")) {
                     if (cat.equals("company")) {
-                        list = repo.descCompany();
+                        list = repo.sortDesc("company");
+                        System.out.println("repo.sortDesc(\"company\") called"); // FOR TESTING ONLY
                     } else if (cat.equals("contact")) {
-                        list = repo.descContact();
+                        list = repo.sortDesc("contact");
+                        System.out.println("repo.sortDesc(\"contact\") called"); // FOR TESTING ONLY
                     } else if (cat.equals("country")) {
-                        list = repo.descCountry();
+                        list = repo.sortDesc("country");
+                        System.out.println("repo.sortDesc(\"country\") called"); // FOR TESTING ONLY
                     }
                 } else if (sort.equals("asc")) {
                     if (cat.equals("company")) {
-                        list = repo.ascCompany();
+                        list = repo.sortAsc("company");
+                        System.out.println("repo.sortAsc(\"company\") called"); // FOR TESTING ONLY
                     } else if (cat.equals("contact")) {
-                        list = repo.ascContact();
+                        list = repo.sortAsc("contact");
+                        System.out.println("repo.sortAsc(\"contact\") called"); // FOR TESTING ONLY
                     } else if (cat.equals("country")) {
-                        list = repo.ascCountry();
+                        list = repo.sortAsc("country");
+                        System.out.println("repo.sortAsc(\"country\") called"); // FOR TESTING ONLY
                     }
                 }
             }
