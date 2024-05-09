@@ -2,6 +2,8 @@ package org.example.backend.Service.Impl;
 
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -31,14 +34,27 @@ public class BlacklistService {
         return List.of(theblacklist);
     }
 
-    public void addNewBlacklistCustomer(String name, String email, boolean isOk){
+    public void addNewBlacklistCustomer(String name, String email, boolean isOk) throws JsonProcessingException {
+
+        // Create ObjectMapper instance
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Create JSON payload using Java objects
+        String jsonPayload = mapper.writeValueAsString(Map.of(
+                "email", email,
+                "name", name,
+                "ok", isOk
+        ));
+
+        // send http post request
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://javabl.systementor.se/api/stefan/blacklist"))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString("{\"email\":"+email+", \"name\":"+name+", \"isOk\":"+isOk+" }"))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
                 .build();
 
+        // receive http post response
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenAccept(System.out::println)

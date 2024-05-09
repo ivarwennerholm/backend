@@ -1,11 +1,14 @@
 package org.example.backend.Controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BlacklistCustomerDto;
 import org.example.backend.Service.Impl.BlacklistService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,9 +31,14 @@ public class BlacklistController {
         return "allBlacklistCustomers.html";
     }
 
-//    @RequestMapping("add")
-//    public String addBlacklist(){
-//        addNewBlacklistCustomer;
-//        return "b"
-//    }
+    @PostMapping("add")
+    public String addNewToBlacklist(@RequestParam String email, @RequestParam String name, @RequestParam boolean isOk, Model model){
+        System.out.println(email + " " + name + " " + isOk);
+        try {
+            blackService.addNewBlacklistCustomer(name,email,isOk);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());
+        }
+        return getAllBlacklist(model);
+    }
 }
