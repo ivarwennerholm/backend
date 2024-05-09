@@ -36,9 +36,15 @@ public class BlacklistController {
         System.out.println(email + " " + name + " " + isOk);
         try {
             blackService.addNewBlacklistCustomer(name,email,isOk);
+            model.addAttribute("successMsg","New person is added to the blacklsit.");
         } catch (JsonProcessingException e) {
             System.out.println(e.getMessage());
         }
         return getAllBlacklist(model);
+    }
+
+    @RequestMapping("blacklistForm")
+    public String blacklistForm(){
+        return "addNewPersonToBlacklist.html";
     }
 }

@@ -31,29 +31,15 @@
             <td th:text="${b.group}"></td>
             <td th:text="${b.created}"></td>
             <td th:text="${b.ok}"></td>
-            <td><a th:href="@{/customers/updateForm/{id}(id=${b.id})}">Update</a></td>
-            <td><a th:href="@{/customers/delete/{id}(id=${b.id})}">Delete</a></td>
+            <td><a>Update</a></td>
+            <td><a>Delete</a></td>
         </tr>
     </table>
-    <form action="add" method="post">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email"><br>
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name"><br>
-        <label>Ok:</label>
-        <input type="radio" name="isOk" value="true" id="isTrue">
-        <label for="isTrue">True</label>
-        <input type="radio" name="isOk" value="false" id="isFalse">
-        <label for="isFalse">False</label>
-        <br><br>
-        <input type="submit" value="Add">
-    </form>
-<!--    <p th:unless="${#strings.isEmpty(error)}" th:text="${error}"></p>-->
-<!--    <p th:unless="${#strings.isEmpty(success)}"th:text="${success}"></p>-->
     <br><br>
-<!--    <div>-->
-<!--        <a th:href="@{/customers/registerForm}">Add</a>-->
-<!--    </div>-->
+    <p th:unless="${#strings.isEmpty(successMsg)}" th:text="${successMsg}" style="color: green"></p>
+    <div>
+        <a th:href="@{/blacklist/blacklistForm}">Add</a>
+    </div>
 </div>
 </body>
 </html>
