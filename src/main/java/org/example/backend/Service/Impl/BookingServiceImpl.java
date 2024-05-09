@@ -32,7 +32,7 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepository roomRepository;
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
-    private BlacklistService blackService;
+    private final BlacklistService blackService;
 
     @Override
     public BookingDto bookingToBookingDto(Booking b) {
