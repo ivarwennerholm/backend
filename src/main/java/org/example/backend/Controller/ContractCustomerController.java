@@ -45,18 +45,4 @@ public class ContractCustomerController {
         return "contractCustomer.html";
     }
 
-    /*@GetMapping("search/{search}")
-    public String searchContractCustomers(@PathVariable String search, Model model) {
-        model.addAttribute("search", search);
-        System.out.println(search);
-        *//*List <ContractCustomerDto> list = service.findAllByCompanyNameContaining(search);
-        if (!list.isEmpty()) {
-            model.addAttribute("list", list);
-        } else {
-            model.addAttribute("notfound", "No Contract Customer found");
-        }*//*
-        // return "redirect:/contractcustomers";
-        return "redirect:/contractcustomers?search=" + search;
-    }*/
-
 }
