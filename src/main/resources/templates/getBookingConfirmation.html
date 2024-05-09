@@ -17,18 +17,24 @@
     <div class="mt-2 mb-4">
         <a href="http://localhost:8080/"><img src="/logo.png"></a>
     </div>
-    <div class="my-3">
-        <h4>Booking complete! ✌️</h4>
+    <div th:if="${!#strings.isEmpty(blacklistMsg)}">
+        <p th:text="${blacklistMsg}" style="color: red"></p>
     </div>
-    <div class="rounded border border-dark custom-width-25 text-center p-3">
-        <p th:text="'Name: ' + ${name}"></p>
-        <p th:text="'Phone: ' + ${phone}"></p>
-        <p th:text="'Room number: ' + ${roomnumber}"></p>
-        <p th:text="'Checkin: ' + ${checkin}"></p>
-        <p th:text="'Checkout: ' + ${checkout}"></p>
-        <p th:text="'Guests: ' + ${guests}"></p>
-        <p th:text="'Extra beds: ' + ${extrabeds}"></p>
+    <div th:unless="${!#strings.isEmpty(blacklistMsg)}">
+        <div class="my-3">
+            <h4>Booking complete! ✌️</h4>
+        </div>
+        <div class="rounded border border-dark custom-width-25 text-center p-3">
+            <p th:text="'Name: ' + ${name}"></p>
+            <p th:text="'Phone: ' + ${phone}"></p>
+            <p th:text="'Room number: ' + ${roomnumber}"></p>
+            <p th:text="'Checkin: ' + ${checkin}"></p>
+            <p th:text="'Checkout: ' + ${checkout}"></p>
+            <p th:text="'Guests: ' + ${guests}"></p>
+            <p th:text="'Extra beds: ' + ${extrabeds}"></p>
+        </div>
     </div>
+
 </div>
 <!-- FOR TESTING ONLY
 <div style="border:1px solid black">

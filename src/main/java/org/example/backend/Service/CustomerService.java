@@ -14,9 +14,11 @@ public interface CustomerService {
 
     public String addCustomer(CustomerDto c);
 
-    public void addCustomerWithoutID(String name, String phone);
+    public void addCustomerWithoutID(String name, String phone, String email);
 
     public Customer getCustomerByNameAndPhone(String name, String phone);
+
+    public Customer getCustomerByEmail(String email);
 
     public String deleteCustomerByName(String name);
 

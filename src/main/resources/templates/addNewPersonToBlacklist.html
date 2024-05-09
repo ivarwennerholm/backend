@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blacklist New Person</title>
+</head>
+<body>
+<div class="container text-center m-5">
+    <div class="mt-2 mb-4">
+        <a href="http://localhost:8080/"><img src="/logo.png"></a>
+    </div>
+<div class="mb-3">
+    <h2>Blacklist New Person</h2>
+</div>
+<form action="add" method="post">
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email"><br><br>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name"><br><br>
+    <label>Ok:</label>
+    <input type="radio" name="isOk" value="true" id="isTrue">
+    <label for="isTrue">True</label>
+    <input type="radio" name="isOk" value="false" id="isFalse">
+    <label for="isFalse">False</label>
+    <br><br>
+    <input type="submit" value="Add">
+</form>
+</div>
+</body>
+</html>

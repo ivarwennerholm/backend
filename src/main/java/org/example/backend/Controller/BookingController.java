@@ -113,6 +113,7 @@ public class BookingController {
                                          @RequestParam String extrabeds,
                                          @RequestParam String name,
                                          @RequestParam String phone,
+                                         @RequestParam String email,
                                          Model model) throws ParseException {
 
         model.addAttribute("checkin", checkin);
@@ -121,6 +122,7 @@ public class BookingController {
         model.addAttribute("extrabeds", extrabeds);
         model.addAttribute("name", name);
         model.addAttribute("phone", phone);
+        model.addAttribute("email",email);
 
         // Add booking to database
         Date checkinDate = bookService.convertStringToDate(checkin);
@@ -130,7 +132,11 @@ public class BookingController {
         long roomId = Long.parseLong(roomid);
         int roomNumber = roomService.getRoomById(roomId).getRoomNumber();
         model.addAttribute("roomnumber", roomNumber);
-        bookService.createAndAddBookingToDatabase(checkinDate, checkoutDate, guestsAmt, extrabedsAmt, roomId, name, phone);
+        try {
+            bookService.createAndAddBookingToDatabase(checkinDate, checkoutDate, guestsAmt, extrabedsAmt, roomId, name, phone, email);
+        } catch (Exception e) {
+            model.addAttribute("blacklistMsg",e.getMessage());
+        }
         return "getBookingConfirmation";
     }
 

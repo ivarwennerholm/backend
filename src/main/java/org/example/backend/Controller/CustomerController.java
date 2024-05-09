@@ -62,7 +62,7 @@ public class CustomerController {
         if (bindingResult.hasErrors()) {
             return "addNewCustomer.html";
         }
-        cusService.addCustomer(new CustomerDto(customer.getName(),customer.getPhone()));
+        cusService.addCustomer(new CustomerDto(customer.getName(),customer.getPhone(),customer.getEmail()));
         return getAllCustomers(model);
     }
 
@@ -123,11 +123,12 @@ public class CustomerController {
         return "updateCustomer.html";
     }
 
-    @PostMapping("update/")
+    @PostMapping("update")
     public String updateCustomer(@Valid Customer customer, BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
             model.addAttribute("customer", customer);
             model.addAttribute("id", customer.getId());
+            System.out.println(customer.getId() + customer.getName() + customer.getPhone() + customer.getEmail());
             return "updateCustomer.html";
         }
         cusService.updateCustomer(customer.getId(), customer.getName(), customer.getPhone());

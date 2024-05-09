@@ -36,16 +36,37 @@ function validatePhone() {
     }
 }
 
+function validateEmail(){
+    var email = document.getElementById("email");
+    if (email.value === "")
+        return false;
+    var email_error = document.getElementById("email-error");
+    var regex = /^(.+)@(\S+)$/;
+    if (!regex.test(email.value)){
+        email.className = "form-control w-auto text-center is-invalid";
+        markup = "<p class=\"text-secondary\"><small><small>⚠️️ Email format is valid. Please try again.</small></small></p>";
+        email_error.innerHTML = markup;
+        return false;
+    } else {
+        email.className = "form-control w-auto text-center is-valid";
+        markup = "";
+        email_error.innerHTML = markup;
+        return true;
+    }
+}
+
 function valAllFieldsAndUpdateConfirmBtn() {
     validateName();
     validatePhone();
+    validateEmail();
     updateConfirmButton();
 }
 
 function areAllFieldsValid() {
     if (
         validateName() &&
-        validatePhone()
+        validatePhone() &&
+        validateEmail()
     ) {
         return true;
     } else {

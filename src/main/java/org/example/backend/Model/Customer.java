@@ -31,6 +31,10 @@ public class Customer {
     @Pattern(regexp = "^[\\d+-]*$", message = "Telephone numbers can only contain digits and hyphens")
     private String phone;
 
+    @NotEmpty(message = "Email is mandatory")
+    @Pattern(regexp = "^(.+)@(\\S+)$", message = "Please provide a valid email")
+    private String email;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private List<Booking> bookingList;
 
@@ -45,4 +49,16 @@ public class Customer {
         this.phone = phone;
     }
 
+    public Customer(String name, String phone, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
+
+    public Customer(Long id, String name, String phone, List<Booking> bookingList) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.bookingList = bookingList;
+    }
 }

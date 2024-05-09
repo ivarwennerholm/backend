@@ -17,12 +17,12 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepo;
     @Override
     public Customer customerDtoToCustomer(CustomerDto c) {
-        return Customer.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).build();
+        return Customer.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).email(c.getEmail()).build();
     }
 
     @Override
     public CustomerDto customerToCustomerDto(Customer c) {
-        return CustomerDto.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).build();
+        return CustomerDto.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).email(c.getEmail()).build();
     }
 
 
@@ -38,14 +38,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void addCustomerWithoutID(String name, String phone) {
-        Customer customer = Customer.builder().name(name).phone(phone).build();
+    public void addCustomerWithoutID(String name, String phone, String email) {
+        Customer customer = Customer.builder().name(name).phone(phone).email(email).build();
         customerRepo.save(customer);
     }
 
     @Override
     public Customer getCustomerByNameAndPhone(String name, String phone) {
         return customerRepo.getCustomerByNameAndPhone(name, phone);
+    }
+
+    @Override
+    public Customer getCustomerByEmail(String email) {
+        return customerRepo.findAll().stream().filter(k -> k.getEmail().equals(email)).findFirst().orElse(null);
     }
 
     @Override

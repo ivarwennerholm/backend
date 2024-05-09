@@ -1,12 +1,13 @@
 package org.example.backend.Service.Impl;
 
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.DTO.BookingDto;
-import org.example.backend.DTO.CustomerDto;
-import org.example.backend.DTO.RoomDto;
+import org.example.backend.DTO.*;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
+import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
@@ -15,14 +16,12 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Service;
 
+import java.net.URL;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +32,7 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepository roomRepository;
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
+    private final BlacklistService blackService;
 
     @Override
     public BookingDto bookingToBookingDto(Booking b) {
@@ -142,12 +142,17 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone) {
-        customerService.addCustomerWithoutID(name, phone);
-        Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
-        Room room = roomRepository.findById(roomId).orElse(null);
-        Booking booking = new Booking(checkin, checkout, guests, extraBeds, customer, room);
-        bookingRepository.save(booking);
+    public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
+        if (blackService.isEmailValid(email)){
+            customerService.addCustomerWithoutID(name, phone, email);
+            Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
+            Room room = roomRepository.findById(roomId).orElse(null);
+            Booking booking = new Booking(checkin, checkout, guests, extraBeds, customer, room);
+            bookingRepository.save(booking);
+        } else {
+            throw new Exception("Booking unsuccessful. Please contact Admin.");
+        }
+
     }
 
     @Override
@@ -224,5 +229,6 @@ public class BookingServiceImpl implements BookingService {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return new java.sql.Date(df.parse(date).getTime());
     }
+
 
 }
