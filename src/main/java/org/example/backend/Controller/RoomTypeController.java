@@ -18,9 +18,4 @@ public class RoomTypeController {
         return service.getAll();
     }
 
-    @RequestMapping("add")
-    public String addRoomType(@RequestParam Long id, @RequestParam String type, @RequestParam int maxExtraBed, @RequestParam int maxPerson, @RequestParam double pricePerNight) {
-        service.addRoomType(new RoomTypeDto(id, type, maxExtraBed, maxPerson, pricePerNight));
-        return "room type (id: " + id + ", type: " + type + ", extrabed: " + maxExtraBed + ", maxperson: " + maxPerson + ") added";
-    }
 }

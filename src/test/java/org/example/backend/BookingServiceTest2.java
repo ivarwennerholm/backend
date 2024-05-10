@@ -14,10 +14,7 @@ import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
 import org.example.backend.Service.BookingService;
 import org.example.backend.Service.CustomerService;
-import org.example.backend.Service.Impl.BookingServiceImpl;
-import org.example.backend.Service.Impl.CustomerServiceImpl;
-import org.example.backend.Service.Impl.RoomServiceImpl;
-import org.example.backend.Service.Impl.RoomTypeServiceImpl;
+import org.example.backend.Service.Impl.*;
 import org.example.backend.Service.RoomService;
 import org.example.backend.Service.RoomTypeService;
 import org.junit.jupiter.api.Assertions;
@@ -36,7 +33,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 public class BookingServiceTest2 {
@@ -54,6 +50,8 @@ public class BookingServiceTest2 {
     private RoomService roomService;
     private CustomerService customerService;
     private BookingService bookingService;
+    private BlacklistService blacklistService;
+
 
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -95,8 +93,9 @@ public class BookingServiceTest2 {
         // Services:
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
         customerService = new CustomerServiceImpl(customerRepository);
+        blacklistService = new BlacklistService();
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
-        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository);
+        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService);
 
         // Customers
         c1 = new Customer(1L, "Venus", "111-1111111");

@@ -33,7 +33,7 @@ public class ContractCustomerController {
         model.addAttribute("search", search);
         model.addAttribute("sort", sort);
         model.addAttribute("cat", cat);
-        return "contractCustomers.html";
+        return "allContractCustomers.html";
     }
 
     @GetMapping("/{id}")
