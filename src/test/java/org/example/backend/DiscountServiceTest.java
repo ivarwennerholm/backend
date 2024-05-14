@@ -87,7 +87,7 @@ public class DiscountServiceTest {
         Date checkout = new java.sql.Date(df.parse("2024-06-12").getTime());
         double fullPrice = 13000;
         double discount1 = 40;
-        double discount2 = 0;
+        double discount2 = 64.8;
         double discount3 = 0;
         double totalDiscount = discount1 + discount2 + discount3;
         double expected = fullPrice - totalDiscount;
@@ -103,6 +103,29 @@ public class DiscountServiceTest {
         double expected = 40;
         double actual = discountService.getDiscountSundayMonday(checkin, checkout, r1);
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getDiscountTwoOrMoreNights() throws ParseException {
+        Date checkin1 = new java.sql.Date(df.parse("2024-05-17").getTime());
+        Date checkout1 = new java.sql.Date(df.parse("2024-05-18").getTime());
+        Date checkin2 = new java.sql.Date(df.parse("2024-05-31").getTime());
+        Date checkout2 = new java.sql.Date(df.parse("2024-06-01").getTime());
+        Date checkin3 = new java.sql.Date(df.parse("2024-05-17").getTime());
+        Date checkout3 = new java.sql.Date(df.parse("2024-06-12").getTime());
+        Date checkin4 = new java.sql.Date(df.parse("2024-06-17").getTime());
+        Date checkout4 = new java.sql.Date(df.parse("2024-06-19").getTime());
+        double totalPrice = 1000;
+        double expectedYes = 5;
+        double expectedNo = 0;
+        double actual1 = discountService.getDiscountTwoOrMoreNights(checkin1, checkout1, totalPrice);
+        double actual2 = discountService.getDiscountTwoOrMoreNights(checkin2, checkout2, totalPrice);
+        double actual3 = discountService.getDiscountTwoOrMoreNights(checkin3, checkout3, totalPrice);
+        double actual4 = discountService.getDiscountTwoOrMoreNights(checkin4, checkout4, totalPrice);
+        Assertions.assertEquals(expectedNo, actual1);
+        Assertions.assertEquals(expectedNo, actual2);
+        Assertions.assertEquals(expectedYes, actual3);
+        Assertions.assertEquals(expectedYes, actual4);
     }
 
     @Test
