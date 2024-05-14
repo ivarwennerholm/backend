@@ -123,12 +123,14 @@ public class BookingServiceTest2 {
         r3 = new Room(3L, 103, rt3);
 
         // Bookings
+        // TODO: Add method call for totalPrice
+        double totalPrice = 10000;
         b1 = new Booking(1L, new java.sql.Date(df.parse("2024-06-01").getTime()),
-                new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, c1, r1);
+                new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, totalPrice, c1, r1);
         b2 = new Booking(2L, new java.sql.Date(df.parse("2024-08-22").getTime()),
-                new java.sql.Date(df.parse("2024-08-23").getTime()), 3, 1, c2, r2);
+                new java.sql.Date(df.parse("2024-08-23").getTime()), 3, 1, totalPrice, c2, r2);
         b3 = new Booking(3L, new java.sql.Date(df.parse("2024-12-23").getTime()),
-                new java.sql.Date(df.parse("2024-12-25").getTime()), 4, 2, c3, r3);
+                new java.sql.Date(df.parse("2024-12-25").getTime()), 4, 2, totalPrice, c3, r3);
 
         // MOCK RETURNS:
         // roomTypeRepository

@@ -70,14 +70,16 @@ public class BackendApplication {
 
             // Bookings
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            // TODO: implement discountmethod
+            double totalPrice = 13000;
             Booking b1 = new Booking(new java.sql.Date(df.parse("2024-06-01").getTime()),
-                    new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, c1, r1);
+                    new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, totalPrice, c1, r1);
             Booking b2 = new Booking(new java.sql.Date(df.parse("2024-08-22").getTime()),
-                    new java.sql.Date(df.parse("2024-08-23").getTime()), 3, 1, c2, r2);
+                    new java.sql.Date(df.parse("2024-08-23").getTime()), 3, 1, totalPrice, c2, r2);
             Booking b3 = new Booking(new java.sql.Date(df.parse("2024-12-23").getTime()),
-                    new java.sql.Date(df.parse("2024-12-25").getTime()), 4, 2, c3, r3);
+                    new java.sql.Date(df.parse("2024-12-25").getTime()), 4, 2, totalPrice, c3, r3);
             Booking b4 = new Booking(new java.sql.Date(df.parse("2024-12-23").getTime()),
-                    new java.sql.Date(df.parse("2024-12-30").getTime()), 3, 1, c2, r2);
+                    new java.sql.Date(df.parse("2024-12-30").getTime()), 3, 1, totalPrice, c2, r2);
             bRepo.save(b1);
             bRepo.save(b2);
             bRepo.save(b3);

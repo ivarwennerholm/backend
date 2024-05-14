@@ -44,6 +44,7 @@ public class BookingServiceImpl implements BookingService {
                 checkoutDate(b.getCheckoutDate()).
                 guestAmt(b.getGuestAmt()).
                 extraBedAmt(b.getExtraBedAmt()).
+                totalPrice(b.getTotalPrice()).
                 customer(customerDto).
                 room(roomDto).
                 build();
@@ -59,6 +60,7 @@ public class BookingServiceImpl implements BookingService {
                 checkoutDate(bd.getCheckoutDate()).
                 guestAmt(bd.getGuestAmt()).
                 extraBedAmt(bd.getExtraBedAmt()).
+                totalPrice(bd.getTotalPrice()).
                 customer(customer).
                 room(room).
                 build();
@@ -147,7 +149,9 @@ public class BookingServiceImpl implements BookingService {
             customerService.addCustomerWithoutID(name, phone, email);
             Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
             Room room = roomRepository.findById(roomId).orElse(null);
-            Booking booking = new Booking(checkin, checkout, guests, extraBeds, customer, room);
+            // TODO: metod för att räkna ut
+            double totalPrice = 10000.00;
+            Booking booking = new Booking(checkin, checkout, guests, extraBeds, totalPrice, customer, room);
             bookingRepository.save(booking);
         } else {
             throw new Exception("Booking unsuccessful. Please contact Admin.");
