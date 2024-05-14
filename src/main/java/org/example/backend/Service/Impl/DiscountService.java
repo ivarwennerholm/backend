@@ -34,7 +34,7 @@ public class DiscountService {
         Calendar today = Calendar.getInstance();
         Calendar tomorrow = Calendar.getInstance();
         int numberOfDiscountedNights = 0;
-        for (int i = 0; i < (interval.size() - 2); i++) {
+        for (int i = 0; i < (interval.size() - 1); i++) {
             today.setTime(interval.get(i));
             tomorrow.setTime(interval.get(i + 1));
             if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY && tomorrow.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {

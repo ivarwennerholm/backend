@@ -106,21 +106,26 @@ public class DiscountServiceTest {
     }
 
     @Test
-    public void getNumberOfDiscuntedNightsTest() throws ParseException {
+    public void getNumberOfDiscountedNightsTest() throws ParseException {
         Date checkin1 = new java.sql.Date(df.parse("2024-05-14").getTime());
         Date checkout1 = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkin2 = new java.sql.Date(df.parse("2024-05-18").getTime());
         Date checkout2 = new java.sql.Date(df.parse("2024-05-26").getTime());
         Date checkin3 = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkout3 = new java.sql.Date(df.parse("2024-06-12").getTime());
+        Date checkin4 = new java.sql.Date(df.parse("2024-05-19").getTime());
+        Date checkout4 = new java.sql.Date(df.parse("2024-05-20").getTime());
         int expected1 = 0;
         int expected2 = 1;
         int expected3 = 4;
+        int expected4 = 1;
         int actual1 = discountService.getNumberOfDiscountedNights(checkin1, checkout1);
         int actual2 = discountService.getNumberOfDiscountedNights(checkin2, checkout2);
         int actual3 = discountService.getNumberOfDiscountedNights(checkin3, checkout3);
+        int actual4 = discountService.getNumberOfDiscountedNights(checkin4, checkout4);
         Assertions.assertEquals(expected1, actual1);
         Assertions.assertEquals(expected2, actual2);
         Assertions.assertEquals(expected3, actual3);
+        Assertions.assertEquals(expected4, actual4);
     }
 }
