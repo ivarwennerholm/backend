@@ -82,7 +82,7 @@ public class BookingServiceTest {
                 .checkoutDate(new java.sql.Date(df.parse("2024-06-07").getTime()))
                 .guestAmt(1)
                 .extraBedAmt(0)
-                .customer(new Customer(1L,"Venus", "111-1111111",null))
+                .customer(new Customer(1L,"Venus", "111-1111111"))
                 .room(new Room(1L,2099, new RoomType(1L, "single", 0, 1,500)))
                 .build();
 
@@ -92,7 +92,7 @@ public class BookingServiceTest {
                 .checkoutDate(new java.sql.Date(df.parse("2024-07-07").getTime()))
                 .guestAmt(1)
                 .extraBedAmt(0)
-                .customer(new Customer(1L,"Venus", "111-1111111",null))
+                .customer(new Customer(1L,"Venus", "111-1111111"))
                 .room(new Room(1L,2099, new RoomType(1L, "single", 0, 1,500)))
                 .build();
 

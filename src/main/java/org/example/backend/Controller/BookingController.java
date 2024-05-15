@@ -105,7 +105,7 @@ public class BookingController {
         model.addAttribute("guests", guests);
         model.addAttribute("extrabeds", extrabeds);
         model.addAttribute("fullprice", fullprice);
-        System.out.println(fullprice);
+        System.out.println("BookingController: Full price = " + fullprice);
         return "inputUserDetails";
     }
 
@@ -139,13 +139,17 @@ public class BookingController {
         int roomNumber = roomService.getRoomById(roomId).getRoomNumber();
         model.addAttribute("roomnumber", roomNumber);
         try {
+            System.out.println("BookingController: creating database entry");
             bookService.createAndAddBookingToDatabase(checkinDate, checkoutDate, guestsAmt, extrabedsAmt, roomId, name, phone, email);
+            System.out.println("BookingController: database entry completed");
         } catch (Exception e) {
             model.addAttribute("blacklistMsg",e.getMessage());
         }
         Booking lastBooking = bookService.getLastBooking();
         String discount = String.valueOf(Double.parseDouble(fullprice) - lastBooking.getTotalPrice());
-        System.out.println("Discount: " + discount);
+        System.out.println("BookingController: Full price = " + fullprice);
+        System.out.println("BookingController: Discounted price = " + lastBooking.getTotalPrice());
+        System.out.println("BookingController: Discount = " + discount);
         return "getBookingConfirmation";
     }
 

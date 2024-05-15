@@ -8,15 +8,20 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
+import org.example.backend.Service.Impl.DiscountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @SpringBootApplication
 public class BackendApplication {
@@ -36,7 +41,7 @@ public class BackendApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(CustomerRepository cRepo, RoomTypeRepository rtRepo, RoomRepository rRepo, BookingRepository bRepo) {
+    public CommandLineRunner commandLineRunner(CustomerRepository cRepo, RoomTypeRepository rtRepo, RoomRepository rRepo, BookingRepository bRepo, DiscountService discountService, CustomerRepository customerRepository, BookingRepository bookingRepository) {
         return (args) -> {
             // Delete all
             cRepo.deleteAll();
@@ -62,7 +67,7 @@ public class BackendApplication {
 
             // Rooms
             Room r1 = new Room(101, rt1);
-            Room r2 = new Room( 102, rt2);
+            Room r2 = new Room(102, rt2);
             Room r3 = new Room(103, rt3);
             rRepo.save(r1);
             rRepo.save(r2);
@@ -70,16 +75,22 @@ public class BackendApplication {
 
             // Bookings
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            // TODO: implement discountmethod
-            double totalPrice = 13000;
+//            double totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-06-01").getTime()),
+//                    new java.sql.Date(df.parse("2024-06-07").getTime()), r1, c1, null, false);
             Booking b1 = new Booking(new java.sql.Date(df.parse("2024-06-01").getTime()),
-                    new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, totalPrice, c1, r1);
+                    new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, 9877, c1, r1);
+//            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-08-22").getTime()),
+//                    new java.sql.Date(df.parse("2024-08-23").getTime()), r2, c2, null, false);
             Booking b2 = new Booking(new java.sql.Date(df.parse("2024-08-22").getTime()),
-                    new java.sql.Date(df.parse("2024-08-23").getTime()), 3, 1, totalPrice, c2, r2);
+                    new java.sql.Date(df.parse("2024-08-23").getTime()), 3, 1, 1299, c2, r2);
+//            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-12-2").getTime()),
+//                    new java.sql.Date(df.parse("2024-12-25").getTime()), r3, c3, null, false);
             Booking b3 = new Booking(new java.sql.Date(df.parse("2024-12-23").getTime()),
-                    new java.sql.Date(df.parse("2024-12-25").getTime()), 4, 2, totalPrice, c3, r3);
+                    new java.sql.Date(df.parse("2024-12-25").getTime()), 4, 2, 16300, c3, r3);
+//            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-12-23").getTime()),
+//                    new java.sql.Date(df.parse("2024-12-30").getTime()), r2, c2, null, false);
             Booking b4 = new Booking(new java.sql.Date(df.parse("2024-12-23").getTime()),
-                    new java.sql.Date(df.parse("2024-12-30").getTime()), 3, 1, totalPrice, c2, r2);
+                    new java.sql.Date(df.parse("2024-12-30").getTime()), 3, 1, 7599, c2, r2);
             bRepo.save(b1);
             bRepo.save(b2);
             bRepo.save(b3);

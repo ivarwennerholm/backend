@@ -49,6 +49,13 @@ public class Customer {
         this.phone = phone;
     }
 
+    public Customer(Long id, String name, String phone, String email) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
+
     public Customer(String name, String phone, String email) {
         this.name = name;
         this.phone = phone;

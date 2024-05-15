@@ -69,8 +69,8 @@ public class DiscountServiceTest {
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
         blacklistService = new BlacklistService();
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
-        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService);
-        discountService = new DiscountService(bookingService, bookingRepository);
+        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
+        discountService = new DiscountService(bookingRepository);
 
         // Customers, room types & rooms
         c1 = new Customer(1L, "Venus", "111-1111111");

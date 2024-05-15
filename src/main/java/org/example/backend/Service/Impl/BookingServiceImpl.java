@@ -29,6 +29,7 @@ public class BookingServiceImpl implements BookingService {
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
     private final BlacklistService blackService;
+    private final DiscountService discountService;
 
     @Override
     public BookingDto bookingToBookingDto(Booking b) {
@@ -129,7 +130,7 @@ public class BookingServiceImpl implements BookingService {
                 .filter(k -> areDatesOverlapping(datesInterval, createDateInterval(k.getCheckinDate(), k.getCheckoutDate())))
                 .toList();
 
-        if (conflictBookList.size()==0){
+        if (conflictBookList.isEmpty()){
             originBooking.setCheckinDate(wantedCheckIn);
             originBooking.setCheckoutDate(wantedCheckOut);
             bookingRepository.save(originBooking);
@@ -145,20 +146,30 @@ public class BookingServiceImpl implements BookingService {
             Customer customer;
             if (customerService.getCustomerByNamePhoneAndEmail(name, phone, email) != null) {
                 customer = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
+                System.out.println("BookingService: customer found in database = " + customer);
             } else {
                 customerService.addCustomerWithoutID(name, phone, email);
                 customer = customerService.getLastCustomer();
+                System.out.println("BookingService: customer created = " + customer);
             }
-            // Customer customer = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
             Room room = roomRepository.findById(roomId).orElse(null);
-            // TODO: metod för att räkna ut
-            double totalPrice = 10000.00;
+            System.out.println("BookingService: room = " + room);
+            System.out.println("BookingService: customer = " + customer);
+            System.out.println(customer.getId());
+            System.out.println(customer.getName());
+            System.out.println(customer.getPhone());
+            System.out.println(customer.getEmail());
+            assert room != null;
+            // double totalPrice = 10000;
+            //Customer customer = customerRepository.findById(customerId).orElse(null);
+            double totalPrice = discountService.getTotalPriceWithDiscounts(checkin, checkout, room, customer, null, false);
+            System.out.println("BookingService: totalPrice = " + totalPrice);
             Booking booking = new Booking(checkin, checkout, guests, extraBeds, totalPrice, customer, room);
             bookingRepository.save(booking);
+            System.out.println("BookingService: booking saved = " + booking);
         } else {
             throw new Exception("Booking unsuccessful. Please contact Admin.");
         }
-
     }
 
     @Override

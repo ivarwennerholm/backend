@@ -106,7 +106,7 @@ public class CustomerServiceTest {
                 .checkoutDate(new java.sql.Date(df.parse("2024-06-07").getTime()))
                 .guestAmt(1)
                 .extraBedAmt(0)
-                .customer(new Customer(1L,"Peter C", "+0722222",null))
+                .customer(new Customer(1L,"Peter C", "+0722222"))
                 .room(new Room(1L,2099, new RoomType(1L, "single", 0, 1,500)))
                 .build();
 

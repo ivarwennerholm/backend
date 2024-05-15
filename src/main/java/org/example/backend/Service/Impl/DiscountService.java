@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DiscountService {
 
-    private final BookingService bookingService;
+//    private final BookingService bookingService;
     private final BookingRepository bookingRepository;
 
     // ANSI colors for readability
@@ -27,21 +28,21 @@ public class DiscountService {
     public static final String ANSI_YELLOW = "\033[0;33m";
 
     public double getTotalPriceWithDiscounts(Date checkin, Date checkout, Room room, Customer customer, Date dateForTesting, boolean test) {
-        long nights = bookingService.getNumberOfDaysBetweenTwoDates(checkin, checkout);
+        long nights = getNumberOfDaysBetweenTwoDates(checkin, checkout);
         double pricePerNight = room.getRoomType().getPricePerNight();
         double totalPrice = nights * pricePerNight;
-        System.out.println(ANSI_GREEN + "Discount 1: " + getDiscountSundayMonday(checkin, checkout, room) + ANSI_RESET); // TODO: REMOVE
+        System.out.println("DiscountService: Discount 1 = " + getDiscountSundayMonday(checkin, checkout, room)); // TODO: REMOVE
         totalPrice -= getDiscountSundayMonday(checkin, checkout, room);
-        System.out.println(ANSI_GREEN + "Discount 2: " + getDiscountTwoOrMoreNights(checkin, checkout, totalPrice) + ANSI_RESET); // TODO: REMOVE
+        System.out.println("DiscountService: Discount 2 = " + getDiscountTwoOrMoreNights(checkin, checkout, totalPrice)); // TODO: REMOVE
         totalPrice -= getDiscountTwoOrMoreNights(checkin, checkout, totalPrice);
         if (test) {
-            System.out.println(ANSI_GREEN + "Discount 3: " + getDiscountReturningCustomer(customer, totalPrice, dateForTesting, true) + ANSI_RESET); // TODO: REMOVE
+            System.out.println("DiscountService: Discount 3 = " + getDiscountReturningCustomer(customer, totalPrice, dateForTesting, true)); // TODO: REMOVE
             totalPrice -= getDiscountReturningCustomer(customer, totalPrice, dateForTesting, true);
         } else {
-            System.out.println(ANSI_GREEN + "Discount 3: " + getDiscountReturningCustomer(customer, totalPrice, null, false) + ANSI_RESET); // TODO: REMOVE
+            System.out.println("DiscountService: Discount 3 = " + getDiscountReturningCustomer(customer, totalPrice, null, false)); // TODO: REMOVE
             totalPrice -= getDiscountReturningCustomer(customer, totalPrice, null, false);
         }
-        System.out.println(ANSI_YELLOW + "Grand total: " + totalPrice + ANSI_RESET); // TODO: REMOVE
+        System.out.println("DiscountService: Grand total = " + totalPrice); // TODO: REMOVE
         return totalPrice;
     }
 
@@ -51,7 +52,7 @@ public class DiscountService {
     }
 
     public double getDiscountTwoOrMoreNights(Date checkin, Date checkout, double totalPrice) {
-        if (bookingService.getNumberOfDaysBetweenTwoDates(checkin, checkout) >= 2) {
+        if (getNumberOfDaysBetweenTwoDates(checkin, checkout) >= 2) {
             return totalPrice * 0.005;
         } else {
             return 0;
@@ -76,7 +77,7 @@ public class DiscountService {
         List<List<Date>> allDatesBookedWithinTheLastYear;
         allDatesBookedWithinTheLastYear = allBookingsForCustomer.
                 stream().
-                map(booking -> bookingService.createDateInterval(booking.getCheckinDate(), booking.getCheckoutDate())).
+                map(booking -> createDateInterval(booking.getCheckinDate(), booking.getCheckoutDate())).
                 map(datelist -> {
                             if (test) {
                                 return datelist.
@@ -94,7 +95,7 @@ public class DiscountService {
                 toList();
         long counter = allDatesBookedWithinTheLastYear.
                 stream().
-                mapToLong(datelist -> bookingService.getNumberOfDaysBetweenTwoDates(datelist.get(0), datelist.get(datelist.size() - 1))).
+                mapToLong(datelist -> getNumberOfDaysBetweenTwoDates(datelist.get(0), datelist.get(datelist.size() - 1))).
                 sum();
         return counter >= 10;
     }
@@ -116,7 +117,7 @@ public class DiscountService {
     }
 
     public int getNumberOfDiscountedNights(Date checkin, Date checkout) {
-        List<Date> interval = bookingService.createDateInterval(checkin, checkout);
+        List<Date> interval = createDateInterval(checkin, checkout);
         Calendar today = Calendar.getInstance();
         Calendar tomorrow = Calendar.getInstance();
         int numberOfDiscountedNights = 0;
@@ -128,5 +129,23 @@ public class DiscountService {
             }
         }
         return numberOfDiscountedNights;
+    }
+
+    public List<Date> createDateInterval(Date checkin, Date checkout) {
+        List<Date> interval = new ArrayList<>();
+        Date iterateDate = checkin;
+        while (!iterateDate.after(checkout)) {
+            interval.add(iterateDate);
+            Calendar c = Calendar.getInstance();
+            c.setTime(iterateDate);
+            c.add(Calendar.DATE, 1);
+            iterateDate = new java.sql.Date(c.getTimeInMillis());
+        }
+        return interval;
+    }
+
+    public Long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout) {
+        long differenceMillis = checkout.getTime() - checkin.getTime();
+        return differenceMillis / (1000 * 60 * 60 * 24);
     }
 }

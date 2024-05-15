@@ -20,4 +20,11 @@ public class RoomType {
     private int maxExtraBed;
     private int maxPerson;
     private double pricePerNight;
+
+    public RoomType(String type, int maxExtraBed, int maxPerson, double pricePerNight) {
+        this.type = type;
+        this.maxExtraBed = maxExtraBed;
+        this.maxPerson = maxPerson;
+        this.pricePerNight = pricePerNight;
+    }
 }
