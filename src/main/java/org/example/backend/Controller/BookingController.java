@@ -96,12 +96,15 @@ public class BookingController {
                                    @RequestParam String checkout,
                                    @RequestParam String guests,
                                    @RequestParam String extrabeds,
+                                   @RequestParam String fullprice,
                                    Model model) {
         model.addAttribute("roomid", roomid);
         model.addAttribute("checkin", checkin);
         model.addAttribute("checkout", checkout);
         model.addAttribute("guests", guests);
         model.addAttribute("extrabeds", extrabeds);
+        model.addAttribute("fullprice", fullprice);
+        System.out.println(fullprice);
         return "inputUserDetails";
     }
 
@@ -114,6 +117,7 @@ public class BookingController {
                                          @RequestParam String name,
                                          @RequestParam String phone,
                                          @RequestParam String email,
+                                         @RequestParam String fullprice,
                                          Model model) throws ParseException {
 
         model.addAttribute("checkin", checkin);
@@ -123,6 +127,7 @@ public class BookingController {
         model.addAttribute("name", name);
         model.addAttribute("phone", phone);
         model.addAttribute("email",email);
+        model.addAttribute("fullprice", fullprice);
 
         // Add booking to database
         Date checkinDate = bookService.convertStringToDate(checkin);
