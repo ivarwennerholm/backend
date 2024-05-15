@@ -1,0 +1,29 @@
+package org.example.backend.Events;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
+@Entity
+@DiscriminatorValue("RoomCleaningFinished")
+public class RoomCleanDone extends Log {
+    @Id
+    @GeneratedValue
+    Long id;
+    @JsonProperty(value = "CleaningByUser")
+    String cleaner;
+
+    @Override
+    public String toString() {
+        return "RoomStatus{" +
+                "room=" + roomno +
+                ", dateTime='" + dateTime +
+                ", cleaner='" + cleaner +
+                '\'' +
+                '}';
+    }
+}

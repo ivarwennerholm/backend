@@ -40,6 +40,13 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
     implementation("com.fasterxml.jackson.core:jackson-core:2.17.1")
+    //rabbitMQ
+    // https://mvnrepository.com/artifact/com.rabbitmq/amqp-client
+    implementation("com.rabbitmq:amqp-client:5.21.0")
+    //Jackson annotations
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.1")
+
 
 
 
