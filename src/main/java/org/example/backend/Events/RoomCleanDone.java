@@ -21,7 +21,7 @@ public class RoomCleanDone extends Log {
     public String toString() {
         return "RoomStatus{" +
                 "room=" + roomno +
-                ", dateTime='" + dateTime +
+                ", dateTime='" + timestamp +
                 ", cleaner='" + cleaner +
                 '\'' +
                 '}';

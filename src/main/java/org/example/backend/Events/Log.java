@@ -6,6 +6,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.example.backend.Model.Room;
+import org.example.backend.Repository.RoomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -21,22 +27,25 @@ import lombok.RequiredArgsConstructor;
         @JsonSubTypes.Type(value = RoomCleanDone.class, name = "RoomCleaningFinished")
 })
 @Data
+@RequiredArgsConstructor
 public abstract class Log {
+
     @Id
     @GeneratedValue
     Long id;
 
     @JsonProperty(value = "RoomNo")
     String roomno;
+
     @JsonProperty(value = "TimeStamp")
-    String dateTime;
+    LocalDateTime timestamp;
 
     @Override
     public String toString() {
         return "Log{" +
                 "id=" + id +
                 ", roomno='" + roomno + '\'' +
-                ", dateTime='" + dateTime + '\'' +
+                ", dateTime='" + timestamp + '\'' +
                 '}';
     }
 }
