@@ -35,7 +35,7 @@ public abstract class Log {
     Long id;
 
     @JsonProperty(value = "RoomNo")
-    String roomno;
+    int roomno;
 
     @JsonProperty(value = "TimeStamp")
     LocalDateTime timestamp;
@@ -48,4 +48,6 @@ public abstract class Log {
                 ", dateTime='" + timestamp + '\'' +
                 '}';
     }
+
+    public String getCleaner(){return null;};
 }

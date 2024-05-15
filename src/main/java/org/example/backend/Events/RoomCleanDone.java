@@ -26,4 +26,9 @@ public class RoomCleanDone extends Log {
                 '\'' +
                 '}';
     }
+
+    @Override
+    public String getCleaner() {
+        return cleaner;
+    }
 }

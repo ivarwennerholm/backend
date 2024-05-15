@@ -26,7 +26,6 @@ public class ReadEventsApp implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        eventRepo.deleteAll();
 
         System.out.println("reading start");
         ConnectionFactory factory = new ConnectionFactory();
