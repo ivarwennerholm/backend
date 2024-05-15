@@ -1,13 +1,10 @@
 package org.example.backend.Service.Impl;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.*;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
-import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
@@ -16,7 +13,6 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -146,8 +142,14 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
         if (blackService.isEmailValid(email)){
-            customerService.addCustomerWithoutID(name, phone, email);
-            Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
+            Customer customer;
+            if (customerService.getCustomerByNamePhoneAndEmail(name, phone, email) != null) {
+                customer = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
+            } else {
+                customerService.addCustomerWithoutID(name, phone, email);
+                customer = customerService.getLastCustomer();
+            }
+            // Customer customer = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
             Room room = roomRepository.findById(roomId).orElse(null);
             // TODO: metod för att räkna ut
             double totalPrice = 10000.00;

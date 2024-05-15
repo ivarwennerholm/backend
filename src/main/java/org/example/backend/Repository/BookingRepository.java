@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    // For ascending order without search term
     @Query("SELECT b FROM Booking b WHERE b.customer = :customerId ")
     List<Booking> getAllBookingsForCustomer(@Param("customerId") long customerId);
 }

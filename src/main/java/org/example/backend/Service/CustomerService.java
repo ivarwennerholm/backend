@@ -16,7 +16,7 @@ public interface CustomerService {
 
     public void addCustomerWithoutID(String name, String phone, String email);
 
-    public Customer getCustomerByNameAndPhone(String name, String phone);
+    public Customer getCustomerByNamePhoneAndEmail(String name, String phone, String email);
 
     public Customer getCustomerByEmail(String email);
 
@@ -30,5 +30,7 @@ public interface CustomerService {
 
     public String updateForm(CustomerDto customerDto);
 
-    Customer getCustomerById(Long id);
+    public Customer getCustomerById(Long id);
+
+    public Customer getLastCustomer();
 }

@@ -44,8 +44,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer getCustomerByNameAndPhone(String name, String phone) {
-        return customerRepo.getCustomerByNameAndPhone(name, phone);
+    public Customer getCustomerByNamePhoneAndEmail(String name, String phone, String email) {
+        return customerRepo.getCustomerByNamePhoneAndEmail(name, phone, email);
     }
 
     @Override
@@ -100,5 +100,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getCustomerById(Long id) {
         return null;
+    }
+
+    @Override
+    public Customer getLastCustomer() {
+        return customerRepo.getLastCustomer();
     }
 }

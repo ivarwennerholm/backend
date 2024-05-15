@@ -34,7 +34,7 @@
                 <td><b>Room type</b></td>
                 <td><b>Price per night</b></td>
                 <td><b>Total nights</b></td>
-                <td><b>Total price</b></td>
+                <!--<td><b>Total price</b></td>-->
                 <td><b>Extra bed(s)</b></td>
             </tr>
             <tr th:each="booking : ${list}">
@@ -42,7 +42,7 @@
                 <td th:text="${booking.room.roomType.type}"></td>
                 <td th:text="${booking.room.roomType.pricePerNight + 'kr'}"></td>
                 <td th:text="${nights}"></td>
-                <td th:text="${nights * booking.room.roomType.pricePerNight} + 'kr'"></td>
+                <!--<td th:text="${nights * booking.room.roomType.pricePerNight} + 'kr'"></td>-->
                 <td th:text="${booking.extraBedAmt}"></td>
                 <td>
                     <form method="post" th:action="@{inputUserDetails}">
@@ -51,6 +51,7 @@
                         <input type="hidden" name="checkout" th:value="${checkout}"/>
                         <input type="hidden" name="guests" th:value="${guests}"/>
                         <input type="hidden" name="extrabeds" th:value="${booking.extraBedAmt}"/>
+                        <input type="hidden" name="fullprice" th:value="${nights * booking.room.roomType.pricePerNight} + 'kr'"/>
                         <input type="submit" value="Make reservation">
                     </form>
                 </td>
