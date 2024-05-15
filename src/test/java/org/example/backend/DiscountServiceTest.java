@@ -23,6 +23,11 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
 
 public class DiscountServiceTest {
 
@@ -42,14 +47,13 @@ public class DiscountServiceTest {
     private RoomService roomService;
     private RoomTypeService roomTypeService;
 
-
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     // Customers, roomtypes, rooms and bookings
-    Customer c1;
+    Customer c1; Customer c2; Customer c3;
     RoomType rt1;
     Room r1;
-    Booking b1;
+    Booking b1; Booking b2; Booking b3; Booking b4; Booking b5; Booking b6;
 
     // ANSI colors for readability
     public static final String ANSI_RESET = "\u001B[0m";
@@ -58,41 +62,54 @@ public class DiscountServiceTest {
 
     @BeforeEach
     public void init() throws ParseException {
+        // Mock
+        MockitoAnnotations.openMocks(this);
+
         // Services
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
         blacklistService = new BlacklistService();
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
         bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService);
-        discountService = new DiscountService(bookingService);
+        discountService = new DiscountService(bookingService, bookingRepository);
 
-        // Customers
+        // Customers, room types & rooms
         c1 = new Customer(1L, "Venus", "111-1111111");
-
-        // Room Types
+        c2 = new Customer(2L, "Alex", "222-2222222");
+        c3 = new Customer(3L, "Ivar", "333-3333333");
         rt1 = new RoomType(1L, "Single", 0, 1, 500);
-
-        // Rooms
         r1 = new Room(1L, 101, rt1);
 
         // Bookings
         // TODO: Add method call for totalPrice
         double totalPrice = 10000;
-        b1 = new Booking(1L, new java.sql.Date(df.parse("2024-06-01").getTime()),
-                new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, totalPrice, c1, r1);
+        b1 = new Booking(1L, new java.sql.Date(df.parse("2024-06-01").getTime()), new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, totalPrice, c1, r1);
+        b2 = new Booking(2L, new java.sql.Date(df.parse("2024-07-03").getTime()), new java.sql.Date(df.parse("2024-07-07").getTime()), 1, 0, totalPrice, c1, r1);
+        b3 = new Booking(3L, new java.sql.Date(df.parse("2024-12-15").getTime()), new java.sql.Date(df.parse("2024-12-16").getTime()), 1, 0, totalPrice, c1, r1);
+        b4 = new Booking(1L, new java.sql.Date(df.parse("2024-03-01").getTime()),new java.sql.Date(df.parse("2024-03-20").getTime()), 1, 0, totalPrice, c1, r1);
+        b5 = new Booking(2L, new java.sql.Date(df.parse("2024-08-10").getTime()),new java.sql.Date(df.parse("2024-08-19").getTime()), 3, 1, totalPrice, c2, r1);
+        b6 = new Booking(3L, new java.sql.Date(df.parse("2024-12-02").getTime()),new java.sql.Date(df.parse("2024-12-12").getTime()), 4, 2, totalPrice, c3, r1);
+
+        // Mock returns
+        when(bookingRepository.getAllBookingsForCustomer(c1.getId())).thenReturn(Arrays.asList(b1, b2, b3, b4));
+        when(bookingRepository.getAllBookingsForCustomer(c2.getId())).thenReturn(Collections.singletonList(b5));
+        when(bookingRepository.getAllBookingsForCustomer(c3.getId())).thenReturn(Collections.singletonList(b6));
+
     }
 
     @Test
     public void getTotalPriceIncludingDiscountTest() throws ParseException {
+        Date today = new java.sql.Date(df.parse("2025-05-15").getTime());
         Date checkin = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkout = new java.sql.Date(df.parse("2024-06-12").getTime());
         double fullPrice = 13000;
         double discount1 = 40;
         double discount2 = 64.8;
-        double discount3 = 0;
+        double discount3 = 257.904;
         double totalDiscount = discount1 + discount2 + discount3;
         double expected = fullPrice - totalDiscount;
-        double actual = discountService.getTotalPriceWithDiscounts(checkin, checkout, r1, c1);
+        double actual = discountService.getTotalPriceWithDiscounts(checkin, checkout, r1, c1, today, true);
         Assertions.assertEquals(expected, actual);
+        System.out.println(ANSI_GREEN + "Total with discount: " + actual + ANSI_RESET); // TODO: DELETE
     }
 
     @Test
@@ -129,6 +146,28 @@ public class DiscountServiceTest {
     }
 
     @Test
+    public void getDiscountForReturningCustomerTest() throws ParseException {
+        Date today = new java.sql.Date(df.parse("2025-05-15").getTime());
+        double fullPrice = 10000;
+        double expected1 = 200;
+        double actual1 = discountService.getDiscountReturningCustomer(c3, fullPrice, today, true);
+        double expected2 = 0;
+        double actual2 = discountService.getDiscountReturningCustomer(c2, fullPrice, today, true);
+        Assertions.assertEquals(expected1, actual1);
+        Assertions.assertEquals(expected2, actual2);
+    }
+
+    @Test
+    public void getListOfBookingsForCustomer() throws ParseException {
+        when(bookingRepository.getAllBookingsForCustomer(c1.getId())).thenReturn(Arrays.asList(b1, b2, b3));
+        List<Booking> expected = Arrays.asList(b1, b2, b3);
+        List<Booking> actual = bookingRepository.getAllBookingsForCustomer(c1.getId());
+        System.out.println(ANSI_GREEN + expected + ANSI_RESET); // TEST
+        System.out.println(ANSI_GREEN + actual + ANSI_RESET); // TEST
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
     public void getNumberOfDiscountedNightsTest() throws ParseException {
         Date checkin1 = new java.sql.Date(df.parse("2024-05-14").getTime());
         Date checkout1 = new java.sql.Date(df.parse("2024-05-17").getTime());
@@ -150,5 +189,29 @@ public class DiscountServiceTest {
         Assertions.assertEquals(expected2, actual2);
         Assertions.assertEquals(expected3, actual3);
         Assertions.assertEquals(expected4, actual4);
+    }
+
+    @Test
+    public void isDateWithinAYearFromTodayTest() throws ParseException {
+        Date today = new java.sql.Date(df.parse("2024-01-01").getTime());
+        Date compare1 = new java.sql.Date(df.parse("2022-12-31").getTime());
+        Date compare2 = new java.sql.Date(df.parse("2023-01-01").getTime());
+        Date compare3 = new java.sql.Date(df.parse("2023-01-02").getTime());
+        boolean actual1 = discountService.isDateWithinAYearFromToday(compare1, today, true);
+        boolean actual2 = discountService.isDateWithinAYearFromToday(compare2, today, true);
+        boolean actual3 = discountService.isDateWithinAYearFromToday(compare3, today, true);
+        Assertions.assertFalse(actual1);
+        Assertions.assertFalse(actual2);
+        Assertions.assertTrue(actual3);
+    }
+
+    @Test
+    public void doesCustomerHaveTenOrMoreNightsBookedInTheLastYearTest() throws ParseException {
+        Date today = new java.sql.Date(df.parse("2025-05-15").getTime());
+        Assertions.assertTrue(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c1, today, true));
+        Assertions.assertFalse(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c2, today, true));
+        Assertions.assertTrue(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c3, today, true));
+
+
     }
 }
