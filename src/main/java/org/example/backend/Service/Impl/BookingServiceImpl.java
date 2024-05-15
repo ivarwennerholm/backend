@@ -236,5 +236,10 @@ public class BookingServiceImpl implements BookingService {
         return new java.sql.Date(df.parse(date).getTime());
     }
 
+    @Override
+    public Booking getLastBooking() {
+        return bookingRepository.getLastBooking();
+    }
+
 
 }

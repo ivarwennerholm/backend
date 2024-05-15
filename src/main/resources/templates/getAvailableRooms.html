@@ -51,7 +51,7 @@
                         <input type="hidden" name="checkout" th:value="${checkout}"/>
                         <input type="hidden" name="guests" th:value="${guests}"/>
                         <input type="hidden" name="extrabeds" th:value="${booking.extraBedAmt}"/>
-                        <input type="hidden" name="fullprice" th:value="${nights * booking.room.roomType.pricePerNight} + 'kr'"/>
+                        <input type="hidden" name="fullprice" th:value="${nights * booking.room.roomType.pricePerNight}"/>
                         <input type="submit" value="Make reservation">
                     </form>
                 </td>

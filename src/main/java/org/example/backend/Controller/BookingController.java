@@ -3,6 +3,7 @@ package org.example.backend.Controller;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.AvailableBookingDto;
+import org.example.backend.Model.Booking;
 import org.example.backend.Service.BookingService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Controller;
@@ -142,6 +143,9 @@ public class BookingController {
         } catch (Exception e) {
             model.addAttribute("blacklistMsg",e.getMessage());
         }
+        Booking lastBooking = bookService.getLastBooking();
+        String discount = String.valueOf(Double.parseDouble(fullprice) - lastBooking.getTotalPrice());
+        System.out.println("Discount: " + discount);
         return "getBookingConfirmation";
     }
 

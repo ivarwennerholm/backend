@@ -42,6 +42,8 @@ public interface BookingService {
 
     public Date convertStringToDate(String date) throws ParseException;
 
+    public Booking getLastBooking();
+
 
 
 }
