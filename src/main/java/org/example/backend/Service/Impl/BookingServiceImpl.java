@@ -142,10 +142,15 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
+        System.out.println("BookingService: createAndAddBookingToDatabase initiated");
         if (blackService.isEmailValid(email)){
             Customer customer;
-            if (customerService.getCustomerByNamePhoneAndEmail(name, phone, email) != null) {
-                customer = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
+            Optional <Customer> optional = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
+            System.out.println("BookingService: optional retrieved");
+            if (optional.isPresent()) {
+                System.out.println("BookingService: optional.isPresent");
+                customer = optional.get();
+                // customer = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
                 System.out.println("BookingService: customer found in database = " + customer);
             } else {
                 customerService.addCustomerWithoutID(name, phone, email);
@@ -155,10 +160,6 @@ public class BookingServiceImpl implements BookingService {
             Room room = roomRepository.findById(roomId).orElse(null);
             System.out.println("BookingService: room = " + room);
             System.out.println("BookingService: customer = " + customer);
-            System.out.println(customer.getId());
-            System.out.println(customer.getName());
-            System.out.println(customer.getPhone());
-            System.out.println(customer.getEmail());
             assert room != null;
             // double totalPrice = 10000;
             //Customer customer = customerRepository.findById(customerId).orElse(null);

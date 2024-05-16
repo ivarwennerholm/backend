@@ -1,13 +1,11 @@
 package org.example.backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -36,6 +34,7 @@ public class Customer {
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @ToString.Exclude
     private List<Booking> bookingList;
 
     public Customer(String name, String phone) {

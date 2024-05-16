@@ -9,6 +9,7 @@ import org.example.backend.Service.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer getCustomerByNamePhoneAndEmail(String name, String phone, String email) {
+    public Optional<Customer> getCustomerByNamePhoneAndEmail(String name, String phone, String email) {
         return customerRepo.getCustomerByNamePhoneAndEmail(name, phone, email);
     }
 
