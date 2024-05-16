@@ -7,20 +7,43 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = RoomOpened.class, name = "RoomOpened"),
+        @JsonSubTypes.Type(value = RoomClosed.class, name = "RoomClosed"),
+        @JsonSubTypes.Type(value = RoomCleanStarted.class, name = "RoomCleaningStarted"),
+        @JsonSubTypes.Type(value = RoomCleanDone.class, name = "RoomCleaningFinished")
+})
 @Data
 @RequiredArgsConstructor
-public class RoomEvent {
+public abstract class RoomEvent {
 
     @Id
     @GeneratedValue
-    private Long id;
+    Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "log_id")
-    private Log roomlog;
+    @JsonProperty(value = "RoomNo")
+    int roomno;
 
-    public RoomEvent(Log roomlog){
-        this.roomlog = roomlog;
+    @JsonProperty(value = "TimeStamp")
+    LocalDateTime timestamp;
+
+    @Override
+    public String toString() {
+        return "Log{" +
+                "id=" + id +
+                ", roomno='" + roomno + '\'' +
+                ", dateTime='" + timestamp + '\'' +
+                '}';
     }
+
+    public String getCleaner(){return null;};
 }

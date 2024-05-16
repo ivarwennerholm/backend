@@ -1,6 +1,5 @@
 package org.example.backend.Repository;
 
-import org.example.backend.Events.Log;
 import org.example.backend.Events.RoomEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,6 +13,6 @@ public interface RoomEventRepository extends JpaRepository<RoomEvent,Long> {
 
     @Modifying
     @Transactional
-    @Query("select x from Log x where x.roomno=:roomnr")
-    public List<Log> getRoomEventByRoomNo(@Param("roomnr") int roomnr);
+    @Query("select x from RoomEvent x where x.roomno=:roomnr")
+    public List<RoomEvent> getRoomEventByRoomNo(@Param("roomnr") int roomnr);
 }

@@ -5,12 +5,10 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Entity
-@DiscriminatorValue("RoomCleaningFinished")
-public class RoomCleanDone extends Log {
+//@DiscriminatorValue("RoomCleaningFinished")
+public class RoomCleanDone extends RoomEvent {
     @Id
     @GeneratedValue
     Long id;

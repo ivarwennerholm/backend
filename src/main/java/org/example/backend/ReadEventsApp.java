@@ -9,8 +9,8 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.Events.Log;
 import org.example.backend.Events.RoomEvent;
+//import org.example.backend.Events.RoomEvent2;
 import org.example.backend.Repository.RoomEventRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
@@ -49,9 +49,8 @@ public class ReadEventsApp implements CommandLineRunner {
             System.out.println(" [x] Received '" + message + "'");
 
 
-            Log r = jsonMapper.readValue(message, Log.class);
-            RoomEvent re = new RoomEvent(r);
-            eventRepo.save(re);
+            RoomEvent r = jsonMapper.readValue(message, RoomEvent.class);
+            eventRepo.save(r);
             System.out.println(r.toString());
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
