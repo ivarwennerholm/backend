@@ -73,7 +73,7 @@ public class DiscountServiceTest {
         dateService = new DateService();
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
         discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);
-        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService);
+        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
 
         // Customers, room types & rooms
         c1 = new Customer(1L, "Venus", "111-1111111");
@@ -216,7 +216,5 @@ public class DiscountServiceTest {
         Assertions.assertTrue(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c1, today, true));
         Assertions.assertFalse(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c2, today, true));
         Assertions.assertTrue(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c3, today, true));
-
-
     }
 }

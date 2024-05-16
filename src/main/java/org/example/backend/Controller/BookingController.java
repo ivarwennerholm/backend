@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -148,10 +149,16 @@ public class BookingController {
             model.addAttribute("blacklistMsg",e.getMessage());
         }
         Booking lastBooking = bookService.getLastBooking();
-        String discount = String.valueOf(Double.parseDouble(fullprice) - lastBooking.getTotalPrice());
+        double discountValue = Double.parseDouble(fullprice) - lastBooking.getTotalPrice();
+        double discountedPriceValue = lastBooking.getTotalPrice();
+        DecimalFormat df = new DecimalFormat("#.##");
+        String discount = df.format(discountValue);
+        String discountedPrice = df.format(discountedPriceValue);
         System.out.println("BookingController: Full price = " + fullprice);
-        System.out.println("BookingController: Discounted price = " + lastBooking.getTotalPrice());
+        System.out.println("BookingController: Discounted price = " + discountedPrice);
         System.out.println("BookingController: Discount = " + discount);
+        model.addAttribute("discount", discount);
+        model.addAttribute("discountedprice", discountedPrice);
         return "getBookingConfirmation";
     }
 

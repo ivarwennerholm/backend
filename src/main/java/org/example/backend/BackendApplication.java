@@ -75,10 +75,10 @@ public class BackendApplication {
 
             // Bookings
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-//            double totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-06-01").getTime()),
-//                    new java.sql.Date(df.parse("2024-06-07").getTime()), r1, c1, null, false);
+            double totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-06-01").getTime()),
+                    new java.sql.Date(df.parse("2024-06-07").getTime()), r1.getId(), c1.getId(), null, false);
             Booking b1 = new Booking(new java.sql.Date(df.parse("2024-06-01").getTime()),
-                    new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, 9877, c1, r1);
+                    new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, totalPrice, c1, r1);
 //            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-08-22").getTime()),
 //                    new java.sql.Date(df.parse("2024-08-23").getTime()), r2, c2, null, false);
             Booking b2 = new Booking(new java.sql.Date(df.parse("2024-08-22").getTime()),

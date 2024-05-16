@@ -99,7 +99,7 @@ public class BookingServiceTest2 {
         dateService = new DateService();
 
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
-        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService);
+        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
         discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);
 
         // Customers

@@ -30,7 +30,7 @@ public class BookingServiceImpl implements BookingService {
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
     private final BlacklistService blackService;
-//    private final DiscountService discountService;
+    private final DiscountService discountService;
     private DateService dateService = new DateService();
 
     @Override
@@ -151,7 +151,6 @@ public class BookingServiceImpl implements BookingService {
             if (optional.isPresent()) {
                 System.out.println("BookingService: optional.isPresent");
                 customer = optional.get();
-                // customer = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
                 System.out.println("BookingService: customer found in database = " + customer);
             } else {
                 customerService.addCustomerWithoutID(name, phone, email);
@@ -164,9 +163,9 @@ public class BookingServiceImpl implements BookingService {
             assert room != null;
             // double totalPrice = 10000;
             //Customer customer = customerRepository.findById(customerId).orElse(null);
-//            double totalPrice = discountService.getTotalPriceWithDiscounts(checkin, checkout, roomId, customer, null, false);
-//            System.out.println("BookingService: totalPrice = " + totalPrice);
-            Booking booking = new Booking(checkin, checkout, guests, extraBeds, 10000, customer, room);
+            double totalPrice = discountService.getTotalPriceWithDiscounts(checkin, checkout, room.getId(), customer.getId(), null, false);
+            System.out.println("BookingService: totalPrice = " + totalPrice);
+            Booking booking = new Booking(checkin, checkout, guests, extraBeds, totalPrice, customer, room);
             bookingRepository.save(booking);
             System.out.println("BookingService: booking saved = " + booking);
         } else {
