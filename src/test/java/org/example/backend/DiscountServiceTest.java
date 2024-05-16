@@ -114,14 +114,12 @@ public class DiscountServiceTest {
         double expected = fullPrice - totalDiscount;
         double actual = discountService.getTotalPriceWithDiscounts(checkin, checkout, r1.getId(), c1.getId(), today, true);
         Assertions.assertEquals(expected, actual);
-        System.out.println(ANSI_GREEN + "Total with discount: " + actual + ANSI_RESET); // TODO: DELETE
     }
 
     @Test
     public void getDiscountSundayMondayTest() throws ParseException {
         Date checkin = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkout = new java.sql.Date(df.parse("2024-06-12").getTime());
-        System.out.println(dateService.getNumberOfDaysBetweenTwoDates(checkin, checkout));
         double expected = 40;
         double actual = discountService.getDiscountSundayMonday(checkin, checkout, r1);
         Assertions.assertEquals(expected, actual);
@@ -167,8 +165,6 @@ public class DiscountServiceTest {
         when(bookingRepository.getAllBookingsForCustomer(c1.getId())).thenReturn(Arrays.asList(b1, b2, b3));
         List<Booking> expected = Arrays.asList(b1, b2, b3);
         List<Booking> actual = bookingRepository.getAllBookingsForCustomer(c1.getId());
-        System.out.println(ANSI_GREEN + expected + ANSI_RESET); // TEST
-        System.out.println(ANSI_GREEN + actual + ANSI_RESET); // TEST
         Assertions.assertEquals(expected, actual);
     }
 
