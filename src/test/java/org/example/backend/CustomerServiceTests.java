@@ -8,7 +8,6 @@ import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Service.Impl.CustomerServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,11 +25,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CustomerServiceTest {
+public class CustomerServiceTests {
     @Mock
     private CustomerRepository cusRepo;
 

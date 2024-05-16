@@ -8,14 +8,11 @@ import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
 import org.example.backend.Service.Impl.RoomServiceImpl;
 import org.example.backend.Service.Impl.RoomTypeServiceImpl;
-import org.example.backend.Service.RoomService;
-import org.example.backend.Service.RoomTypeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -26,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RoomServiceTest {
+public class RoomServiceTests {
 
     @Mock
     private RoomRepository rmRepo;

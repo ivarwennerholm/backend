@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class BookingServiceTest2 {
+public class BookingService2Tests {
 
     @Mock
     private RoomRepository roomRepository;

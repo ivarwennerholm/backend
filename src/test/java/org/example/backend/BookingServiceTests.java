@@ -1,9 +1,5 @@
 package org.example.backend;
 
-import org.example.backend.DTO.BookingDto;
-import org.example.backend.DTO.CustomerDto;
-import org.example.backend.DTO.RoomDto;
-import org.example.backend.DTO.RoomTypeDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
@@ -12,7 +8,6 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
-import org.example.backend.Service.BookingService;
 import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.Impl.BookingServiceImpl;
 import org.example.backend.Service.Impl.CustomerServiceImpl;
@@ -25,10 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BookingServiceTest {
+public class BookingServiceTests {
     @Mock
     private BookingRepository bookRepo;
 
