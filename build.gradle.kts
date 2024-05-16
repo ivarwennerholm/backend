@@ -32,7 +32,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     //json
-    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
     // XML
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0")
@@ -42,6 +42,14 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-core:2.17.1")
     // https://mvnrepository.com/artifact/com.h2database/h2
     testImplementation("com.h2database:h2:2.2.224")
+    //rabbitMQ
+    // https://mvnrepository.com/artifact/com.rabbitmq/amqp-client
+    implementation("com.rabbitmq:amqp-client:5.21.0")
+    //Jackson annotations
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.1")
+
+
 
 
 }

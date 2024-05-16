@@ -32,6 +32,10 @@ public class BackendApplication {
             SpringApplication application = new SpringApplication(FetchContractCustomers.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
+        } else if (Objects.equals(args[0], "readevents")) {
+            SpringApplication application = new SpringApplication(ReadEventsApp.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
         }
     }
 
