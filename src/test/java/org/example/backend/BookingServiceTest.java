@@ -14,10 +14,7 @@ import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
 import org.example.backend.Service.BookingService;
 import org.example.backend.Service.CustomerService;
-import org.example.backend.Service.Impl.BookingServiceImpl;
-import org.example.backend.Service.Impl.CustomerServiceImpl;
-import org.example.backend.Service.Impl.RoomServiceImpl;
-import org.example.backend.Service.Impl.RoomTypeServiceImpl;
+import org.example.backend.Service.Impl.*;
 import org.example.backend.Service.RoomService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +54,8 @@ public class BookingServiceTest {
 
     @Mock
     private CustomerService cS;
+
+    //private DateService dateService = new DateService();
 
     @InjectMocks
     private BookingServiceImpl bookService;
@@ -106,6 +105,7 @@ public class BookingServiceTest {
     @Test
     public void updateBookingDatesTest() throws ParseException {
         when(bookRepo.findAll()).thenReturn(Arrays.asList(b1,b2));
+
         Assertions.assertTrue(bookService.updateBookingDates(1L, "2024-06-08", "2024-06-31").equals("booking is updated"));
 
         Exception ex = assertThrows(RuntimeException.class,() -> bookService.updateBookingDates(1L, "2024-07-01", "2024-07-31"));

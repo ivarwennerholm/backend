@@ -5,21 +5,25 @@ import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
 import org.example.backend.Repository.BookingRepository;
+import org.example.backend.Repository.CustomerRepository;
+import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Service.BookingService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class DiscountService {
 
 //    private final BookingService bookingService;
+    private DateService dateService = new DateService();
     private final BookingRepository bookingRepository;
+    private final RoomRepository roomRepository;
+    private final CustomerRepository customerRepository;
 
     // ANSI colors for readability
     public static final String ANSI_RESET = "\u001B[0m";
@@ -27,10 +31,18 @@ public class DiscountService {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\033[0;33m";
 
-    public double getTotalPriceWithDiscounts(Date checkin, Date checkout, Room room, Customer customer, Date dateForTesting, boolean test) {
-        long nights = getNumberOfDaysBetweenTwoDates(checkin, checkout);
+    public double getTotalPriceWithDiscounts(Date checkin, Date checkout, long roomId, long customerId, Date dateForTesting, boolean test) {
+        long nights = dateService.getNumberOfDaysBetweenTwoDates(checkin, checkout);
+        Optional<Room> optionalRoom = roomRepository.findById(roomId);
+        Room room = null;
+        if (optionalRoom.isPresent())
+            room = optionalRoom.get();
         double pricePerNight = room.getRoomType().getPricePerNight();
         double totalPrice = nights * pricePerNight;
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        Customer customer = null;
+        if (optionalCustomer.isPresent())
+            customer = optionalCustomer.get();
         System.out.println("DiscountService: Discount 1 = " + getDiscountSundayMonday(checkin, checkout, room)); // TODO: REMOVE
         totalPrice -= getDiscountSundayMonday(checkin, checkout, room);
         System.out.println("DiscountService: Discount 2 = " + getDiscountTwoOrMoreNights(checkin, checkout, totalPrice)); // TODO: REMOVE
@@ -52,7 +64,7 @@ public class DiscountService {
     }
 
     public double getDiscountTwoOrMoreNights(Date checkin, Date checkout, double totalPrice) {
-        if (getNumberOfDaysBetweenTwoDates(checkin, checkout) >= 2) {
+        if (dateService.getNumberOfDaysBetweenTwoDates(checkin, checkout) >= 2) {
             return totalPrice * 0.005;
         } else {
             return 0;
@@ -72,52 +84,8 @@ public class DiscountService {
         }
     }
 
-    public boolean doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(Customer customer, Date dateForTesting, boolean test) {
-        List<Booking> allBookingsForCustomer = bookingRepository.getAllBookingsForCustomer(customer.getId());
-        List<List<Date>> allDatesBookedWithinTheLastYear;
-        allDatesBookedWithinTheLastYear = allBookingsForCustomer.
-                stream().
-                map(booking -> createDateInterval(booking.getCheckinDate(), booking.getCheckoutDate())).
-                map(datelist -> {
-                            if (test) {
-                                return datelist.
-                                    stream().
-                                    filter(date -> isDateWithinAYearFromToday(date, dateForTesting, true)).
-                                    toList();
-                            } else {
-                                return datelist.
-                                    stream().
-                                    filter(date -> isDateWithinAYearFromToday(date, null, false)).
-                                    toList();
-                            }
-                        }).
-                filter(datelist -> !datelist.isEmpty()).
-                toList();
-        long counter = allDatesBookedWithinTheLastYear.
-                stream().
-                mapToLong(datelist -> getNumberOfDaysBetweenTwoDates(datelist.get(0), datelist.get(datelist.size() - 1))).
-                sum();
-        return counter >= 10;
-    }
-
-    public boolean isDateWithinAYearFromToday(Date date, Date dateForTesting, boolean test) {
-        Date today;
-        if (!test) {
-            LocalDate localDateToday = LocalDate.now();
-            today = java.sql.Date.valueOf(localDateToday);
-        } else {
-            today = dateForTesting;
-        }
-        Calendar aYearAgo = Calendar.getInstance();
-        aYearAgo.setTime(today);
-        aYearAgo.add(Calendar.YEAR, -1);
-        Calendar dateToCompare = Calendar.getInstance();
-        dateToCompare.setTime(date);
-        return aYearAgo.before(dateToCompare);
-    }
-
     public int getNumberOfDiscountedNights(Date checkin, Date checkout) {
-        List<Date> interval = createDateInterval(checkin, checkout);
+        List<Date> interval = dateService.createDateInterval(checkin, checkout);
         Calendar today = Calendar.getInstance();
         Calendar tomorrow = Calendar.getInstance();
         int numberOfDiscountedNights = 0;
@@ -131,21 +99,31 @@ public class DiscountService {
         return numberOfDiscountedNights;
     }
 
-    public List<Date> createDateInterval(Date checkin, Date checkout) {
-        List<Date> interval = new ArrayList<>();
-        Date iterateDate = checkin;
-        while (!iterateDate.after(checkout)) {
-            interval.add(iterateDate);
-            Calendar c = Calendar.getInstance();
-            c.setTime(iterateDate);
-            c.add(Calendar.DATE, 1);
-            iterateDate = new java.sql.Date(c.getTimeInMillis());
-        }
-        return interval;
-    }
-
-    public Long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout) {
-        long differenceMillis = checkout.getTime() - checkin.getTime();
-        return differenceMillis / (1000 * 60 * 60 * 24);
+    public boolean doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(Customer customer, Date dateForTesting, boolean test) {
+        List<Booking> allBookingsForCustomer = bookingRepository.getAllBookingsForCustomer(customer.getId());
+        List<List<Date>> allDatesBookedWithinTheLastYear;
+        allDatesBookedWithinTheLastYear = allBookingsForCustomer.
+                stream().
+                map(booking -> dateService.createDateInterval(booking.getCheckinDate(), booking.getCheckoutDate())).
+                map(datelist -> {
+                    if (test) {
+                        return datelist.
+                                stream().
+                                filter(date -> dateService.isDateWithinAYearFromToday(date, dateForTesting, true)).
+                                toList();
+                    } else {
+                        return datelist.
+                                stream().
+                                filter(date -> dateService.isDateWithinAYearFromToday(date, null, false)).
+                                toList();
+                    }
+                }).
+                filter(datelist -> !datelist.isEmpty()).
+                toList();
+        long counter = allDatesBookedWithinTheLastYear.
+                stream().
+                mapToLong(datelist -> dateService.getNumberOfDaysBetweenTwoDates(datelist.get(0), datelist.get(datelist.size() - 1))).
+                sum();
+        return counter >= 10;
     }
 }

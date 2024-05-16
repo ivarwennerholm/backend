@@ -52,6 +52,7 @@ public class BookingServiceTest2 {
     private BookingService bookingService;
     private BlacklistService blacklistService;
     private DiscountService discountService;
+    private DateService dateService;
 
 
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -95,9 +96,11 @@ public class BookingServiceTest2 {
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
         customerService = new CustomerServiceImpl(customerRepository);
         blacklistService = new BlacklistService();
-        discountService = new DiscountService(bookingRepository);
+        dateService = new DateService();
+
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
-        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
+        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService);
+        discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);
 
         // Customers
         c1 = new Customer(1L, "Venus", "111-1111111");
@@ -181,13 +184,13 @@ public class BookingServiceTest2 {
 
     @Test // WORKING 👍
     public void testIsRoomAvailableOnDates() throws ParseException {
-        Date d1 = bookingService.convertStringToDate("2024-05-25");
-        Date d2 = bookingService.convertStringToDate("2024-05-31");
-        Date d3 = bookingService.convertStringToDate("2024-06-01");
-        Date d4 = bookingService.convertStringToDate("2024-06-04");
-        Date d5 = bookingService.convertStringToDate("2024-06-07");
-        Date d6 = bookingService.convertStringToDate("2024-06-08");
-        Date d7 = bookingService.convertStringToDate("2024-06-13");
+        Date d1 = dateService.convertStringToDate("2024-05-25");
+        Date d2 = dateService.convertStringToDate("2024-05-31");
+        Date d3 = dateService.convertStringToDate("2024-06-01");
+        Date d4 = dateService.convertStringToDate("2024-06-04");
+        Date d5 = dateService.convertStringToDate("2024-06-07");
+        Date d6 = dateService.convertStringToDate("2024-06-08");
+        Date d7 = dateService.convertStringToDate("2024-06-13");
         Assertions.assertTrue(bookingService.isRoomAvailableOnDates(rdto1, d1, d2));
         Assertions.assertTrue(bookingService.isRoomAvailableOnDates(rdto1, d1, d3));
         Assertions.assertFalse(bookingService.isRoomAvailableOnDates(rdto1, d1, d4));
@@ -242,50 +245,50 @@ public class BookingServiceTest2 {
 
     @Test // WORKING 👍
     public void testAreDatesOverlapping() throws ParseException {
-        Date d1 = bookingService.convertStringToDate("2024-07-01");
-        Date d2 = bookingService.convertStringToDate("2024-07-30");
-        Date d3 = bookingService.convertStringToDate("2024-07-31");
-        Date d4 = bookingService.convertStringToDate("2024-08-01");
-        Date d5 = bookingService.convertStringToDate("2024-08-03");
-        Date d6 = bookingService.convertStringToDate("2024-08-04");
-        Date d7 = bookingService.convertStringToDate("2024-08-16");
-        List<Date> search = bookingService.createDateInterval(d3, d5);
-        List<Date> notOverLapping1 = bookingService.createDateInterval(d1, d2);
-        List<Date> notOverLapping2 = bookingService.createDateInterval(d1, d3);
-        List<Date> notOverLapping3 = bookingService.createDateInterval(d5, d7);
-        List<Date> notOverLapping4 = bookingService.createDateInterval(d6, d7);
-        List<Date> overLapping1 = bookingService.createDateInterval(d1, d4);
-        List<Date> overLapping2 = bookingService.createDateInterval(d4, d7);
-        assertTrue(bookingService.areDatesOverlapping(overLapping1, search));
-        assertTrue(bookingService.areDatesOverlapping(overLapping2, search));
-        assertTrue(bookingService.areDatesOverlapping(search, search));
-        Assertions.assertFalse(bookingService.areDatesOverlapping(notOverLapping1, search));
-        Assertions.assertFalse(bookingService.areDatesOverlapping(notOverLapping2, search));
-        Assertions.assertFalse(bookingService.areDatesOverlapping(notOverLapping3, search));
-        Assertions.assertFalse(bookingService.areDatesOverlapping(notOverLapping4, search));
+        Date d1 = dateService.convertStringToDate("2024-07-01");
+        Date d2 = dateService.convertStringToDate("2024-07-30");
+        Date d3 = dateService.convertStringToDate("2024-07-31");
+        Date d4 = dateService.convertStringToDate("2024-08-01");
+        Date d5 = dateService.convertStringToDate("2024-08-03");
+        Date d6 = dateService.convertStringToDate("2024-08-04");
+        Date d7 = dateService.convertStringToDate("2024-08-16");
+        List<Date> search = dateService.createDateInterval(d3, d5);
+        List<Date> notOverLapping1 = dateService.createDateInterval(d1, d2);
+        List<Date> notOverLapping2 = dateService.createDateInterval(d1, d3);
+        List<Date> notOverLapping3 = dateService.createDateInterval(d5, d7);
+        List<Date> notOverLapping4 = dateService.createDateInterval(d6, d7);
+        List<Date> overLapping1 = dateService.createDateInterval(d1, d4);
+        List<Date> overLapping2 = dateService.createDateInterval(d4, d7);
+        assertTrue(dateService.areDatesOverlapping(overLapping1, search));
+        assertTrue(dateService.areDatesOverlapping(overLapping2, search));
+        assertTrue(dateService.areDatesOverlapping(search, search));
+        Assertions.assertFalse(dateService.areDatesOverlapping(notOverLapping1, search));
+        Assertions.assertFalse(dateService.areDatesOverlapping(notOverLapping2, search));
+        Assertions.assertFalse(dateService.areDatesOverlapping(notOverLapping3, search));
+        Assertions.assertFalse(dateService.areDatesOverlapping(notOverLapping4, search));
     }
 
     @Test // WORKING 👍
     public void testCreateDateInterval() throws ParseException {
-        Date d1 = bookingService.convertStringToDate("2024-07-31");
-        Date d2 = bookingService.convertStringToDate("2024-08-01");
-        Date d3 = bookingService.convertStringToDate("2024-08-02");
-        Date d4 = bookingService.convertStringToDate("2024-08-03");
+        Date d1 = dateService.convertStringToDate("2024-07-31");
+        Date d2 = dateService.convertStringToDate("2024-08-01");
+        Date d3 = dateService.convertStringToDate("2024-08-02");
+        Date d4 = dateService.convertStringToDate("2024-08-03");
         List<Date> expected = Arrays.asList(d1, d2, d3, d4);
-        List<Date> actual = bookingService.createDateInterval(d1, d4);
+        List<Date> actual = dateService.createDateInterval(d1, d4);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test // WORKING 👍
     public void testGetNumberOfDaysBetweenTwoDates() throws ParseException {
-        Date d1 = bookingService.convertStringToDate("2024-07-30");
-        Date d2 = bookingService.convertStringToDate("2024-07-31");
-        Date d3 = bookingService.convertStringToDate("2024-08-01");
+        Date d1 = dateService.convertStringToDate("2024-07-30");
+        Date d2 = dateService.convertStringToDate("2024-07-31");
+        Date d3 = dateService.convertStringToDate("2024-08-01");
         long expected1 = 1;
         long expected2 = 2;
         long notExpected = 3;
-        long actual1 = bookingService.getNumberOfDaysBetweenTwoDates(d1, d2);
-        long actual2 = bookingService.getNumberOfDaysBetweenTwoDates(d1, d3);
+        long actual1 = dateService.getNumberOfDaysBetweenTwoDates(d1, d2);
+        long actual2 = dateService.getNumberOfDaysBetweenTwoDates(d1, d3);
         Assertions.assertEquals(actual1, expected1);
         Assertions.assertNotEquals(actual1, notExpected);
         Assertions.assertEquals(actual2, expected2);
@@ -330,7 +333,7 @@ public class BookingServiceTest2 {
         String notExpected = "2023-12-13";
         java.sql.Date expectedDate = new java.sql.Date(df.parse(expected).getTime());
         java.sql.Date notExpectedDate = new java.sql.Date(df.parse(notExpected).getTime());
-        java.sql.Date actualDate = bookingService.convertStringToDate(expected);
+        java.sql.Date actualDate = dateService.convertStringToDate(expected);
         Assertions.assertEquals(expectedDate, actualDate);
         Assertions.assertNotEquals(notExpectedDate, actualDate);
     }

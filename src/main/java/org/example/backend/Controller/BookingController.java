@@ -5,6 +5,7 @@ import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.AvailableBookingDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Service.BookingService;
+import org.example.backend.Service.Impl.DateService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ public class BookingController {
 
     private final RoomService roomService;
     private final BookingService bookService;
+    private final DateService dateService;
     private List<BookingDto> allBookings = new ArrayList<>();
 
     @RequestMapping("all")
@@ -71,9 +73,9 @@ public class BookingController {
         model.addAttribute("guests", guests);
         model.addAttribute("checkin", checkin);
         model.addAttribute("checkout", checkout);
-        Date checkinDate = bookService.convertStringToDate(checkin);
-        Date checkoutDate = bookService.convertStringToDate(checkout);
-        long differenceDays = bookService.getNumberOfDaysBetweenTwoDates(checkinDate, checkoutDate);
+        Date checkinDate = dateService.convertStringToDate(checkin);
+        Date checkoutDate = dateService.convertStringToDate(checkout);
+        long differenceDays = dateService.getNumberOfDaysBetweenTwoDates(checkinDate, checkoutDate);
         model.addAttribute("nights", differenceDays);
         List<AvailableBookingDto> allBookingsForRoom = new ArrayList<>();
         roomService.
@@ -131,8 +133,8 @@ public class BookingController {
         model.addAttribute("fullprice", fullprice);
 
         // Add booking to database
-        Date checkinDate = bookService.convertStringToDate(checkin);
-        Date checkoutDate = bookService.convertStringToDate(checkout);
+        Date checkinDate = dateService.convertStringToDate(checkin);
+        Date checkoutDate = dateService.convertStringToDate(checkout);
         int guestsAmt = Integer.parseInt(guests);
         int extrabedsAmt = Integer.parseInt(extrabeds);
         long roomId = Long.parseLong(roomid);

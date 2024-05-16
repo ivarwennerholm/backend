@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.util.Optional;
 
 import org.example.backend.DTO.RoomDto;
+import org.example.backend.Model.Customer;
 
 public interface BookingService {
 
@@ -30,20 +31,10 @@ public interface BookingService {
 
     public void createAndAddBookingToDatabase (Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception;
 
-    public boolean areDatesOverlapping(List<java.sql.Date> searchDates, List<java.sql.Date> bookingDates);
-
-    public List<java.sql.Date> createDateInterval(java.sql.Date checkin, java.sql.Date checkout);
-
-    public Long getNumberOfDaysBetweenTwoDates(java.sql.Date checkin, java.sql.Date checkout);
-
     public int getExtraBedsForBooking(RoomDto room, int guests);
 
     public boolean isRoomAvailableOnDates(RoomDto room, java.sql.Date checkin, java.sql.Date checkout);
 
-    public Date convertStringToDate(String date) throws ParseException;
-
     public Booking getLastBooking();
-
-
 
 }

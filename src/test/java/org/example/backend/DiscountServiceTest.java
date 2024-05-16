@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
@@ -46,6 +47,7 @@ public class DiscountServiceTest {
     private BlacklistService blacklistService;
     private RoomService roomService;
     private RoomTypeService roomTypeService;
+    private DateService dateService;
 
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -68,9 +70,10 @@ public class DiscountServiceTest {
         // Services
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
         blacklistService = new BlacklistService();
+        dateService = new DateService();
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
-        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
-        discountService = new DiscountService(bookingRepository);
+        discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);
+        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService);
 
         // Customers, room types & rooms
         c1 = new Customer(1L, "Venus", "111-1111111");
@@ -98,6 +101,8 @@ public class DiscountServiceTest {
 
     @Test
     public void getTotalPriceIncludingDiscountTest() throws ParseException {
+        when(roomRepository.findById(1L)).thenReturn(Optional.ofNullable(r1));
+        when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(c1));
         Date today = new java.sql.Date(df.parse("2025-05-15").getTime());
         Date checkin = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkout = new java.sql.Date(df.parse("2024-06-12").getTime());
@@ -107,7 +112,7 @@ public class DiscountServiceTest {
         double discount3 = 257.904;
         double totalDiscount = discount1 + discount2 + discount3;
         double expected = fullPrice - totalDiscount;
-        double actual = discountService.getTotalPriceWithDiscounts(checkin, checkout, r1, c1, today, true);
+        double actual = discountService.getTotalPriceWithDiscounts(checkin, checkout, r1.getId(), c1.getId(), today, true);
         Assertions.assertEquals(expected, actual);
         System.out.println(ANSI_GREEN + "Total with discount: " + actual + ANSI_RESET); // TODO: DELETE
     }
@@ -116,7 +121,7 @@ public class DiscountServiceTest {
     public void getDiscountSundayMondayTest() throws ParseException {
         Date checkin = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkout = new java.sql.Date(df.parse("2024-06-12").getTime());
-        System.out.println(bookingService.getNumberOfDaysBetweenTwoDates(checkin, checkout));
+        System.out.println(dateService.getNumberOfDaysBetweenTwoDates(checkin, checkout));
         double expected = 40;
         double actual = discountService.getDiscountSundayMonday(checkin, checkout, r1);
         Assertions.assertEquals(expected, actual);
@@ -197,9 +202,9 @@ public class DiscountServiceTest {
         Date compare1 = new java.sql.Date(df.parse("2022-12-31").getTime());
         Date compare2 = new java.sql.Date(df.parse("2023-01-01").getTime());
         Date compare3 = new java.sql.Date(df.parse("2023-01-02").getTime());
-        boolean actual1 = discountService.isDateWithinAYearFromToday(compare1, today, true);
-        boolean actual2 = discountService.isDateWithinAYearFromToday(compare2, today, true);
-        boolean actual3 = discountService.isDateWithinAYearFromToday(compare3, today, true);
+        boolean actual1 = dateService.isDateWithinAYearFromToday(compare1, today, true);
+        boolean actual2 = dateService.isDateWithinAYearFromToday(compare2, today, true);
+        boolean actual3 = dateService.isDateWithinAYearFromToday(compare3, today, true);
         Assertions.assertFalse(actual1);
         Assertions.assertFalse(actual2);
         Assertions.assertTrue(actual3);
