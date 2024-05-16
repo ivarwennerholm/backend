@@ -7,7 +7,6 @@ import org.example.backend.Model.Room;
 import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
-import org.example.backend.Service.BookingService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -19,17 +18,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DiscountService {
 
-//    private final BookingService bookingService;
     private DateService dateService = new DateService();
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
     private final CustomerRepository customerRepository;
-
-    // ANSI colors for readability
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\033[0;33m";
 
     public double getTotalPriceWithDiscounts(Date checkin, Date checkout, long roomId, long customerId, Date dateForTesting, boolean test) {
         long nights = dateService.getNumberOfDaysBetweenTwoDates(checkin, checkout);
@@ -43,18 +35,13 @@ public class DiscountService {
         Customer customer = null;
         if (optionalCustomer.isPresent())
             customer = optionalCustomer.get();
-        System.out.println("DiscountService: Discount 1 = " + getDiscountSundayMonday(checkin, checkout, room)); // TODO: REMOVE
         totalPrice -= getDiscountSundayMonday(checkin, checkout, room);
-        System.out.println("DiscountService: Discount 2 = " + getDiscountTwoOrMoreNights(checkin, checkout, totalPrice)); // TODO: REMOVE
         totalPrice -= getDiscountTwoOrMoreNights(checkin, checkout, totalPrice);
         if (test) {
-            System.out.println("DiscountService: Discount 3 = " + getDiscountReturningCustomer(customer, totalPrice, dateForTesting, true)); // TODO: REMOVE
             totalPrice -= getDiscountReturningCustomer(customer, totalPrice, dateForTesting, true);
         } else {
-            System.out.println("DiscountService: Discount 3 = " + getDiscountReturningCustomer(customer, totalPrice, null, false)); // TODO: REMOVE
             totalPrice -= getDiscountReturningCustomer(customer, totalPrice, null, false);
         }
-        System.out.println("DiscountService: Grand total = " + totalPrice); // TODO: REMOVE
         return totalPrice;
     }
 
@@ -126,4 +113,5 @@ public class DiscountService {
                 sum();
         return counter >= 10;
     }
+
 }

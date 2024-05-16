@@ -53,7 +53,7 @@ public class BookingController {
                                  @RequestParam(required = false) String newCheckOut,
                                  Model model){
         try {
-            bookService.updateBookingDates(id,newCheckIn,newCheckOut);
+            bookService.updateBookingDates(id, newCheckIn, newCheckOut);
             model.addAttribute("okBook","Successfully update booking dates");
         } catch (RuntimeException | ParseException e) {
             model.addAttribute("failBook",e.getMessage());
@@ -108,7 +108,6 @@ public class BookingController {
         model.addAttribute("guests", guests);
         model.addAttribute("extrabeds", extrabeds);
         model.addAttribute("fullprice", fullprice);
-        System.out.println("BookingController: Full price = " + fullprice);
         return "inputUserDetails";
     }
 
@@ -142,9 +141,7 @@ public class BookingController {
         int roomNumber = roomService.getRoomById(roomId).getRoomNumber();
         model.addAttribute("roomnumber", roomNumber);
         try {
-            System.out.println("BookingController: creating database entry");
             bookService.createAndAddBookingToDatabase(checkinDate, checkoutDate, guestsAmt, extrabedsAmt, roomId, name, phone, email);
-            System.out.println("BookingController: database entry completed");
         } catch (Exception e) {
             model.addAttribute("blacklistMsg",e.getMessage());
         }
@@ -154,9 +151,6 @@ public class BookingController {
         DecimalFormat df = new DecimalFormat("#.##");
         String discount = df.format(discountValue);
         String discountedPrice = df.format(discountedPriceValue);
-        System.out.println("BookingController: Full price = " + fullprice);
-        System.out.println("BookingController: Discounted price = " + discountedPrice);
-        System.out.println("BookingController: Discount = " + discount);
         model.addAttribute("discount", discount);
         model.addAttribute("discountedprice", discountedPrice);
         return "getBookingConfirmation";

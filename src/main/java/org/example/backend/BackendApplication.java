@@ -14,14 +14,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @SpringBootApplication
 public class BackendApplication {
@@ -79,16 +75,16 @@ public class BackendApplication {
                     new java.sql.Date(df.parse("2024-06-07").getTime()), r1.getId(), c1.getId(), null, false);
             Booking b1 = new Booking(new java.sql.Date(df.parse("2024-06-01").getTime()),
                     new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, totalPrice, c1, r1);
-//            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-08-22").getTime()),
-//                    new java.sql.Date(df.parse("2024-08-23").getTime()), r2, c2, null, false);
+            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-08-22").getTime()),
+                    new java.sql.Date(df.parse("2024-08-23").getTime()), r2.getId(), c2.getId(), null, false);
             Booking b2 = new Booking(new java.sql.Date(df.parse("2024-08-22").getTime()),
                     new java.sql.Date(df.parse("2024-08-23").getTime()), 3, 1, 1299, c2, r2);
-//            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-12-2").getTime()),
-//                    new java.sql.Date(df.parse("2024-12-25").getTime()), r3, c3, null, false);
+            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-12-2").getTime()),
+                    new java.sql.Date(df.parse("2024-12-25").getTime()), r3.getId(), c3.getId(), null, false);
             Booking b3 = new Booking(new java.sql.Date(df.parse("2024-12-23").getTime()),
                     new java.sql.Date(df.parse("2024-12-25").getTime()), 4, 2, 16300, c3, r3);
-//            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-12-23").getTime()),
-//                    new java.sql.Date(df.parse("2024-12-30").getTime()), r2, c2, null, false);
+            totalPrice = discountService.getTotalPriceWithDiscounts(new java.sql.Date(df.parse("2024-12-23").getTime()),
+                    new java.sql.Date(df.parse("2024-12-30").getTime()), r2.getId(), c2.getId(), null, false);
             Booking b4 = new Booking(new java.sql.Date(df.parse("2024-12-23").getTime()),
                     new java.sql.Date(df.parse("2024-12-30").getTime()), 3, 1, 7599, c2, r2);
             bRepo.save(b1);
@@ -97,4 +93,5 @@ public class BackendApplication {
             bRepo.save(b4);
         };
     }
+
 }

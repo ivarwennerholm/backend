@@ -37,6 +37,7 @@ public class Customer {
     @ToString.Exclude
     private List<Booking> bookingList;
 
+    // TODO: Do we need all these different constructors? - Ivar
     public Customer(String name, String phone) {
         this.name = name;
         this.phone = phone;

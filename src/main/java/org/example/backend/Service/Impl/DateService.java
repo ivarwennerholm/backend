@@ -40,7 +40,7 @@ public class DateService {
         return interval;
     }
 
-    public Long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout) {
+    public long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout) {
         long differenceMillis = checkout.getTime() - checkin.getTime();
         return differenceMillis / (1000 * 60 * 60 * 24);
     }

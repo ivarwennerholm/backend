@@ -11,7 +11,6 @@ import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Service.BookingService;
 import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.RoomService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -88,52 +87,53 @@ public class BookingServiceImpl implements BookingService {
         return "delete booking id " + b.getId();
     }
 
-    //venus tar
     @Override
     public BookingDto findBookingById(Long id) {
         return bookingToBookingDto(bookingRepository.findById(id).get());
     }
 
-    //venus tar
-//    @Override
-//    public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
-//        Booking b = bookingRepository.findById(id).get();
-//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-//        if (!newCheckIn.isEmpty()){
-//            b.setCheckinDate(new java.sql.Date(df.parse(newCheckIn).getTime()));
-//        }
-//        if (!newCheckOut.isEmpty()){
-//            b.setCheckoutDate(new java.sql.Date(df.parse(newCheckOut).getTime()));
-//        }
-//        bookingRepository.save(b);
-//    }
+    /* TODO: Can this be deleted? - Ivar
+    // venus tar
+    @Override
+    public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
+        Booking b = bookingRepository.findById(id).get();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        if (!newCheckIn.isEmpty()){
+            b.setCheckinDate(new java.sql.Date(df.parse(newCheckIn).getTime()));
+        }
+        if (!newCheckOut.isEmpty()){
+            b.setCheckoutDate(new java.sql.Date(df.parse(newCheckOut).getTime()));
+        }
+        bookingRepository.save(b);
+    }
+    */
 
     @Override
     public String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
         Room r = bookingRepository.findById(id).get().getRoom();
         Booking originBooking = bookingRepository.findById(id).get();
-
+        long customerId = originBooking.getCustomer().getId();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date wantedCheckIn = originBooking.getCheckinDate();
         Date wantedCheckOut = originBooking.getCheckoutDate();
-
-        if (!newCheckIn.isEmpty()){
-            wantedCheckIn = new java.sql.Date (df.parse(newCheckIn).getTime());
+        if (!newCheckIn.isEmpty()) {
+            wantedCheckIn = new java.sql.Date(df.parse(newCheckIn).getTime());
         }
-        if (!newCheckOut.isEmpty()){
-            wantedCheckOut = new java.sql.Date (df.parse(newCheckOut).getTime());
+        if (!newCheckOut.isEmpty()) {
+            wantedCheckOut = new java.sql.Date(df.parse(newCheckOut).getTime());
         }
         List<Date> datesInterval = dateService.createDateInterval(wantedCheckIn, wantedCheckOut);
         List<Booking> conflictBookList =
                 bookingRepository.findAll().stream()
-                .filter(k -> k.getRoom().getId()==r.getId())
-                .filter(k -> k.getId()!=id)
-                .filter(k -> dateService.areDatesOverlapping(datesInterval, dateService.createDateInterval(k.getCheckinDate(), k.getCheckoutDate())))
-                .toList();
-
-        if (conflictBookList.isEmpty()){
+                        .filter(k -> k.getRoom().getId() == r.getId())
+                        .filter(k -> k.getId() != id)
+                        .filter(k -> dateService.areDatesOverlapping(datesInterval, dateService.createDateInterval(k.getCheckinDate(), k.getCheckoutDate())))
+                        .toList();
+        if (conflictBookList.isEmpty()) {
             originBooking.setCheckinDate(wantedCheckIn);
             originBooking.setCheckoutDate(wantedCheckOut);
+            originBooking.setTotalPrice(discountService.getTotalPriceWithDiscounts(wantedCheckIn, wantedCheckOut, r.getId(), customerId, null, false));
+            System.out.println("New total price = " + discountService.getTotalPriceWithDiscounts(wantedCheckIn, wantedCheckOut, r.getId(), customerId, null, false)); // TESTING
             bookingRepository.save(originBooking);
             return "booking is updated";
         } else {
@@ -144,9 +144,9 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
         System.out.println("BookingService: createAndAddBookingToDatabase initiated");
-        if (blackService.isEmailValid(email)){
+        if (blackService.isEmailValid(email)) {
             Customer customer;
-            Optional <Customer> optional = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
+            Optional<Customer> optional = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
             System.out.println("BookingService: optional retrieved");
             if (optional.isPresent()) {
                 System.out.println("BookingService: optional.isPresent");
@@ -161,8 +161,6 @@ public class BookingServiceImpl implements BookingService {
             System.out.println("BookingService: room = " + room);
             System.out.println("BookingService: customer = " + customer);
             assert room != null;
-            // double totalPrice = 10000;
-            //Customer customer = customerRepository.findById(customerId).orElse(null);
             double totalPrice = discountService.getTotalPriceWithDiscounts(checkin, checkout, room.getId(), customer.getId(), null, false);
             System.out.println("BookingService: totalPrice = " + totalPrice);
             Booking booking = new Booking(checkin, checkout, guests, extraBeds, totalPrice, customer, room);
@@ -214,8 +212,5 @@ public class BookingServiceImpl implements BookingService {
     public Booking getLastBooking() {
         return bookingRepository.getLastBooking();
     }
-
-
-
 
 }

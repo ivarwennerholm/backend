@@ -1,7 +1,6 @@
 package org.example.backend.Repository;
 
 import org.example.backend.Model.Booking;
-import org.example.backend.Model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
