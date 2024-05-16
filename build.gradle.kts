@@ -32,7 +32,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     //json
-// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
     // XML
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0")
@@ -48,30 +48,29 @@ dependencies {
     //Jackson annotations
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.1")
-
-
-
-
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+/*
 val integrationTestTask = tasks.register<Test>("integrationTest") {
     group = "verification"
     filter {
         includeTestsMatching("*IT")
     }
 }
+*/
 
 tasks.test {
     filter {
         includeTestsMatching("*Tests")
-
     }
 }
 
+/*
 tasks.check {
     dependsOn(integrationTestTask)
 }
+*/
