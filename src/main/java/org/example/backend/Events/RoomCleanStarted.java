@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-//@DiscriminatorValue("RoomCleaningStarted")
 public class RoomCleanStarted extends RoomEvent {
     @Id
     @GeneratedValue

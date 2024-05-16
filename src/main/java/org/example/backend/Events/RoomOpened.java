@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-//@DiscriminatorValue("RoomOpened")
 public class RoomOpened extends RoomEvent {
     @Id
     @GeneratedValue
