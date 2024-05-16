@@ -4,6 +4,7 @@ import org.example.backend.DTO.CustomerDto;
 import org.example.backend.Model.Customer;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomerService {
     public Customer customerDtoToCustomer(CustomerDto c);
@@ -16,7 +17,7 @@ public interface CustomerService {
 
     public void addCustomerWithoutID(String name, String phone, String email);
 
-    public Customer getCustomerByNameAndPhone(String name, String phone);
+    public Optional<Customer> getCustomerByNamePhoneAndEmail(String name, String phone, String email);
 
     public Customer getCustomerByEmail(String email);
 
@@ -30,5 +31,7 @@ public interface CustomerService {
 
     public String updateForm(CustomerDto customerDto);
 
-    Customer getCustomerById(Long id);
+    public Customer getCustomerById(Long id);
+
+    public Customer getLastCustomer();
 }

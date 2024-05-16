@@ -32,10 +32,7 @@ public class RoomServiceTests {
     private RoomTypeRepository rtRepo;
 
     @InjectMocks
-    private RoomTypeServiceImpl rtService;
-
-    @InjectMocks
-    private RoomServiceImpl rmService;
+    private RoomTypeServiceImpl sut;
 
     @Test
     public void roomToRoomDtoTest(){
@@ -54,10 +51,8 @@ public class RoomServiceTests {
                 build();
 
         when(rtRepo.findById(1L)).thenReturn(Optional.of(rt));
-        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo,rtService);
-
+        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo, sut);
         RoomDto rmDto = rmService2.roomToRoomDto(rm);
-
         assertEquals(1L, rmDto.getId());
         assertEquals(101, rmDto.getRoomNumber());
         assertEquals(1L, rmDto.getRoomType().getId());
@@ -66,6 +61,7 @@ public class RoomServiceTests {
         assertEquals(1, rmDto.getRoomType().getMaxPerson());
         assertEquals(500, rmDto.getRoomType().getPricePerNight());
     }
+
     @Test
     void roomDtoToRoomTest() {
         RoomType rt = RoomType.builder().
@@ -75,14 +71,10 @@ public class RoomServiceTests {
                 maxPerson(1).
                 pricePerNight(500).
                 build();
-
-        RoomTypeDto rtDto = rtService.roomTypeToRoomTypeDto(rt);
+        RoomTypeDto rtDto = sut.roomTypeToRoomTypeDto(rt);
         RoomDto roomDto = new RoomDto(1L, 101, rtDto);
-
-        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo,rtService);
-
+        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo, sut);
         Room room = rmService2.roomDtoToRoom(roomDto);
-
         assertEquals(1L, room.getId());
         assertEquals(101, room.getRoomNumber());
         assertEquals(1L, room.getRoomType().getId());
@@ -91,6 +83,7 @@ public class RoomServiceTests {
         assertEquals(1, room.getRoomType().getMaxPerson());
         assertEquals(500, room.getRoomType().getPricePerNight());
     }
+
     @Test
     public void getroomByIdTest(){
         RoomType rt = RoomType.builder().
@@ -100,20 +93,15 @@ public class RoomServiceTests {
                 maxPerson(1).
                 pricePerNight(500).
                 build();
-
         when(rtRepo.findById(1L)).thenReturn(Optional.of(rt));
-
         Room rm1 = Room.builder().
                 id(1L).
                 roomNumber(101).
                 roomType(rt).
                 build();
-
         when(rmRepo.findById(1L)).thenReturn(Optional.of(rm1));
-        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo,rtService);
-
+        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo, sut);
         RoomDto rmDto = rmService2.getRoomById(1L);
-
         assertEquals(1L, rmDto.getId());
         assertEquals(101, rmDto.getRoomNumber());
         assertEquals(1L, rmDto.getRoomType().getId());
@@ -132,7 +120,6 @@ public class RoomServiceTests {
                 maxPerson(1).
                 pricePerNight(500).
                 build();
-
         RoomType rt2 = RoomType.builder().
                 id(2L).
                 type("double").
@@ -140,28 +127,22 @@ public class RoomServiceTests {
                 maxPerson(2).
                 pricePerNight(1000).
                 build();
-
         when(rtRepo.findById(1L)).thenReturn(Optional.of(rt1));
-
         when(rtRepo.findById(2L)).thenReturn(Optional.of(rt2));
         Room rm1 = Room.builder().
                 id(1L).
                 roomNumber(101).
                 roomType(rt1).
                 build();
-
         Room rm2 = Room.builder().
                 id(2L).
                 roomNumber(202).
                 roomType(rt2).
                 build();
-
         when(rmRepo.findAll()).thenReturn(Arrays.asList(rm1,rm2));
-
-        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo,rtService);
-
+        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo, sut);
         List<RoomDto> rmDtoList = rmService2.getAll();
-
         Assertions.assertEquals(2,rmDtoList.size());
     }
+
 }

@@ -66,6 +66,7 @@
         <input type="hidden" id="checkout" name="checkout" th:value="${checkout}">
         <input type="hidden" id="guests" name="guests" th:value="${guests}">
         <input type="hidden" id="extrabeds" name="extrabeds" th:value="${extrabeds}">
+        <input type="hidden" id="fullprice" name="fullprice" th:value="${fullprice}">
         <div class="mt-3">
             <input id="confirmButton" type="submit" value="Book" disabled>
         </div>
@@ -81,6 +82,7 @@
     <p th:text="'checkout: ' + ${checkout}"></p>
     <p th:text="'guests: ' + ${guests}"></p>
     <p th:text="'extrabeds: ' + ${extrabeds}"></p>
+    <p th:text="'fullprice: ' + ${fullprice}"></p>
 </div>
 -->
 </body>

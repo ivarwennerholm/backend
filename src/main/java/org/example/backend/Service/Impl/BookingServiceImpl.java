@@ -1,13 +1,10 @@
 package org.example.backend.Service.Impl;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.*;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
-import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
@@ -16,7 +13,6 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.RoomService;
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -33,6 +29,8 @@ public class BookingServiceImpl implements BookingService {
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
     private final BlacklistService blackService;
+    private final DiscountService discountService;
+    private DateService dateService = new DateService();
 
     @Override
     public BookingDto bookingToBookingDto(Booking b) {
@@ -44,6 +42,7 @@ public class BookingServiceImpl implements BookingService {
                 checkoutDate(b.getCheckoutDate()).
                 guestAmt(b.getGuestAmt()).
                 extraBedAmt(b.getExtraBedAmt()).
+                totalPrice(b.getTotalPrice()).
                 customer(customerDto).
                 room(roomDto).
                 build();
@@ -59,6 +58,7 @@ public class BookingServiceImpl implements BookingService {
                 checkoutDate(bd.getCheckoutDate()).
                 guestAmt(bd.getGuestAmt()).
                 extraBedAmt(bd.getExtraBedAmt()).
+                totalPrice(bd.getTotalPrice()).
                 customer(customer).
                 room(room).
                 build();
@@ -87,53 +87,52 @@ public class BookingServiceImpl implements BookingService {
         return "delete booking id " + b.getId();
     }
 
-    //venus tar
     @Override
     public BookingDto findBookingById(Long id) {
         return bookingToBookingDto(bookingRepository.findById(id).get());
     }
 
-    //venus tar
-//    @Override
-//    public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
-//        Booking b = bookingRepository.findById(id).get();
-//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-//        if (!newCheckIn.isEmpty()){
-//            b.setCheckinDate(new java.sql.Date(df.parse(newCheckIn).getTime()));
-//        }
-//        if (!newCheckOut.isEmpty()){
-//            b.setCheckoutDate(new java.sql.Date(df.parse(newCheckOut).getTime()));
-//        }
-//        bookingRepository.save(b);
-//    }
+    /* TODO: Can this be deleted? - Ivar
+    // venus tar
+    @Override
+    public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
+        Booking b = bookingRepository.findById(id).get();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        if (!newCheckIn.isEmpty()){
+            b.setCheckinDate(new java.sql.Date(df.parse(newCheckIn).getTime()));
+        }
+        if (!newCheckOut.isEmpty()){
+            b.setCheckoutDate(new java.sql.Date(df.parse(newCheckOut).getTime()));
+        }
+        bookingRepository.save(b);
+    }
+    */
 
     @Override
     public String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
         Room r = bookingRepository.findById(id).get().getRoom();
         Booking originBooking = bookingRepository.findById(id).get();
-
+        long customerId = originBooking.getCustomer().getId();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date wantedCheckIn = originBooking.getCheckinDate();
         Date wantedCheckOut = originBooking.getCheckoutDate();
-
-        if (!newCheckIn.isEmpty()){
-            wantedCheckIn = new java.sql.Date (df.parse(newCheckIn).getTime());
+        if (!newCheckIn.isEmpty()) {
+            wantedCheckIn = new java.sql.Date(df.parse(newCheckIn).getTime());
         }
-        if (!newCheckOut.isEmpty()){
-            wantedCheckOut = new java.sql.Date (df.parse(newCheckOut).getTime());
+        if (!newCheckOut.isEmpty()) {
+            wantedCheckOut = new java.sql.Date(df.parse(newCheckOut).getTime());
         }
-        List<Date> datesInterval = createDateInterval(wantedCheckIn, wantedCheckOut);
-
+        List<Date> datesInterval = dateService.createDateInterval(wantedCheckIn, wantedCheckOut);
         List<Booking> conflictBookList =
                 bookingRepository.findAll().stream()
-                .filter(k -> k.getRoom().getId()==r.getId())
-                .filter(k -> k.getId()!=id)
-                .filter(k -> areDatesOverlapping(datesInterval, createDateInterval(k.getCheckinDate(), k.getCheckoutDate())))
-                .toList();
-
-        if (conflictBookList.size()==0){
+                        .filter(k -> k.getRoom().getId() == r.getId())
+                        .filter(k -> k.getId() != id)
+                        .filter(k -> dateService.areDatesOverlapping(datesInterval, dateService.createDateInterval(k.getCheckinDate(), k.getCheckoutDate())))
+                        .toList();
+        if (conflictBookList.isEmpty()) {
             originBooking.setCheckinDate(wantedCheckIn);
             originBooking.setCheckoutDate(wantedCheckOut);
+            originBooking.setTotalPrice(discountService.getTotalPriceWithDiscounts(wantedCheckIn, wantedCheckOut, r.getId(), customerId, null, false));
             bookingRepository.save(originBooking);
             return "booking is updated";
         } else {
@@ -143,48 +142,23 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
-        if (blackService.isEmailValid(email)){
-            customerService.addCustomerWithoutID(name, phone, email);
-            Customer customer = customerService.getCustomerByNameAndPhone(name, phone);
+        if (blackService.isEmailValid(email)) {
+            Customer customer;
+            Optional<Customer> optional = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
+            if (optional.isPresent()) {
+                customer = optional.get();
+            } else {
+                customerService.addCustomerWithoutID(name, phone, email);
+                customer = customerService.getLastCustomer();
+            }
             Room room = roomRepository.findById(roomId).orElse(null);
-            Booking booking = new Booking(checkin, checkout, guests, extraBeds, customer, room);
+            assert room != null;
+            double totalPrice = discountService.getTotalPriceWithDiscounts(checkin, checkout, room.getId(), customer.getId(), null, false);
+            Booking booking = new Booking(checkin, checkout, guests, extraBeds, totalPrice, customer, room);
             bookingRepository.save(booking);
         } else {
             throw new Exception("Booking unsuccessful. Please contact Admin.");
         }
-
-    }
-
-    @Override
-    public boolean areDatesOverlapping(List<Date> searchDates, List<Date> bookingDates) {
-        boolean output = false;
-        if (searchDates.get(0).equals(bookingDates.get(bookingDates.size() -1)) || searchDates.get(searchDates.size() - 1).equals(bookingDates.get(0)))
-            return output;
-        for (Date date : searchDates) {
-            if (bookingDates.contains(date))
-                output = true;
-        }
-        return output;
-    }
-
-    @Override
-    public List<Date> createDateInterval(Date checkin, Date checkout) {
-        List<Date> interval = new ArrayList<>();
-        Date iterateDate = checkin;
-        while (!iterateDate.after(checkout)) {
-            interval.add(iterateDate);
-            Calendar c = Calendar.getInstance();
-            c.setTime(iterateDate);
-            c.add(Calendar.DATE, 1);
-            iterateDate = new java.sql.Date(c.getTimeInMillis());
-        }
-        return interval;
-    }
-
-    @Override
-    public Long getNumberOfDaysBetweenTwoDates(Date checkin, Date checkout) {
-        long differenceMillis = checkout.getTime() - checkin.getTime();
-        return differenceMillis / (1000 * 60 * 60 * 24);
     }
 
     @Override
@@ -215,20 +189,18 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public boolean isRoomAvailableOnDates(RoomDto room, Date checkin, Date checkout) {
         long roomId = room.getId();
-        List<Date> datesInterval = createDateInterval(checkin, checkout);
+        List<Date> datesInterval = dateService.createDateInterval(checkin, checkout);
         List<BookingDto> conflictingBookings = getAll().
                 stream().
                 filter(b -> b.getRoom().getId() == roomId).
-                filter(b -> areDatesOverlapping(datesInterval, createDateInterval(b.getCheckinDate(), b.getCheckoutDate()))).
+                filter(b -> dateService.areDatesOverlapping(datesInterval, dateService.createDateInterval(b.getCheckinDate(), b.getCheckoutDate()))).
                 toList();
         return conflictingBookings.isEmpty();
     }
 
     @Override
-    public Date convertStringToDate(String date) throws ParseException {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        return new java.sql.Date(df.parse(date).getTime());
+    public Booking getLastBooking() {
+        return bookingRepository.getLastBooking();
     }
-
 
 }
