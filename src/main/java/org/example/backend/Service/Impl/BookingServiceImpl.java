@@ -133,7 +133,6 @@ public class BookingServiceImpl implements BookingService {
             originBooking.setCheckinDate(wantedCheckIn);
             originBooking.setCheckoutDate(wantedCheckOut);
             originBooking.setTotalPrice(discountService.getTotalPriceWithDiscounts(wantedCheckIn, wantedCheckOut, r.getId(), customerId, null, false));
-            System.out.println("New total price = " + discountService.getTotalPriceWithDiscounts(wantedCheckIn, wantedCheckOut, r.getId(), customerId, null, false)); // TESTING
             bookingRepository.save(originBooking);
             return "booking is updated";
         } else {
@@ -143,29 +142,20 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
-        System.out.println("BookingService: createAndAddBookingToDatabase initiated");
         if (blackService.isEmailValid(email)) {
             Customer customer;
             Optional<Customer> optional = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
-            System.out.println("BookingService: optional retrieved");
             if (optional.isPresent()) {
-                System.out.println("BookingService: optional.isPresent");
                 customer = optional.get();
-                System.out.println("BookingService: customer found in database = " + customer);
             } else {
                 customerService.addCustomerWithoutID(name, phone, email);
                 customer = customerService.getLastCustomer();
-                System.out.println("BookingService: customer created = " + customer);
             }
             Room room = roomRepository.findById(roomId).orElse(null);
-            System.out.println("BookingService: room = " + room);
-            System.out.println("BookingService: customer = " + customer);
             assert room != null;
             double totalPrice = discountService.getTotalPriceWithDiscounts(checkin, checkout, room.getId(), customer.getId(), null, false);
-            System.out.println("BookingService: totalPrice = " + totalPrice);
             Booking booking = new Booking(checkin, checkout, guests, extraBeds, totalPrice, customer, room);
             bookingRepository.save(booking);
-            System.out.println("BookingService: booking saved = " + booking);
         } else {
             throw new Exception("Booking unsuccessful. Please contact Admin.");
         }

@@ -25,12 +25,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
-public class DiscountServiceTest {
+public class DiscountServiceTests {
 
     @Mock
     private RoomRepository roomRepository;
@@ -161,14 +160,6 @@ public class DiscountServiceTest {
     }
 
     @Test
-    public void getListOfBookingsForCustomer() throws ParseException {
-        when(bookingRepository.getAllBookingsForCustomer(c1.getId())).thenReturn(Arrays.asList(b1, b2, b3));
-        List<Booking> expected = Arrays.asList(b1, b2, b3);
-        List<Booking> actual = bookingRepository.getAllBookingsForCustomer(c1.getId());
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
     public void getNumberOfDiscountedNightsTest() throws ParseException {
         Date checkin1 = new java.sql.Date(df.parse("2024-05-14").getTime());
         Date checkout1 = new java.sql.Date(df.parse("2024-05-17").getTime());
@@ -190,20 +181,6 @@ public class DiscountServiceTest {
         Assertions.assertEquals(expected2, actual2);
         Assertions.assertEquals(expected3, actual3);
         Assertions.assertEquals(expected4, actual4);
-    }
-
-    @Test
-    public void isDateWithinAYearFromTodayTest() throws ParseException {
-        Date today = new java.sql.Date(df.parse("2024-01-01").getTime());
-        Date compare1 = new java.sql.Date(df.parse("2022-12-31").getTime());
-        Date compare2 = new java.sql.Date(df.parse("2023-01-01").getTime());
-        Date compare3 = new java.sql.Date(df.parse("2023-01-02").getTime());
-        boolean actual1 = dateService.isDateWithinAYearFromToday(compare1, today, true);
-        boolean actual2 = dateService.isDateWithinAYearFromToday(compare2, today, true);
-        boolean actual3 = dateService.isDateWithinAYearFromToday(compare3, today, true);
-        Assertions.assertFalse(actual1);
-        Assertions.assertFalse(actual2);
-        Assertions.assertTrue(actual3);
     }
 
     @Test

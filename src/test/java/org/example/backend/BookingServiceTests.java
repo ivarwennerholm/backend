@@ -1,9 +1,5 @@
 package org.example.backend;
 
-import org.example.backend.DTO.BookingDto;
-import org.example.backend.DTO.CustomerDto;
-import org.example.backend.DTO.RoomDto;
-import org.example.backend.DTO.RoomTypeDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
@@ -16,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.text.DateFormat;
@@ -29,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BookingServiceTest {
+public class BookingServiceTests {
     @Mock
     private BookingRepository bookRepo;
 
@@ -113,7 +108,7 @@ public class BookingServiceTest {
         Assertions.assertEquals("The room is occupied during this new booking period", ex.getMessage());
     }
 
-    /*
+    /* TODO: Not working? -Ivar
     @Test
     public void findBookingByIdTest() throws ParseException {
         Room r = new Room(1L, 2099, new RoomType(1L, "single", 1, 0, 500));
