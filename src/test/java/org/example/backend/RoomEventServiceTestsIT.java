@@ -30,15 +30,15 @@ public class RoomEventServiceTestsIT {
     // test receiving message in json format from rabbitMQ ***
     // test json format file has all correct fields ***
     /*
-     ***cannot dp integration test because we cannot control if rabbitMQ has awaiting messages in queue.
-     To know if rabbitMQ is running, there are other management systems doing this work.
+     ***Stefan: cannot do integration test because we cannot control if rabbitMQ has awaiting messages in queue.
+     To know if rabbitMQ server is running, there are other management systems doing this work.
      */
 
 
     // test data is mapped correctly to entity object -> UNIT TEST - DONE
     // test connection to H2 database is working -> Integration Test - DONE
     // test data is successfully saved to database -> Integration Test - Done
-    // correct json type is mapped to correct java class ?? not always have awaiting messages to test...
+    // test correct json type is mapped to correct java class ?? not always have awaiting messages to test...
 
     @Autowired
     private RoomEventRepository eventRepo;
