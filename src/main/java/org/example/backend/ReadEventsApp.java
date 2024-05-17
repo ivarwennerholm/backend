@@ -11,6 +11,7 @@ import org.example.backend.Events.RoomEvent;
 //import org.example.backend.Events.RoomEvent2;
 import org.example.backend.Repository.RoomEventRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.io.UnsupportedEncodingException;
@@ -52,7 +53,7 @@ public class ReadEventsApp implements CommandLineRunner {
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }
 
-    static void getQueueMessageToDatabase(JsonMapper jsonMapper, RoomEventRepository eventRepo, String message) throws JsonProcessingException {
+    void getQueueMessageToDatabase(JsonMapper jsonMapper, RoomEventRepository eventRepo, String message) throws JsonProcessingException {
         RoomEvent r = jsonMapper.readValue(message, RoomEvent.class);
         eventRepo.save(r);
         System.out.println(r.toString());

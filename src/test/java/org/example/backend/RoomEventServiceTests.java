@@ -43,6 +43,7 @@ public class RoomEventServiceTests {
         List<RoomEvent> actual = sut.getRoomEventsByRoomNo(101);
 
         //Assert
+        verify(rmEventRepo,times(1)).getRoomEventByRoomNo(101);
         Assertions.assertEquals(4,actual.size());
 
         Assertions.assertTrue(actual.get(0).getId()==1L);

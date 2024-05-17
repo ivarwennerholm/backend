@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.*;
@@ -23,13 +24,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Scanner;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
 public class RoomEventServiceTestsIT {
 
     // test connection to rabbitMQ ***
@@ -46,17 +48,20 @@ public class RoomEventServiceTestsIT {
     // data is successfully saved to database
     // correct json type is mapped to correct java class
 
-    @Mock
+    @Autowired
     private RoomEventRepository eventRepo;
 
-    @InjectMocks
-    private ReadEventsApp eventApp;
+    private ReadEventsApp eventApp = new ReadEventsApp(eventRepo);
 
+    private JsonMapper jsonMapper;
+    @BeforeEach
+    void setUp(){
+        jsonMapper = new JsonMapper();
+        jsonMapper.registerModule(new JavaTimeModule());
+    }
     @Test
     void whenGetQueueMessageToDatabaseShouldMapCorrectly() throws IOException {
         //Arrange
-        JsonMapper jsonMapper = new JsonMapper();
-        jsonMapper.registerModule(new JavaTimeModule());
         BufferedReader reader = new BufferedReader(new FileReader("src/test/resources/RoomEvents.json"));
         String message = reader.readLine();
         System.out.println(message);
@@ -65,11 +70,18 @@ public class RoomEventServiceTestsIT {
         eventApp.getQueueMessageToDatabase(jsonMapper, eventRepo, message);
 
         //Assert
-        //further discuss...
+        List<RoomEvent> list = eventRepo.findAll();
+        Assertions.assertEquals(1,list.size());
+        Assertions.assertTrue(list.get(0).getId()==1);
+        Assertions.assertTrue(list.get(0).getRoomno()==101);
+        Assertions.assertTrue(list.get(0).getTimestamp().isEqual(LocalDateTime.parse("2024-05-16T18:32:27.540932")));
+        Assertions.assertTrue(list.get(0).getCleaner().equals("Young Cartwright"));
+
+//        //further discuss...
 //        verify(eventRepo,times(1)).save(argThat(RoomEvent -> RoomEvent.getId()==1L));
-        verify(eventRepo,times(1)).save(argThat(RoomEvent -> RoomEvent.getRoomno()==101));
-        verify(eventRepo,times(1)).save(argThat(RoomEvent -> String.valueOf(RoomEvent.getTimestamp()).equals("2024-05-16T18:32:27.540931906")));
-        verify(eventRepo,times(1)).save(argThat(RoomEvent -> RoomEvent.getCleaner().equals("Young Cartwright")));
+//        verify(eventRepo,times(1)).save(argThat(RoomEvent -> RoomEvent.getRoomno()==101));
+//        verify(eventRepo,times(1)).save(argThat(RoomEvent -> String.valueOf(RoomEvent.getTimestamp()).equals("2024-05-16T18:32:27.540931906")));
+//        verify(eventRepo,times(1)).save(argThat(RoomEvent -> RoomEvent.getCleaner().equals("Young Cartwright")));
     }
 
 }
