@@ -1,7 +1,1 @@
-[
-  {"type":"RoomOpened","TimeStamp":"2024-05-16T05:28:27.579059895","RoomNo":"102"},
-  {"type":"RoomClosed","TimeStamp":"2024-05-16T08:42:27.48050927","RoomNo":"101"},
-  {"type":"RoomCleaningStarted","TimeStamp":"2024-05-16T01:20:27.497480694","RoomNo":"102","CleaningByUser":"Cassandra Gutmann"},
-  {"type":"RoomCleaningFinished","TimeStamp":"2024-05-16T18:32:27.540931906","RoomNo":"101","CleaningByUser":"Young Cartwright"}
-
-]
+{"type":"RoomCleaningFinished","TimeStamp":"2024-05-16T18:32:27.540931906","RoomNo":"101","CleaningByUser":"Young Cartwright"}

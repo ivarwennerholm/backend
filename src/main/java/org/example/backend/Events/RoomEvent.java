@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 public abstract class RoomEvent {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @JsonProperty(value = "RoomNo")

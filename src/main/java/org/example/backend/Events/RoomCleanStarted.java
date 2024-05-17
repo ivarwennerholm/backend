@@ -23,9 +23,10 @@ public class RoomCleanStarted extends RoomEvent {
 
     @Override
     public String toString() {
-        return "RoomStatus{" +
-                "room=" + roomno +
-                ", dateTime='" + timestamp +
+        return "RoomEvent{" +
+                "id=" + id +
+                ", roomno='" + roomno + '\'' +
+                ", dateTime='" + timestamp + '\'' +
                 ", cleaner='" + cleaner +
                 '\'' +
                 '}';
