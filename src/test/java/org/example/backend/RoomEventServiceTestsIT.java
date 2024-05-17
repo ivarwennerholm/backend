@@ -22,6 +22,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Scanner;
+
+import static org.example.backend.ShipperServiceTestsIT.url;
 
 @SpringBootTest
 public class RoomEventServiceTestsIT {
@@ -54,8 +57,11 @@ public class RoomEventServiceTestsIT {
     @Test
     void whenGetQueueMessageToDatabaseShouldMapCorrectly() throws IOException {
         //Arrange
-        BufferedReader reader = new BufferedReader(new FileReader("src/test/resources/RoomEvents.json"));
-        String message = reader.readLine();
+        InputStream in = new FileInputStream("src/test/resources/RoomEvents.json");
+        Scanner s = new Scanner(in).useDelimiter("\\A");
+
+        //Act
+        String message = s.hasNext() ? s.next() : "";
         System.out.println(message);
 
         //Act

@@ -18,8 +18,8 @@ public class Shipper {
 
     Long shipper_id;
     String email;
-    String contactName;
     String companyName;
+    String contactName;
     String contactTitle;
     String streetAddress;
     String city;
@@ -28,11 +28,26 @@ public class Shipper {
     String phone;
     String fax;
 
+//    public Shipper(Long id, Long shipper_id, String email, String companyName, String contactName, String contactTitle, String streetAddress, String city, String postalCode, String country, String phone, String fax) {
+//        this.id = id;
+//        this.shipper_id = shipper_id;
+//        this.email = email;
+//        this.companyName = companyName;
+//        this.contactName = contactName;
+//        this.contactTitle = contactTitle;
+//        this.streetAddress = streetAddress;
+//        this.city = city;
+//        this.postalCode = postalCode;
+//        this.country = country;
+//        this.phone = phone;
+//        this.fax = fax;
+//    }
+
     public Shipper(ShipperDto shipDto){
         this.shipper_id = shipDto.getId();
         this.email = shipDto.getEmail();
-        this.contactName = shipDto.getContactName();
         this.companyName = shipDto.getCompanyName();
+        this.contactName = shipDto.getContactName();
         this.contactTitle = shipDto.getContactTitle();
         this.streetAddress = shipDto.getStreetAddress();
         this.city = shipDto.getCity();

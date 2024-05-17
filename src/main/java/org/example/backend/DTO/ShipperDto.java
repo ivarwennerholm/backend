@@ -9,8 +9,8 @@ import lombok.*;
 public class ShipperDto {
     Long id;
     String email;
-    String contactName;
     String companyName;
+    String contactName;
     String contactTitle;
     String streetAddress;
     String city;
