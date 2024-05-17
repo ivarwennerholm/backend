@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
 
 @ComponentScan
 @RequiredArgsConstructor
-public class ConsoleAppJson implements CommandLineRunner{
+public class FetchShippingContractors implements CommandLineRunner{
     private final ShipperRepository shipperRepo;
 
     @Override

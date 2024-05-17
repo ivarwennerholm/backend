@@ -25,8 +25,8 @@ public class BackendApplication {
     public static void main(String[] args) {
         if(args.length == 0) {
             SpringApplication.run(BackendApplication.class, args);
-        } else if (Objects.equals(args[0], "consoleAppJson")){
-            SpringApplication application = new SpringApplication(ConsoleAppJson.class);
+        } else if (Objects.equals(args[0], "fetchshippingcontractors")){
+            SpringApplication application = new SpringApplication(FetchShippingContractors.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
         } else if (Objects.equals(args[0], "fetchcontractcustomers")) {
