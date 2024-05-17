@@ -43,10 +43,10 @@ public class RoomEventServiceTestsIT {
      */
 
 
-    // data is mapped correctly to entity object -> UNIT TEST - DONE
-    // connection to H2 database is working
-    // data is successfully saved to database
-    // correct json type is mapped to correct java class
+    // test data is mapped correctly to entity object -> UNIT TEST - DONE
+    // test connection to H2 database is working -> Integration Test - DONE
+    // test data is successfully saved to database -> Integration Test - Done
+    // correct json type is mapped to correct java class ?? not always have awaiting messages to test...
 
     @Autowired
     private RoomEventRepository eventRepo;
@@ -76,12 +76,6 @@ public class RoomEventServiceTestsIT {
         Assertions.assertTrue(list.get(0).getRoomno()==101);
         Assertions.assertTrue(list.get(0).getTimestamp().isEqual(LocalDateTime.parse("2024-05-16T18:32:27.540932")));
         Assertions.assertTrue(list.get(0).getCleaner().equals("Young Cartwright"));
-
-//        //further discuss...
-//        verify(eventRepo,times(1)).save(argThat(RoomEvent -> RoomEvent.getId()==1L));
-//        verify(eventRepo,times(1)).save(argThat(RoomEvent -> RoomEvent.getRoomno()==101));
-//        verify(eventRepo,times(1)).save(argThat(RoomEvent -> String.valueOf(RoomEvent.getTimestamp()).equals("2024-05-16T18:32:27.540931906")));
-//        verify(eventRepo,times(1)).save(argThat(RoomEvent -> RoomEvent.getCleaner().equals("Young Cartwright")));
     }
 
 }
