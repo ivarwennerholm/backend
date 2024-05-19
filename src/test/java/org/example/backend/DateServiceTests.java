@@ -1,4 +1,5 @@
 package org.example.backend;
+
 import org.example.backend.Service.Impl.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,21 +19,7 @@ public class DateServiceTests {
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @Test
-    public void isDateWithinAYearFromTodayTest() throws ParseException {
-        Date today = new java.sql.Date(df.parse("2024-01-01").getTime());
-        Date compare1 = new java.sql.Date(df.parse("2022-12-31").getTime());
-        Date compare2 = new java.sql.Date(df.parse("2023-01-01").getTime());
-        Date compare3 = new java.sql.Date(df.parse("2023-01-02").getTime());
-        boolean actual1 = dateService.isDateWithinAYearFromToday(compare1, today, true);
-        boolean actual2 = dateService.isDateWithinAYearFromToday(compare2, today, true);
-        boolean actual3 = dateService.isDateWithinAYearFromToday(compare3, today, true);
-        Assertions.assertFalse(actual1);
-        Assertions.assertFalse(actual2);
-        Assertions.assertTrue(actual3);
-    }
-
-    @Test
-    public void testAreDatesOverlapping() throws ParseException {
+    public void areDatesOverlappingTest() throws ParseException {
         Date d1 = dateService.convertStringToDate("2024-07-01");
         Date d2 = dateService.convertStringToDate("2024-07-30");
         Date d3 = dateService.convertStringToDate("2024-07-31");
@@ -57,7 +44,7 @@ public class DateServiceTests {
     }
 
     @Test
-    public void testCreateDateInterval() throws ParseException {
+    public void createDateIntervalTest() throws ParseException {
         Date d1 = dateService.convertStringToDate("2024-07-31");
         Date d2 = dateService.convertStringToDate("2024-08-01");
         Date d3 = dateService.convertStringToDate("2024-08-02");
@@ -68,7 +55,7 @@ public class DateServiceTests {
     }
 
     @Test
-    public void testGetNumberOfDaysBetweenTwoDates() throws ParseException {
+    public void getNumberOfDaysBetweenTwoDatesTest() throws ParseException {
         Date d1 = dateService.convertStringToDate("2024-07-30");
         Date d2 = dateService.convertStringToDate("2024-07-31");
         Date d3 = dateService.convertStringToDate("2024-08-01");
@@ -84,7 +71,7 @@ public class DateServiceTests {
     }
 
     @Test
-    public void testConvertStringToDate() throws ParseException {
+    public void convertStringToDateTest() throws ParseException {
         String expected = "2024-06-01";
         String notExpected = "2023-12-13";
         java.sql.Date expectedDate = new java.sql.Date(df.parse(expected).getTime());
@@ -92,6 +79,20 @@ public class DateServiceTests {
         java.sql.Date actualDate = dateService.convertStringToDate(expected);
         Assertions.assertEquals(expectedDate, actualDate);
         Assertions.assertNotEquals(notExpectedDate, actualDate);
+    }
+
+    @Test
+    public void isDateWithinAYearFromTodayTest() throws ParseException {
+        Date today = new java.sql.Date(df.parse("2024-01-01").getTime());
+        Date compare1 = new java.sql.Date(df.parse("2022-12-31").getTime());
+        Date compare2 = new java.sql.Date(df.parse("2023-01-01").getTime());
+        Date compare3 = new java.sql.Date(df.parse("2023-01-02").getTime());
+        boolean actual1 = dateService.isDateWithinAYearFromToday(compare1, today, true);
+        boolean actual2 = dateService.isDateWithinAYearFromToday(compare2, today, true);
+        boolean actual3 = dateService.isDateWithinAYearFromToday(compare3, today, true);
+        Assertions.assertFalse(actual1);
+        Assertions.assertFalse(actual2);
+        Assertions.assertTrue(actual3);
     }
 
 }
