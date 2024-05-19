@@ -11,17 +11,20 @@ import org.example.backend.Utils.ShipperJsonProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ShipperServiceTestsIT {
@@ -38,6 +41,19 @@ public class ShipperServiceTestsIT {
     void setUp() throws MalformedURLException {
         url = shipperJsonProvider.getShipperUrl();
     }
+
+    @Test
+    void whenConnectMockUrlIfAvailableOrNot() throws IOException {
+        HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
+        when(mockHttpURLConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_NOT_FOUND);
+
+        URL mockURL = mock(URL.class);
+        when(mockURL.openConnection()).thenReturn(mockHttpURLConnection);
+        shipperJsonProvider.setUrl(mockURL);
+
+        Assertions.assertFalse(shipperJsonProvider.isURLAvailable());
+    }
+
     @Test
     void fetchShippingContractorsShouldContainCorrectTags() throws IOException {
         //Arrange
@@ -65,7 +81,6 @@ public class ShipperServiceTestsIT {
         assertTrue(  result.contains("phone") );
         assertTrue(  result.contains("fax") );
     }
-
     @Test
     public void getShippersToDatabaseShouldMapCorrectly() throws IOException {
         //Arrange
