@@ -38,7 +38,7 @@ public class ShipperServiceTestsIT {
     static URL url;
 
     @BeforeEach
-    void setUp() throws MalformedURLException {
+    void setUp(){
         url = shipperJsonProvider.getShipperUrl();
     }
 
