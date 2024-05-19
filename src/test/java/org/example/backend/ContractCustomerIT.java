@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ContractCustomerTestsIT {
+public class ContractCustomerIT {
 
     URL url;
     InputStream xmlStreamProvider;
@@ -24,9 +24,7 @@ public class ContractCustomerTestsIT {
     @Test
     public void fetchContractCustomersContainsCorrectTagsTest() {
         Scanner scan = new Scanner(xmlStreamProvider).useDelimiter("\\A");
-//        Scanner s = new Scanner(xmlStreamProvider.getDataStream()).useDelimiter("\\A");
-//        String result = scan.hasNext() ? scan.next() : "";
-        /*
+        String result = scan.hasNext() ? scan.next() : "";
         assertTrue(result.contains("<allcustomers>"));
         assertTrue(result.contains("</allcustomers>"));
         assertTrue(result.contains("<customers>"));
@@ -51,6 +49,5 @@ public class ContractCustomerTestsIT {
         assertTrue(result.contains("</phone>"));
         assertTrue(result.contains("<fax>"));
         assertTrue(result.contains("</fax>"));
-        */
     }
 }

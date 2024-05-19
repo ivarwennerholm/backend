@@ -2,7 +2,6 @@ package org.example.backend;
 
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import org.example.backend.Model.AllContractCustomers;
 import org.example.backend.Model.ContractCustomer;
 import org.example.backend.Repository.ContractCustomerRepository;
 import org.example.backend.Service.ContractCustomerService;
@@ -13,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.net.URL;
+import java.util.List;
 
 @ComponentScan
 public class FetchContractCustomers implements CommandLineRunner {
@@ -32,11 +32,13 @@ public class FetchContractCustomers implements CommandLineRunner {
             JacksonXmlModule module = new JacksonXmlModule();
             module.setDefaultUseWrapper(false);
             XmlMapper xmlMapper = new XmlMapper(module);
-            AllContractCustomers allContractCustomers = xmlMapper.readValue(new URL("https://javaintegration.systementor.se/customers"),
-                    AllContractCustomers.class
+
+            List<ContractCustomer> contractCustomers = xmlMapper.readValue(
+                    new URL("https://javaintegration.systementor.se/customers"),
+                    xmlMapper.getTypeFactory().constructCollectionType(List.class, ContractCustomer.class)
             );
             repo.deleteAll();
-            for (ContractCustomer cc : allContractCustomers.list) {
+            for (ContractCustomer cc : contractCustomers) {
                 repo.save(cc);
             }
         } catch (Exception e) {
