@@ -13,7 +13,7 @@ public class ShipperJsonProvider {
     private URL url;
 
     public ShipperJsonProvider() throws MalformedURLException {
-         this.url = new URL("https://javabl.systementor.se/api/stefan/blacklist");
+         this.url = new URL("https://javaintegration.systementor.se/shippers");
     }
 
     public URL getShipperUrl(){
