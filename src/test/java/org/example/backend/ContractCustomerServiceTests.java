@@ -1,4 +1,3 @@
-
 package org.example.backend;
 
 import org.example.backend.DTO.ContractCustomerDto;
@@ -7,9 +6,10 @@ import org.example.backend.Repository.ContractCustomerRepository;
 import org.example.backend.Service.ContractCustomerService;
 import org.example.backend.Service.Impl.ContractCustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,14 +18,8 @@ import static org.mockito.Mockito.when;
 
 public class ContractCustomerServiceTests {
 
-    // private XmlStreamProvider xmlStreamProvider = mock(XmlStreamProvider.class);
-    // BookService sut;
-
-    // @Mock
-    ContractCustomerRepository contractCustomerRepository;
-
-    // @InjectMocks
-    ContractCustomerService contractCustomerService;
+    ContractCustomerRepository repo;
+    ContractCustomerService sut;
 
     ContractCustomer cc1;
     ContractCustomer cc2;
@@ -36,8 +30,8 @@ public class ContractCustomerServiceTests {
 
     @BeforeEach()
     void init() {
-        contractCustomerRepository = mock(ContractCustomerRepository.class);
-        contractCustomerService = new ContractCustomerServiceImpl(contractCustomerRepository);
+        repo = mock(ContractCustomerRepository.class);
+        sut = new ContractCustomerServiceImpl(repo);
         cc1 = ContractCustomer.builder().
                 id(1L).
                 customerId(1).
@@ -77,19 +71,16 @@ public class ContractCustomerServiceTests {
                 phone("076-904-2433").
                 fax("8653-585976").
                 build();
-        ccdto1 = contractCustomerService.contractCustomerToContractCustomerDto(cc1);
-        ccdto2 = contractCustomerService.contractCustomerToContractCustomerDto(cc2);
-        ccdto3 = contractCustomerService.contractCustomerToContractCustomerDto(cc3);
-
-        // sut = new BookService(xmlStreamProvider);
-        // URL url = new URL("https://axmjqhyyjpat.objectstorage.eu-amsterdam-1.oci.customer-oci.com/n/axmjqhyyjpat/b/aspcodeprod/o/books.xml");
-        // return url.openStream();
-        // contractCustomerService.getContractCustomers();
+        ccdto1 = sut.contractCustomerToContractCustomerDto(cc1);
+        ccdto2 = sut.contractCustomerToContractCustomerDto(cc2);
+        ccdto3 = sut.contractCustomerToContractCustomerDto(cc3);
     }
 
     @Test
+    @DisplayName("Conversion between ContractCustomer and ContractCustomerDto should be done correctly")
+    @Tag("unit")
     void contractCustomerToContractCustomerDtoTest() {
-        ContractCustomerDto actual = contractCustomerService.contractCustomerToContractCustomerDto(cc1);
+        ContractCustomerDto actual = sut.contractCustomerToContractCustomerDto(cc1);
         assertEquals(1L, actual.getId());
         assertEquals(1, actual.getCustomerId());
         assertEquals("Persson Kommanditbolag", actual.getCompanyName());
@@ -104,11 +95,13 @@ public class ContractCustomerServiceTests {
     }
 
     @Test
+    @DisplayName("getById() in service should return correct object")
+    @Tag("unit")
     void getByIdTest() {
-        when(contractCustomerRepository.findAll()).thenReturn(Arrays.asList(cc1, cc2, cc3));
-        Optional<ContractCustomerDto> optional1 = contractCustomerService.getById(1L);
-        Optional<ContractCustomerDto> optional2 = contractCustomerService.getById(2L);
-        Optional<ContractCustomerDto> optional3 = contractCustomerService.getById(3L);
+        when(repo.findAll()).thenReturn(Arrays.asList(cc1, cc2, cc3));
+        Optional<ContractCustomerDto> optional1 = sut.getById(1L);
+        Optional<ContractCustomerDto> optional2 = sut.getById(2L);
+        Optional<ContractCustomerDto> optional3 = sut.getById(3L);
         ContractCustomerDto actual1 = null;
         ContractCustomerDto actual2 = null;
         ContractCustomerDto actual3 = null;
@@ -126,18 +119,20 @@ public class ContractCustomerServiceTests {
     }
 
     @Test
+    @DisplayName("Sorting lists of ContractCustomers should be done correctly with Swedish letters")
+    @Tag("unit")
     void sortListWithSwedishLettersTest() {
         List<ContractCustomerDto> list = Arrays.asList(ccdto1, ccdto2, ccdto3);
-        List<ContractCustomerDto> actualCompanyAsc = contractCustomerService.sortListWithSwedishLetters(list, "asc", "company");
-        List<ContractCustomerDto> actualCompanyDesc = contractCustomerService.sortListWithSwedishLetters(list, "desc", "company");
+        List<ContractCustomerDto> actualCompanyAsc = sut.sortListWithSwedishLetters(list, "asc", "company");
+        List<ContractCustomerDto> actualCompanyDesc = sut.sortListWithSwedishLetters(list, "desc", "company");
         List<ContractCustomerDto> expectedCompanyAsc = Arrays.asList(ccdto3, ccdto2, ccdto1);
         List<ContractCustomerDto> expectedCompanyDesc = Arrays.asList(ccdto1, ccdto2, ccdto3);
-        List<ContractCustomerDto> actualContactAsc = contractCustomerService.sortListWithSwedishLetters(list, "asc", "contact");
-        List<ContractCustomerDto> actualContactDesc = contractCustomerService.sortListWithSwedishLetters(list, "desc", "contact");
+        List<ContractCustomerDto> actualContactAsc = sut.sortListWithSwedishLetters(list, "asc", "contact");
+        List<ContractCustomerDto> actualContactDesc = sut.sortListWithSwedishLetters(list, "desc", "contact");
         List<ContractCustomerDto> expectedContactAsc = Arrays.asList(ccdto3, ccdto2, ccdto1);
         List<ContractCustomerDto> expectedContactDesc = Arrays.asList(ccdto1, ccdto2, ccdto3);
-        List<ContractCustomerDto> actualCountryAsc = contractCustomerService.sortListWithSwedishLetters(list, "asc", "country");
-        List<ContractCustomerDto> actualCountryDesc = contractCustomerService.sortListWithSwedishLetters(list, "desc", "country");
+        List<ContractCustomerDto> actualCountryAsc = sut.sortListWithSwedishLetters(list, "asc", "country");
+        List<ContractCustomerDto> actualCountryDesc = sut.sortListWithSwedishLetters(list, "desc", "country");
         List<ContractCustomerDto> expectedCountryAsc = Arrays.asList(ccdto3, ccdto2, ccdto1);
         List<ContractCustomerDto> expectedCountryDesc = Arrays.asList(ccdto1, ccdto2, ccdto3);
         assertEquals(expectedCompanyAsc, actualCompanyAsc);
@@ -149,32 +144,34 @@ public class ContractCustomerServiceTests {
     }
 
     @Test
+    @DisplayName("Getting a list of ContractCustomers from repo should work correctly with searching and sorting")
+    @Tag("unit")
     void getContractCustomersTest() {
-        when(contractCustomerRepository.searchAndSortAsc("Eriksson", "company")).thenReturn(Arrays.asList(cc3, cc2));
-        when(contractCustomerRepository.searchAndSortDesc("Eriksson", "company")).thenReturn(Arrays.asList(cc2, cc3));
-        when(contractCustomerRepository.searchAndSortAsc("Eriksson", "contact")).thenReturn(Arrays.asList(cc3, cc2));
-        when(contractCustomerRepository.searchAndSortDesc("Eriksson", "contact")).thenReturn(Arrays.asList(cc2, cc3));
-        when(contractCustomerRepository.searchAndSortAsc("Eriksson", "country")).thenReturn(Arrays.asList(cc3, cc2));
-        when(contractCustomerRepository.searchAndSortDesc("Eriksson", "country")).thenReturn(Arrays.asList(cc2, cc3));
-        when(contractCustomerRepository.sortAsc("company")).thenReturn(Arrays.asList(cc3, cc2, cc1));
-        when(contractCustomerRepository.sortDesc("company")).thenReturn(Arrays.asList(cc1, cc2, cc3));
-        when(contractCustomerRepository.sortAsc("contact")).thenReturn(Arrays.asList(cc3, cc2, cc1));
-        when(contractCustomerRepository.sortDesc("contact")).thenReturn(Arrays.asList(cc1, cc2, cc3));
-        when(contractCustomerRepository.sortAsc("country")).thenReturn(Arrays.asList(cc3, cc2, cc1));
-        when(contractCustomerRepository.sortDesc("country")).thenReturn(Arrays.asList(cc1, cc2, cc3));
+        when(repo.searchAndSortAsc("Eriksson", "company")).thenReturn(Arrays.asList(cc3, cc2));
+        when(repo.searchAndSortDesc("Eriksson", "company")).thenReturn(Arrays.asList(cc2, cc3));
+        when(repo.searchAndSortAsc("Eriksson", "contact")).thenReturn(Arrays.asList(cc3, cc2));
+        when(repo.searchAndSortDesc("Eriksson", "contact")).thenReturn(Arrays.asList(cc2, cc3));
+        when(repo.searchAndSortAsc("Eriksson", "country")).thenReturn(Arrays.asList(cc3, cc2));
+        when(repo.searchAndSortDesc("Eriksson", "country")).thenReturn(Arrays.asList(cc2, cc3));
+        when(repo.sortAsc("company")).thenReturn(Arrays.asList(cc3, cc2, cc1));
+        when(repo.sortDesc("company")).thenReturn(Arrays.asList(cc1, cc2, cc3));
+        when(repo.sortAsc("contact")).thenReturn(Arrays.asList(cc3, cc2, cc1));
+        when(repo.sortDesc("contact")).thenReturn(Arrays.asList(cc1, cc2, cc3));
+        when(repo.sortAsc("country")).thenReturn(Arrays.asList(cc3, cc2, cc1));
+        when(repo.sortDesc("country")).thenReturn(Arrays.asList(cc1, cc2, cc3));
 
-        List<ContractCustomer> actualSearchCompanyAsc = contractCustomerRepository.searchAndSortAsc("Eriksson", "company");
-        List<ContractCustomer> actualSearchCompanyDesc = contractCustomerRepository.searchAndSortDesc("Eriksson", "company");
-        List<ContractCustomer> actualSearchContactAsc = contractCustomerRepository.searchAndSortAsc("Eriksson", "contact");
-        List<ContractCustomer> actualSearchContactDesc = contractCustomerRepository.searchAndSortDesc("Eriksson", "contact");
-        List<ContractCustomer> actualSearchCountryAsc = contractCustomerRepository.searchAndSortAsc("Eriksson", "country");
-        List<ContractCustomer> actualSearchCountryDesc = contractCustomerRepository.searchAndSortDesc("Eriksson", "country");
-        List<ContractCustomer> actualCompanyAsc = contractCustomerRepository.sortAsc("company");
-        List<ContractCustomer> actualCompanyDesc = contractCustomerRepository.sortDesc("company");
-        List<ContractCustomer> actualContactAsc = contractCustomerRepository.sortAsc("contact");
-        List<ContractCustomer> actualContactDesc = contractCustomerRepository.sortDesc("contact");
-        List<ContractCustomer> actualCountryAsc = contractCustomerRepository.sortAsc("country");
-        List<ContractCustomer> actualCountryDesc = contractCustomerRepository.sortDesc("country");
+        List<ContractCustomer> actualSearchCompanyAsc = repo.searchAndSortAsc("Eriksson", "company");
+        List<ContractCustomer> actualSearchCompanyDesc = repo.searchAndSortDesc("Eriksson", "company");
+        List<ContractCustomer> actualSearchContactAsc = repo.searchAndSortAsc("Eriksson", "contact");
+        List<ContractCustomer> actualSearchContactDesc = repo.searchAndSortDesc("Eriksson", "contact");
+        List<ContractCustomer> actualSearchCountryAsc = repo.searchAndSortAsc("Eriksson", "country");
+        List<ContractCustomer> actualSearchCountryDesc = repo.searchAndSortDesc("Eriksson", "country");
+        List<ContractCustomer> actualCompanyAsc = repo.sortAsc("company");
+        List<ContractCustomer> actualCompanyDesc = repo.sortDesc("company");
+        List<ContractCustomer> actualContactAsc = repo.sortAsc("contact");
+        List<ContractCustomer> actualContactDesc = repo.sortDesc("contact");
+        List<ContractCustomer> actualCountryAsc = repo.sortAsc("country");
+        List<ContractCustomer> actualCountryDesc = repo.sortDesc("country");
         List<ContractCustomer> expectedSearchCompanyAsc = Arrays.asList(cc3, cc2);
         List<ContractCustomer> expectedSearchCompanyDesc = Arrays.asList(cc2, cc3);
         List<ContractCustomer> expectedSearchContactAsc = Arrays.asList(cc3, cc2);
@@ -200,28 +197,6 @@ public class ContractCustomerServiceTests {
         assertEquals(expectedContactDesc, actualContactDesc);
         assertEquals(expectedCountryAsc, actualCountryAsc);
         assertEquals(expectedCountryDesc, actualCountryDesc);
-    }
-
-    @Test
-    void getContractCustomersMapsCorrectlyTest() throws IOException {
-        // Arrange
-        // when(xmlStreamProvider.getDataStream()).thenReturn(getClass().getClassLoader().getResourceAsStream("books.xml"));
-
-        // Act
-        // List<book> result = sut.GetBooks();
-
-        // Assert
-        // assertEquals(3, result.size());
-        // assertEquals(1, result.get(0).id);
-        // assertEquals("Persson Kommanditbolag", result.get(0).companyName);
-        // assertEquals("Maria Åslund", result.get(0).contactName);
-        // assertEquals("gardener", result.get(0).contactTitle);
-        // assertEquals("Anderssons Gata 259", result.get(0).streetAddress);
-        // assertEquals("Kramland", result.get(0).city);
-        // assertEquals(60843, result.get(0).postalCode);
-        // assertEquals("Sverige", result.get(0).country);
-        // assertEquals("076-340-7143", result.get(0).phone);
-        // assertEquals("1500-16026", result.get(0).fax);
     }
 
 }
