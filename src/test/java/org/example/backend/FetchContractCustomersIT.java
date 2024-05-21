@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FetchContractCustomersIT {
 
     @Autowired
-    private FetchContractCustomers fetchContractCustomers;
+    private FetchContractCustomers sut;
 
     @Autowired
     private ContractCustomerRepository repo;
@@ -96,10 +96,10 @@ public class FetchContractCustomersIT {
         String testFilePath = Paths.get("src", "test", "resources", "contractcustomers.xml").toString();
         File testFile = new File(testFilePath);
         assertThat(testFile).exists();
-        fetchContractCustomers.setFilePath(testFilePath);
+        sut.setFilePath(testFilePath);
 
         // ACT
-        fetchContractCustomers.run();
+        sut.run();
         List<ContractCustomer> result = repo.findAll();
 
         // ASSERT

@@ -30,7 +30,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final BlacklistService blackService;
     private final DiscountService discountService;
-    private DateService dateService = new DateService();
+    private final DateService dateService = new DateService();
 
     @Override
     public BookingDto bookingToBookingDto(Booking b) {
