@@ -13,6 +13,7 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.Impl.*;
 import org.example.backend.Service.RoomService;
 import org.example.backend.Service.RoomTypeService;
+import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -68,7 +69,7 @@ public class DiscountServiceTests {
 
         // Services
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
-        blacklistService = new BlacklistService();
+        blacklistService = new BlacklistService(new BlacklistURLProvider());
         dateService = new DateService();
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
         discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);

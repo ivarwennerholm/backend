@@ -6,9 +6,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BlacklistPersonDto;
 import org.example.backend.DTO.BlacklistStatusDto;
+import org.example.backend.Utils.BlacklistCheckEmailURLProvider;
+import org.example.backend.Utils.BlacklistURLProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,6 +21,8 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,14 +30,23 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BlacklistService {
 
-    public static List<BlacklistPersonDto> getAll() throws IOException {
-        URL url = new URL("https://javabl.systementor.se/api/stefan/blacklist");
+    @Autowired
+    private final BlacklistURLProvider blacklistURLProvider;
+
+    @Autowired
+    private BlacklistCheckEmailURLProvider blacklistCheckEmailURLProvider;
+
+    public ArrayList<BlacklistPersonDto> getAll() throws IOException {
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());
 
-        BlacklistPersonDto[] theblacklist = jsonMapper.readValue(url, BlacklistPersonDto[].class);
+        BlacklistPersonDto[] theblacklist = jsonMapper.readValue(blacklistURLProvider.getBlacklistURL(), BlacklistPersonDto[].class);
 
-        return List.of(theblacklist);
+        ArrayList<BlacklistPersonDto> temp = new ArrayList<>();
+        for (BlacklistPersonDto b: theblacklist) {
+            temp.add(b);
+        }
+        return temp;
     }
 
     public void addNewBlacklistPerson(String name, String email, boolean isOk) throws JsonProcessingException {
@@ -49,7 +64,7 @@ public class BlacklistService {
         // send http post request
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/stefan/blacklist"))
+                .uri(URI.create(blacklistURLProvider.getBlacklistUrl_String()))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
                 .build();
@@ -61,7 +76,7 @@ public class BlacklistService {
                 .join();
     }
 
-    public static BlacklistPersonDto getBlacklistPerson(String email) throws IOException {
+    public BlacklistPersonDto getBlacklistPerson(String email) throws IOException {
         return getAll().stream().filter(k -> k.getEmail().equals(email)).findFirst().orElse(null);
     }
 
@@ -79,7 +94,7 @@ public class BlacklistService {
         // send http put request
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://javabl.systementor.se/api/stefan/blacklist/"+email))
+                .uri(URI.create(blacklistURLProvider.getBlacklistUrl_String()+"/"+email))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonPayload))
                 .build();
@@ -92,11 +107,13 @@ public class BlacklistService {
     }
 
     public boolean isEmailValid(String email) throws Exception {
-        URL url = new URL("https://javabl.systementor.se/api/stefan/blacklistcheck/"+email);
+
+        blacklistCheckEmailURLProvider = new BlacklistCheckEmailURLProvider(email);
+
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());
 
-        BlacklistStatusDto status = jsonMapper.readValue(url, BlacklistStatusDto.class);
+        BlacklistStatusDto status = jsonMapper.readValue(blacklistCheckEmailURLProvider.getBlacklistCheckEmailURL(), BlacklistStatusDto.class);
 
         return status.isOk();
     }
