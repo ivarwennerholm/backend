@@ -28,7 +28,7 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepository roomRepository;
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
-    private final BlacklistService blackService;
+    private final BlacklistService blacklistService;
     private final DiscountService discountService;
     private final DateService dateService = new DateService();
 
@@ -142,7 +142,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
-        if (blackService.isEmailValid(email)) {
+        if (blacklistService.isEmailValid(email)) {
             Customer customer;
             Optional<Customer> optional = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
             if (optional.isPresent()) {
