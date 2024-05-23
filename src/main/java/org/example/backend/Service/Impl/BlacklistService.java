@@ -36,13 +36,13 @@ public class BlacklistService {
     @Autowired
     private BlacklistCheckEmailURLProvider blacklistCheckEmailURLProvider;
 
-    public ArrayList<BlacklistPersonDto> getAll() throws IOException {
+    public List<BlacklistPersonDto> getAll() throws IOException {
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());
 
         BlacklistPersonDto[] theblacklist = jsonMapper.readValue(blacklistURLProvider.getBlacklistURL(), BlacklistPersonDto[].class);
 
-        ArrayList<BlacklistPersonDto> temp = new ArrayList<>();
+        List<BlacklistPersonDto> temp = new ArrayList<>();
         for (BlacklistPersonDto b: theblacklist) {
             temp.add(b);
         }

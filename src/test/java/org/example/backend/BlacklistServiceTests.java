@@ -48,7 +48,7 @@ public class BlacklistServiceTests {
     @Test
     void whenGetAllShouldReturnCorrectly() throws IOException {
         //Act
-        ArrayList<BlacklistPersonDto> list = blacklistService.getAll();
+        List<BlacklistPersonDto> list = blacklistService.getAll();
 
         //Assert
         Assertions.assertEquals(3,list.size());
