@@ -40,23 +40,12 @@ public class FetchShippingContractors implements CommandLineRunner{
         HttpURLConnection httpConn = (HttpURLConnection)shipperJsonProvider.getShipperUrl().openConnection();
         httpConn.setInstanceFollowRedirects(false);
         httpConn.setRequestMethod("HEAD");
-        try {
             httpConn.connect();
-            System.out.println("\nJson server connection ok\n");
             shipperRepo.deleteAll();
             JsonMapper jsonMapper = new JsonMapper();
             jsonMapper.registerModule(new JavaTimeModule());
 
             getShippersToDatabase(shipperJsonProvider.getShipperUrl().openStream(),jsonMapper, shipperRepo);
-
-//            ShipperDto[]theShippers = jsonMapper.readValue(shipperJsonProvider.getShipperUrl(), ShipperDto[].class);
-//
-//            for (ShipperDto s : theShippers){
-//                shipperRepo.save(new Shipper(s));
-//            }
-        }catch (UnknownHostException | java.net.ConnectException ex){
-            System.out.println("\nJson server down\n");
-        }
     }
 
     void getShippersToDatabase(InputStream input, JsonMapper jsonMapper, ShipperRepository shipperRepo) throws IOException {
