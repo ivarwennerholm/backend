@@ -87,7 +87,7 @@ public class BookingServiceTests {
         // Services:
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
         customerService = new CustomerServiceImpl(customerRepository);
-        blacklistService = new BlacklistService(new BlacklistURLProvider());
+//        blacklistService = new BlacklistService(new BlacklistURLProvider());
         dateService = new DateService();
 
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
