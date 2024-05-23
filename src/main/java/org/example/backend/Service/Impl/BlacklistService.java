@@ -34,7 +34,7 @@ public class BlacklistService {
     private final BlacklistURLProvider blacklistURLProvider;
 
     @Autowired
-    private BlacklistCheckEmailURLProvider blacklistCheckEmailURLProvider;
+    private final BlacklistCheckEmailURLProvider blacklistCheckEmailURLProvider;
 
     public List<BlacklistPersonDto> getAll() throws IOException {
         JsonMapper jsonMapper = new JsonMapper();
@@ -108,7 +108,7 @@ public class BlacklistService {
 
     public boolean isEmailValid(String email) throws Exception {
 
-        blacklistCheckEmailURLProvider = new BlacklistCheckEmailURLProvider(email);
+        //blacklistCheckEmailURLProvider = new BlacklistCheckEmailURLProvider(email);
 
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());

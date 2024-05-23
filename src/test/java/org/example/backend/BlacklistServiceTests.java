@@ -34,7 +34,7 @@ public class BlacklistServiceTests {
     private BlacklistCheckEmailURLProvider blacklistCheckEmailURLProvider;
     @InjectMocks
     private BlacklistService blacklistService;
-    @BeforeEach
+
     void setUp() throws IOException {
         //Arrange
         InputStream in = new FileInputStream("src/test/resources/BlacklistPerson.json");
@@ -47,6 +47,9 @@ public class BlacklistServiceTests {
 
     @Test
     void whenGetAllShouldReturnCorrectly() throws IOException {
+        //Arrange
+        setUp();
+
         //Act
         List<BlacklistPersonDto> list = blacklistService.getAll();
 
@@ -76,6 +79,9 @@ public class BlacklistServiceTests {
     }
     @Test
     void whenGetBlacklistPersonShouldMatchCorrectly() throws IOException {
+        //Arrange
+        setUp();
+
         //Act
         BlacklistPersonDto bDto = blacklistService.getBlacklistPerson("stefan6@aaa.com");
 
@@ -89,21 +95,23 @@ public class BlacklistServiceTests {
     }
 
     //***TO DO: bug...
-//    @Test
-//    void whenCheckEmailValidityShouldReturnTrueFalse() throws Exception {
-//        //Arrange
-//        InputStream in = new FileInputStream("src/test/resources/BlacklistStatus.json");
-//        JsonMapper jsonMapper = new JsonMapper();
-//        jsonMapper.registerModule(new JavaTimeModule());
-//        URL mockURL = mock(URL.class);
+    @Test
+    void whenCheckEmailValidityShouldReturnTrueFalse() throws Exception {
+        //Arrange
+        InputStream in = new FileInputStream("src/test/resources/BlacklistStatus.json");
+        JsonMapper jsonMapper = new JsonMapper();
+        jsonMapper.registerModule(new JavaTimeModule());
+        URL mockURL = mock(URL.class);
 //        when(blacklistURLProvider.getBlacklistURL()).thenReturn(mockURL);
-//        when(blacklistURLProvider.getBlacklistURL().toString()).thenReturn(mockURL.toString());
-//        when(blacklistCheckEmailURLProvider.getBlacklistCheckEmailURL().openStream()).thenReturn(in);
-//
-//        //Act
-//        boolean s1 = blacklistService.isEmailValid("stefan6@aaa.com");
-//
-//        //Assert
-//        Assertions.assertFalse(s1);
-//    }
+        //when(blacklistURLProvider.getBlacklistURL()).thenReturn(mockURL.toString());
+
+        when(blacklistCheckEmailURLProvider.getBlacklistCheckEmailURL()).thenReturn(mockURL);
+        when(mockURL.openStream()).thenReturn(in);
+
+        //Act
+        boolean s1 = blacklistService.isEmailValid("stefan6@aaa.com");
+
+        //Assert
+        Assertions.assertFalse(s1);
+    }
 }
