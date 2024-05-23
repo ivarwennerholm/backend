@@ -1,21 +1,12 @@
 package org.example.backend;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.rabbitmq.client.*;
-import org.example.backend.Events.RoomCleanDone;
 import org.example.backend.Events.RoomEvent;
 import org.example.backend.Repository.RoomEventRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,8 +14,6 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
-
-import static org.example.backend.ShipperServiceTestsIT.url;
 
 @SpringBootTest
 public class RoomEventServiceTestsIT {

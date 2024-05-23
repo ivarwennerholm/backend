@@ -17,6 +17,7 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.Impl.*;
 import org.example.backend.Service.RoomService;
 import org.example.backend.Service.RoomTypeService;
+import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,7 +87,7 @@ public class BookingServiceTests {
         // Services:
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
         customerService = new CustomerServiceImpl(customerRepository);
-        blacklistService = new BlacklistService();
+        blacklistService = new BlacklistService(new BlacklistURLProvider());
         dateService = new DateService();
 
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);

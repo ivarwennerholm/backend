@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(args = "fetchcontractcustomers")
-public class FetchContractCustomersIT {
+public class FetchContractCustomersTestsIT {
 
     @Autowired
     private FetchContractCustomers sut;
@@ -37,7 +37,7 @@ public class FetchContractCustomersIT {
     InputStream xmlStream;
 
     // Logger for error messages
-    private static final Logger logger = LogManager.getLogger(FetchContractCustomersIT.class);
+    private static final Logger logger = LogManager.getLogger(FetchContractCustomersTestsIT.class);
 
     // ANSI colors for readability
     public static final String ANSI_RESET = "\u001B[0m";
