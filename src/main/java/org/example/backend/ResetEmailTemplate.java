@@ -28,21 +28,20 @@ public class ResetEmailTemplate implements CommandLineRunner {
     public void run(String... args) {
         logger.info(ANSI_YELLOW + "Running ResetEmailTemplate" + ANSI_RESET);
         try {
-            filePath = "src/main/resources/templates/emailTemplate.html";
+            filePath = "src/main/resources/templates/defaultEmailTemplate.html";
             file = new File(filePath);
             fileReader = new FileReader(file);
         } catch (FileNotFoundException ex) {
             logger.error(ANSI_RED + "ResetEmailTemplate: File not found (" + filePath + ")" + ANSI_RESET, ex);
-            return; // Exit the method if file not found
+            return;
         }
-
         try (LineNumberReader lnr = new LineNumberReader(fileReader)) {
             String line;
-            StringBuilder markupBuilder = new StringBuilder(); // Use StringBuilder for efficient string concatenation
+            StringBuilder markupBuilder = new StringBuilder();
             while ((line = lnr.readLine()) != null) {
                 markupBuilder.append(line).append("\n");
             }
-            String markup = markupBuilder.toString().trim(); // Trim leading and trailing whitespace
+            String markup = markupBuilder.toString().trim();
             if (!markup.isEmpty()) {
                 EmailTemplate emailTemplate = new EmailTemplate(markup);
                 emailTemplateRepository.save(emailTemplate);

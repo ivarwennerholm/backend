@@ -3,6 +3,7 @@ package org.example.backend.Service.Impl;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.example.backend.Model.EmailTemplate;
 import org.example.backend.Repository.EmailTemplateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +17,12 @@ import static org.example.backend.BackendApplication.*;
 
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailTemplateService {
 
 
     private final EmailTemplateRepository emailTemplateRepository;
     private final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailTemplateService.class);
 
     public void sendMail(int roomNumber, String checkin, String checkout, String guests, String extrabeds,
                          String name, String phone, String email, String fullprice, String discount, String discountedPrice) {
@@ -60,21 +61,12 @@ public class EmailService {
 
     }
 
-    // TODO: Delete? - Ivar
-    /*
-    private String insertUserDetails(String markup, int roomNumber, String checkin, String checkout, String guests, String extrabeds,
-                                     String name, String phone, String email, String fullprice, String discount, String discountedPrice) {
-        return markup.replace("!!!name!!!", name).
-                replace("!!!phone!!!", phone).
-                replace("!!!roomnumber!!!", String.valueOf(roomNumber)).
-                replace("!!!checkin!!!", checkin).
-                replace("!!!checkout!!!", checkout).
-                replace("!!!guests!!!", guests).
-                replace("!!!extrabeds!!!", extrabeds).
-                replace("!!!fullprice!!!", fullprice).
-                replace("!!!discount!!!", discount).
-                replace("!!!discountedprice!!!", discountedPrice);
+    public String getLatestEmailTemplate() {
+        return emailTemplateRepository.getLatestEmailTemplate();
     }
-    */
+
+    public void saveTemplatetoDatabase(String markup) {
+        emailTemplateRepository.save(new EmailTemplate(markup));
+    }
 
 }

@@ -6,7 +6,7 @@ import org.example.backend.DTO.AvailableBookingDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Service.BookingService;
 import org.example.backend.Service.Impl.DateService;
-import org.example.backend.Service.Impl.EmailService;
+import org.example.backend.Service.Impl.EmailTemplateService;
 import org.example.backend.Service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,7 @@ public class BookingController {
     private List<BookingDto> allBookings = new ArrayList<>();
 
     @Autowired
-    private EmailService emailService;
+    private EmailTemplateService emailTemplateService;
 
     @RequestMapping("all")
     public String allBookings(Model model){
@@ -158,7 +158,7 @@ public class BookingController {
         String discountedPrice = df.format(discountedPriceValue);
         model.addAttribute("discount", discount);
         model.addAttribute("discountedprice", discountedPrice);
-        emailService.sendMail(roomNumber, checkin, checkout, guests, extrabeds, name, phone, email, fullprice, discount, discountedPrice);
+        emailTemplateService.sendMail(roomNumber, checkin, checkout, guests, extrabeds, name, phone, email, fullprice, discount, discountedPrice);
         return "getBookingConfirmation";
     }
 
