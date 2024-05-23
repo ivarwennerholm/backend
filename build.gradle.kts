@@ -53,6 +53,10 @@ dependencies {
     // Jackson annotations
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.1")
+    // Spring boot starter mail
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.2.5")
+
 }
 
 tasks.withType<Test> {

@@ -8,6 +8,7 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Service.Impl.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -70,6 +71,7 @@ public class BookingServiceTestsIT {
     }
 
     @Test
+    @DisplayName("Save should be called when creating and adding booking")
     public void testCreateAndAddBookingToDatabase() throws Exception {
         // ARRANGE
         Date checkin = new Date(df.parse("2024-06-01").getTime());
@@ -107,6 +109,7 @@ public class BookingServiceTestsIT {
         @Autowired
         private BookingRepository sut2;
         @Test
+        @DisplayName("Customer should be saved to H2 database")
         public void writeToDataBaseTest() throws ParseException {
             // ARRANGE
             Customer customer = new Customer(1L, "Venus", "111-1111111", "venus@pear.com");

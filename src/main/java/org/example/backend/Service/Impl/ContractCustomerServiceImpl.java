@@ -11,13 +11,12 @@ import java.text.Collator;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.example.backend.BackendApplication.*;
+
 @Service
 @RequiredArgsConstructor
 public class ContractCustomerServiceImpl implements ContractCustomerService {
     private final ContractCustomerRepository repo;
-
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
 
     @Override
     public ContractCustomerDto contractCustomerToContractCustomerDto(ContractCustomer cc) {

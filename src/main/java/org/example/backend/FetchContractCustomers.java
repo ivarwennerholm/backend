@@ -16,15 +16,14 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
+import static org.example.backend.BackendApplication.*;
+
 @ComponentScan
 @Component
 public class FetchContractCustomers implements CommandLineRunner {
 
     @Autowired
     ContractCustomerRepository repo;
-
-//    @Autowired
-//    ContractCustomerService service;
 
     @Setter
     private String filePath;
@@ -37,7 +36,7 @@ public class FetchContractCustomers implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        logger.info("Running FetchContractCustomers");
+        logger.info(ANSI_YELLOW + "Running FetchContractCustomers" + ANSI_RESET);
         try {
             JacksonXmlModule module = new JacksonXmlModule();
             module.setDefaultUseWrapper(false);
@@ -57,21 +56,14 @@ public class FetchContractCustomers implements CommandLineRunner {
                 );
             }
 
-            /*
-            List<ContractCustomer> contractCustomers = xmlMapper.readValue(
-                    new URL(filePath),
-                    xmlMapper.getTypeFactory().constructCollectionType(List.class, ContractCustomer.class)
-            );
-            */
-
-            logger.info("Fetched {} contract customers", contractCustomers.size());
+            logger.info(ANSI_GREEN + "Fetched " + contractCustomers.size() + " contract customers" + ANSI_RESET);
 
             repo.deleteAll();
             repo.saveAll(contractCustomers);
 
-            logger.info("Successfully saved all contract customers");
+            logger.info(ANSI_GREEN + "Successfully saved all contract customers" + ANSI_RESET);
         } catch (Exception e) {
-            logger.error("FetchContractCustomer: An error occurred during execution", e);
+            logger.error(ANSI_RED + "FetchContractCustomer: An error occurred during execution" + ANSI_RESET, e);
         }
     }
 
