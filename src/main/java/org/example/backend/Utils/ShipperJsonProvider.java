@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.server.ExportException;
 
 @Component
 public class ShipperJsonProvider {
@@ -20,9 +21,14 @@ public class ShipperJsonProvider {
         return this.url;
     }
 
-    public boolean isURLAvailable() throws IOException {
-        HttpURLConnection con = (HttpURLConnection) getShipperUrl().openConnection();
-        return con.getResponseCode() == HttpURLConnection.HTTP_OK; //http_ok: 200, http_notfound: 404
+    public boolean isURLAvailable() throws Exception {
+        try{
+            HttpURLConnection con = (HttpURLConnection) getShipperUrl().openConnection();
+            return con.getResponseCode() == HttpURLConnection.HTTP_OK; //http_ok: 200, http_notfound: 404
+        } catch (Exception e){
+            throw new Exception("Connection to shipping contractor server failed.");
+        }
+
     }
 
     public void setUrl(URL newUrl){

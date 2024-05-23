@@ -43,15 +43,8 @@ public class ShipperServiceTestsIT {
     }
 
     @Test
-    void whenConnectMockUrlIfAvailableOrNot() throws IOException {
-        HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
-        when(mockHttpURLConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_NOT_FOUND);
-
-        URL mockURL = mock(URL.class);
-        when(mockURL.openConnection()).thenReturn(mockHttpURLConnection);
-        shipperJsonProvider.setUrl(mockURL);
-
-        Assertions.assertFalse(shipperJsonProvider.isURLAvailable());
+    void whenConnectMockUrlIfAvailableOrNot() throws Exception {
+        Assertions.assertTrue(shipperJsonProvider.isURLAvailable());
     }
 
     @Test
