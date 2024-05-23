@@ -17,7 +17,10 @@ public class BlacklistCheckEmailURLProvider {
     private BlacklistURLProvider blacklistURLProvider;
     private URL url;
 
+    private String email;
+
     public BlacklistCheckEmailURLProvider(String email){
+        this.email = email;
         blacklistURLProvider = new BlacklistURLProvider();
         try {
             url = new URL(blacklistURLProvider.getBlacklistUrl_String()+"check/"+email);
@@ -44,5 +47,9 @@ public class BlacklistCheckEmailURLProvider {
 
     public void setUrl(URL newUrl){
         this.url = newUrl;
+    }
+
+    public void setEmail(String newEmail){
+        this.email = newEmail;
     }
 }
