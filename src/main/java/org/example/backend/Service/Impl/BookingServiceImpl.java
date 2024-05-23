@@ -92,22 +92,6 @@ public class BookingServiceImpl implements BookingService {
         return bookingToBookingDto(bookingRepository.findById(id).get());
     }
 
-    /* TODO: Can this be deleted? - Ivar
-    // venus tar
-    @Override
-    public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
-        Booking b = bookingRepository.findById(id).get();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        if (!newCheckIn.isEmpty()){
-            b.setCheckinDate(new java.sql.Date(df.parse(newCheckIn).getTime()));
-        }
-        if (!newCheckOut.isEmpty()){
-            b.setCheckoutDate(new java.sql.Date(df.parse(newCheckOut).getTime()));
-        }
-        bookingRepository.save(b);
-    }
-    */
-
     @Override
     public String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
         Room r = bookingRepository.findById(id).get().getRoom();
