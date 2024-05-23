@@ -8,7 +8,9 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
+import org.example.backend.Security.UserDataSeeder;
 import org.example.backend.Service.Impl.DiscountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -21,7 +23,8 @@ import java.util.Objects;
 
 @SpringBootApplication
 public class BackendApplication {
-
+    @Autowired
+    private UserDataSeeder userDataSeeder;
     public static void main(String[] args) {
         if(args.length == 0) {
             SpringApplication.run(BackendApplication.class, args);
@@ -98,4 +101,10 @@ public class BackendApplication {
         };
     }
 
+    @Bean
+    public CommandLineRunner commandLineRunner2(){
+        return args -> {
+            userDataSeeder.Seed();
+        };
+    }
 }

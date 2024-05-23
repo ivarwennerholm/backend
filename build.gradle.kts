@@ -53,6 +53,17 @@ dependencies {
     // Jackson annotations
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.1")
+    //spring security
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+    implementation("org.springframework.boot:spring-boot-starter-security:3.2.5")
+    //spring security web
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
+//    implementation("org.springframework.security:spring-security-web:6.3.0")
+    //spring sucrity test
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+//    testImplementation("org.springframework.security:spring-security-test:6.3.0")
+
+
 }
 
 tasks.withType<Test> {
