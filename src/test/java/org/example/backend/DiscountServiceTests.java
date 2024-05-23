@@ -69,7 +69,7 @@ public class DiscountServiceTests {
 
         // Services
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
-        blacklistService = new BlacklistService(new BlacklistURLProvider());
+        //blacklistService = new BlacklistService(new BlacklistURLProvider());
         dateService = new DateService();
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
         discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);
