@@ -28,9 +28,9 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepository roomRepository;
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
-    private final BlacklistService blackService;
+    private final BlacklistService blacklistService;
     private final DiscountService discountService;
-    private DateService dateService = new DateService();
+    private final DateService dateService = new DateService();
 
     @Override
     public BookingDto bookingToBookingDto(Booking b) {
@@ -92,22 +92,6 @@ public class BookingServiceImpl implements BookingService {
         return bookingToBookingDto(bookingRepository.findById(id).get());
     }
 
-    /* TODO: Can this be deleted? - Ivar
-    // venus tar
-    @Override
-    public void updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
-        Booking b = bookingRepository.findById(id).get();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        if (!newCheckIn.isEmpty()){
-            b.setCheckinDate(new java.sql.Date(df.parse(newCheckIn).getTime()));
-        }
-        if (!newCheckOut.isEmpty()){
-            b.setCheckoutDate(new java.sql.Date(df.parse(newCheckOut).getTime()));
-        }
-        bookingRepository.save(b);
-    }
-    */
-
     @Override
     public String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
         Room r = bookingRepository.findById(id).get().getRoom();
@@ -142,7 +126,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
-        if (blackService.isEmailValid(email)) {
+        if (blacklistService.isEmailValid(email)) {
             Customer customer;
             Optional<Customer> optional = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
             if (optional.isPresent()) {

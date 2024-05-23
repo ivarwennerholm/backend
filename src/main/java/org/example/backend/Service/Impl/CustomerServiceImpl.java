@@ -16,6 +16,7 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepo;
+
     @Override
     public Customer customerDtoToCustomer(CustomerDto c) {
         return Customer.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).email(c.getEmail()).build();

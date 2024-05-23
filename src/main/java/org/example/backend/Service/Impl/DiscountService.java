@@ -1,5 +1,6 @@
 package org.example.backend.Service.Impl;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
@@ -7,6 +8,7 @@ import org.example.backend.Model.Room;
 import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -15,13 +17,30 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class DiscountService {
 
-    private DateService dateService = new DateService();
+    private final DateService dateService;
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
     private final CustomerRepository customerRepository;
+
+    @Autowired
+    public DiscountService(BookingRepository bookingRepository,RoomRepository roomRepository,CustomerRepository customerRepository) {
+        this.dateService = new DateService();
+        this.bookingRepository = bookingRepository;
+        this.roomRepository = roomRepository;
+        this.customerRepository = customerRepository;
+    }
+
+    /*
+    public DiscountService(DateService dateService, BookingRepository bookingRepository,RoomRepository roomRepository,CustomerRepository customerRepository) {
+        this.dateService = dateService;
+        this.bookingRepository = bookingRepository;
+        this.roomRepository = roomRepository;
+        this.customerRepository = customerRepository;
+    }
+    */
 
     public double getTotalPriceWithDiscounts(Date checkin, Date checkout, long roomId, long customerId, Date dateForTesting, boolean test) {
         long nights = dateService.getNumberOfDaysBetweenTwoDates(checkin, checkout);
