@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import static org.example.backend.BackendApplication.*;
 
@@ -50,12 +52,38 @@ public class EmailTemplateController {
         service.saveTemplatetoDatabase(markup);
         Path filePath = Paths.get("src/main/resources/templates/currentEmailTemplate.html");
         try {
-            Files.writeString(filePath, markup);
+            Files.write(filePath, markup.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             logger.info(ANSI_GREEN + "Successfully wrote changes to current email template" + ANSI_RESET);
         } catch (IOException e) {
-            logger.error(ANSI_RED + "Error writing to email template filen" + ANSI_RESET, e);
+            logger.error(ANSI_RED + "Error writing to email template file" + ANSI_RESET, e);
         }
-        return "currentEmailTemplate.html";
+        int maxRetries = 20;
+        int retryCount = 0;
+        int waitTime = 2000;
+        while (retryCount < maxRetries && (!Files.exists(filePath) || !Files.isReadable(filePath))) {
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            retryCount++;
+        }
+        System.out.println(ANSI_GREEN + "Exited wait loop" + ANSI_RESET);
+        if (Files.exists(filePath) && Files.isReadable(filePath)) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+                logger.error(ANSI_RED + "Thread was interrupted while waiting" + ANSI_RESET, ex);
+            }
+
+            logger.info(ANSI_GREEN + "File is successfully written and ready to be accessed" + ANSI_RESET);
+            return "currentEmailTemplate";
+        } else {
+            logger.error(ANSI_RED + "File does not exist or is not accessible after waiting" + ANSI_RESET);
+            return "File does not exist or is not accessible after waiting";
+        }
+        
     }
 
 }
