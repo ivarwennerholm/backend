@@ -1,7 +1,6 @@
 package org.example.backend.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.ResetEmailTemplate;
 import org.example.backend.Service.Impl.EmailTemplateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +67,6 @@ public class EmailTemplateController {
             }
             retryCount++;
         }
-        System.out.println(ANSI_GREEN + "Exited wait loop" + ANSI_RESET);
         if (Files.exists(filePath) && Files.isReadable(filePath)) {
             try {
                 Thread.sleep(3000);
@@ -78,12 +76,11 @@ public class EmailTemplateController {
             }
 
             logger.info(ANSI_GREEN + "File is successfully written and ready to be accessed" + ANSI_RESET);
-            return "currentEmailTemplate";
+            return "showCurrentEmailTemplate";
         } else {
             logger.error(ANSI_RED + "File does not exist or is not accessible after waiting" + ANSI_RESET);
-            return "File does not exist or is not accessible after waiting";
+            return "Failed writing new email template";
         }
-        
     }
 
 }

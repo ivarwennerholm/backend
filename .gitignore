@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Temporary files ###
+src/main/resources/templates/currentEmailTemplate.html
