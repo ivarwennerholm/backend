@@ -9,7 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TestController{
     @GetMapping(path="admin")
     @PreAuthorize("isAuthenticated()")
-    String getAdminPage(){
-        return "security/admin.html";
+    String getAdminLogin(){
+        return "index.html";
+    }
+
+    @GetMapping(path="confidential")
+    @PreAuthorize("hasAuthority('Admin')")
+    String getConfidentialPage(){
+        return "security/confidential.html";
     }
 }

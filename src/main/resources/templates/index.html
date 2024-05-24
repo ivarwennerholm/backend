@@ -53,7 +53,10 @@
         <a href="rooms/all">All room events</a>
     </div>
     <div class="my-1">
-        <a href="admin">Admin</a>
+        <a href="admin" sec:authorize="!isAuthenticated()">Admin Login</a>
+    </div>
+    <div class="my-1">
+        <a href="confidential" sec:authorize="isAuthenticated()">Confidential</a>
     </div>
     <div class="my-1">
         <a href="" sec:authorize="isAuthenticated()" onclick="displayLogoutConfirmationQ()" id="logout" class="btn btn-warning">Logout</a>
@@ -63,7 +66,7 @@
     function displayLogoutConfirmationQ(){
         const logout = document.getElementById("logout");
         const logoutSuccess = document.getElementById("logoutSuccess");
-            const confirmOpt = confirm('Are you sure?');
+            const confirmOpt = confirm('Are you sure you want to logout?');
             if (confirmOpt){
                 logout.href = "/logout";
             }

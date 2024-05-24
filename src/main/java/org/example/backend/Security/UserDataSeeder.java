@@ -30,9 +30,12 @@ public class UserDataSeeder {
     private void addUser(String mail, String role, String password) {
         ArrayList<Role> roles = new ArrayList<>();
         addRole(role);
+        Role r = roleRepository.findByName(role);
+        roles.add(r);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hash = encoder.encode(password);
         User u = User.builder().username(mail).password(hash).enabled(true).roles(roles).build();
+        System.out.println(u.toString());
         userRepository.save(u);
     }
 
