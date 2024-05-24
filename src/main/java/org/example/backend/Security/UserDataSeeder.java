@@ -38,7 +38,8 @@ public class UserDataSeeder {
 
     private void addRole(String role) {
         if (roleRepository.findByName(role)==null){
-            roleRepository.save(Role.builder().name(role).build());
+            Role r = Role.builder().name(role).build();
+            roleRepository.save(r);
         }
     }
 }

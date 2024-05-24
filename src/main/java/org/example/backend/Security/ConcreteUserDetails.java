@@ -3,9 +3,11 @@ package org.example.backend.Security;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @AllArgsConstructor
@@ -13,7 +15,12 @@ public class ConcreteUserDetails implements UserDetails {
     private User user;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        for(Role role : user.getRoles()){
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
+            authorities.add(authority);
+        }
+        return authorities;
     }
 
     @Override

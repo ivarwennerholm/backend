@@ -57,13 +57,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
     implementation("org.springframework.boot:spring-boot-starter-security:3.2.5")
     //spring security web
-    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
-//    implementation("org.springframework.security:spring-security-web:6.3.0")
-    //spring sucrity test
-    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
-//    testImplementation("org.springframework.security:spring-security-test:6.3.0")
-
-
+// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity6
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE")
 }
 
 tasks.withType<Test> {
