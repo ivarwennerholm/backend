@@ -18,7 +18,7 @@ public class BookingDto {
     private Date checkoutDate;
     private int guestAmt;
     private int extraBedAmt;
+    private double totalPrice;
     private CustomerDto customer;
     private RoomDto room;
-
 }

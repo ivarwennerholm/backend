@@ -50,6 +50,10 @@
                 <td th:text="${booking.customer.phone}"></td>
             </tr>
             <tr>
+                <td>Guest Email</td>
+                <td th:text="${booking.customer.email}"></td>
+            </tr>
+            <tr>
                 <td>Room Type</td>
                 <td th:text="${booking.room.roomType.type}"></td>
             </tr>
@@ -72,6 +76,10 @@
             <tr>
                 <td>Nos. of Extra Bed</td>
                 <td th:text="${booking.extraBedAmt}"></td>
+            </tr>
+            <tr>
+                <td>Total price</td>
+                <td th:text="${booking.totalPrice + 'kr'}"></td>
             </tr>
         </table>
     </div>

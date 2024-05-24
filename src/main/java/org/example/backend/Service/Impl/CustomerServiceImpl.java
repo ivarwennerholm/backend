@@ -9,20 +9,22 @@ import org.example.backend.Service.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepo;
+
     @Override
     public Customer customerDtoToCustomer(CustomerDto c) {
-        return Customer.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).build();
+        return Customer.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).email(c.getEmail()).build();
     }
 
     @Override
     public CustomerDto customerToCustomerDto(Customer c) {
-        return CustomerDto.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).build();
+        return CustomerDto.builder().id(c.getId()).name(c.getName()).phone(c.getPhone()).email(c.getEmail()).build();
     }
 
 
@@ -38,14 +40,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void addCustomerWithoutID(String name, String phone) {
-        Customer customer = Customer.builder().name(name).phone(phone).build();
+    public void addCustomerWithoutID(String name, String phone, String email) {
+        Customer customer = Customer.builder().name(name).phone(phone).email(email).build();
         customerRepo.save(customer);
     }
 
     @Override
-    public Customer getCustomerByNameAndPhone(String name, String phone) {
-        return customerRepo.getCustomerByNameAndPhone(name, phone);
+    public Optional<Customer> getCustomerByNamePhoneAndEmail(String name, String phone, String email) {
+        return customerRepo.getCustomerByNamePhoneAndEmail(name, phone, email);
+    }
+
+    @Override
+    public Customer getCustomerByEmail(String email) {
+        return customerRepo.findAll().stream().filter(k -> k.getEmail().equals(email)).findFirst().orElse(null);
     }
 
     @Override
@@ -95,5 +102,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getCustomerById(Long id) {
         return null;
+    }
+
+    @Override
+    public Customer getLastCustomer() {
+        return customerRepo.getLastCustomer();
     }
 }

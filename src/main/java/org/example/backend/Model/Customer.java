@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -31,9 +28,15 @@ public class Customer {
     @Pattern(regexp = "^[\\d+-]*$", message = "Telephone numbers can only contain digits and hyphens")
     private String phone;
 
+    @NotEmpty(message = "Email is mandatory")
+    @Pattern(regexp = "^(.+)@(\\S+)$", message = "Please provide a valid email")
+    private String email;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @ToString.Exclude
     private List<Booking> bookingList;
 
+    // TODO: Do we need all these different constructors? - Ivar
     public Customer(String name, String phone) {
         this.name = name;
         this.phone = phone;
@@ -45,4 +48,23 @@ public class Customer {
         this.phone = phone;
     }
 
+    public Customer(Long id, String name, String phone, String email) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
+
+    public Customer(String name, String phone, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
+
+    public Customer(Long id, String name, String phone, List<Booking> bookingList) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.bookingList = bookingList;
+    }
 }

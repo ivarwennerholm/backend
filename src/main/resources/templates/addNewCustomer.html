@@ -19,6 +19,11 @@
             <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</td>
         </tr>
         <tr>
+            <td>Email:</td>
+            <td><input type="text" th:field="*{email}" /></td>
+            <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
+        </tr>
+        <tr>
             <td><button type="submit">Submit</button></td>
         </tr>
     </table>

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "email": "stefan6@aaa.com",
+    "name": "Stefan Holmberg",
+    "group": "stefan",
+    "created": "2024-05-06T11:18:24.441769",
+    "ok": false
+  },
+  {
+    "id": 2,
+    "email": "peter@aaa.com",
+    "name": "Peter Pan",
+    "group": "peter",
+    "created": "2024-05-07T11:04:42.641854",
+    "ok": false
+  },
+  {
+    "id": 3,
+    "email": "eric@aaa.com",
+    "name": "Eric Ericsson",
+    "group": "eric",
+    "created": "2024-05-08T12:40:52.627185",
+    "ok": true
+  }
+]
