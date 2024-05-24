@@ -59,6 +59,10 @@ dependencies {
     //spring security web
 // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity6
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE")
+    //spring security web
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
+    implementation("org.springframework.security:spring-security-web:6.3.0")
+
 }
 
 tasks.withType<Test> {
