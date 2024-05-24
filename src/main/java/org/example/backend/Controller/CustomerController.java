@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.CustomerDto;
 import org.example.backend.Model.Customer;
 import org.example.backend.Service.CustomerService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,12 +40,14 @@ public class CustomerController {
     }
 
     @RequestMapping("registerForm")
+    @PreAuthorize("hasAuthority('Admin')")
     public String registerForm(Model model){
         model.addAttribute("customer", new Customer());
         return "addNewCustomer.html";
     }
 
     @RequestMapping(value = "delete/{id}")
+    @PreAuthorize("hasAuthority('Admin')")
     public String deleteCustomer(@PathVariable Long id, Model model){
         try{
             cusService.deleteCustomerById(id);
@@ -56,6 +59,7 @@ public class CustomerController {
     }
 
     @RequestMapping("updateForm/{id}")
+    @PreAuthorize("hasAuthority('Admin')")
     public String updateForm(@PathVariable Long id,
                                  Model model){
         CustomerDto customer = cusService.findCustomerById(id);
