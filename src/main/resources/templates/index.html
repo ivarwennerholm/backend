@@ -55,6 +55,19 @@
     <div class="my-1">
         <a href="admin">Admin</a>
     </div>
+    <div class="my-1">
+        <a href="" sec:authorize="isAuthenticated()" onclick="displayLogoutConfirmationQ()" id="logout" class="btn btn-warning">Logout</a>
+    </div>
 </div>
+<script>
+    function displayLogoutConfirmationQ(){
+        const logout = document.getElementById("logout");
+        const logoutSuccess = document.getElementById("logoutSuccess");
+            const confirmOpt = confirm('Are you sure?');
+            if (confirmOpt){
+                logout.href = "/logout";
+            }
+    }
+</script>
 </body>
 </html>

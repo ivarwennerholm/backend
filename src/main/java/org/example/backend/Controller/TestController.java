@@ -10,6 +10,6 @@ public class TestController{
     @GetMapping(path="admin")
     @PreAuthorize("isAuthenticated()")
     String getAdminPage(){
-        return "security/test.html";
+        return "security/admin.html";
     }
 }
