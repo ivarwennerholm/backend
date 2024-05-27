@@ -41,12 +41,13 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/",  "/bookings/**","/customers/**", "/blacklist/**","/contractcustomers/**",
                                 "/rooms/**","/roomevents/**","/roomtypes/**","/shippingcontractors/**",
-                                "/js/**", "/css/**", "/images/**", "/login/**", "/logout","/queues/**" ).permitAll()
+                                "/js/**", "/css/**", "/images/**", "/login/**", "/logout","/queues/**","/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-//                   .loginPage("/login")
-                     .permitAll()
+                   .loginPage("/login")
+                     .defaultSuccessUrl("/admin")
+                        .failureForwardUrl("/")
                 )
                 .logout((logout) -> {
                     logout.permitAll();
