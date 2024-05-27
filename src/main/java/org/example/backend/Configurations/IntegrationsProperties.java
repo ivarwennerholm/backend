@@ -14,9 +14,5 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 public class IntegrationsProperties {
     private String contractCustomersUrl;
-    private String emailTemplateFilePath;
     private EmailProperties email;
-
-    //private String emailSenderHost;
-    //private int emailSenderPort;
 }

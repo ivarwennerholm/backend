@@ -15,4 +15,6 @@ public class EmailProperties {
     private String templateFilepath;
     private String senderHost;
     private int senderPort;
+    private String username;
+    private String password;
 }

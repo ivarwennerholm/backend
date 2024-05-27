@@ -38,3 +38,6 @@ out/
 
 ### Temporary files ###
 src/main/resources/templates/currentEmailTemplate.html
+
+### Security ###
+.env

@@ -36,8 +36,12 @@ public class EmailTemplateService {
         mailSender.setPort(integrations.getEmail().getSenderPort());
         // TODO: Delete
         //mailSender.setPort(587);
-        mailSender.setUsername("nicolas.grady@ethereal.email");
-        mailSender.setPassword("xXA9BeE2bZ95SJn77N");
+        mailSender.setUsername(integrations.getEmail().getUsername());
+        // TODO: Delete
+        // mailSender.setUsername("nicolas.grady@ethereal.email");
+        mailSender.setPassword(integrations.getEmail().getPassword());
+        // TODO: Delete
+        // mailSender.setPassword("xXA9BeE2bZ95SJn77N");
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
