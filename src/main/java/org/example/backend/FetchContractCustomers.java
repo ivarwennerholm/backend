@@ -3,6 +3,7 @@ package org.example.backend;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.Setter;
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.Model.ContractCustomer;
 import org.example.backend.Repository.ContractCustomerRepository;
 import org.slf4j.Logger;
@@ -22,16 +23,21 @@ import static org.example.backend.BackendApplication.*;
 @Component
 public class FetchContractCustomers implements CommandLineRunner {
 
-    @Autowired
     ContractCustomerRepository repo;
+
+    IntegrationsProperties integrations;
 
     @Setter
     private String filePath;
 
     private static final Logger logger = LoggerFactory.getLogger(FetchContractCustomers.class);
 
-    public FetchContractCustomers() {
-        this.filePath = "https://javaintegration.systementor.se/customers";
+    @Autowired
+    public FetchContractCustomers(ContractCustomerRepository repo, IntegrationsProperties integrations) {
+        this.repo = repo;
+        this.integrations = integrations;
+        this.filePath = integrations.getContractCustomersUrl();
+        // this.filePath = "https://javaintegration.systementor.se/customers";
     }
 
     @Override
