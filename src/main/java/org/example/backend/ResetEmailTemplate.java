@@ -33,8 +33,6 @@ public class ResetEmailTemplate implements CommandLineRunner {
         logger.info(ANSI_YELLOW + "Running ResetEmailTemplate" + ANSI_RESET);
         try {
             filePath = integrations.getEmail().getTemplateFilepath();
-            // TODO: Delete
-            //filePath = "src/main/resources/templates/defaultEmailTemplate.html";
             file = new File(filePath);
             fileReader = new FileReader(file);
         } catch (FileNotFoundException ex) {

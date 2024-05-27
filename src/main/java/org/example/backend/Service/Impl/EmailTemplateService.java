@@ -31,17 +31,9 @@ public class EmailTemplateService {
     public void sendMail(int roomNumber, String checkin, String checkout, String guests, String extrabeds,
                          String name, String phone, String email, String fullprice, String discount, String discountedPrice) {
         mailSender.setHost(integrations.getEmail().getSenderHost());
-        // TODO: Delete
-        //mailSender.setHost("smtp.ethereal.email");
         mailSender.setPort(integrations.getEmail().getSenderPort());
-        // TODO: Delete
-        //mailSender.setPort(587);
         mailSender.setUsername(integrations.getEmail().getUsername());
-        // TODO: Delete
-        // mailSender.setUsername("nicolas.grady@ethereal.email");
         mailSender.setPassword(integrations.getEmail().getPassword());
-        // TODO: Delete
-        // mailSender.setPassword("xXA9BeE2bZ95SJn77N");
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
@@ -53,8 +45,6 @@ public class EmailTemplateService {
             helper.setFrom("nicolas.grady@ethereal.email");
             helper.setSubject("Your booking confirmation");
             String markup = emailTemplateRepository.getLatestEmailTemplate();
-            // markup = insertUserDetails(markup, roomNumber, checkin, checkout, guests, extrabeds,
-            // name, phone, email, fullprice, discount, discountedPrice);
             markup = markup.replace("!!!name!!!", name).
                     replace("!!!phone!!!", phone).
                     replace("!!!roomnumber!!!", String.valueOf(roomNumber)).
