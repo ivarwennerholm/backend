@@ -62,6 +62,10 @@ dependencies {
     //spring security web
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
     implementation("org.springframework.security:spring-security-web:6.3.0")
+    //spring boot mail
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.3.0")
+
 
 }
 

@@ -1,11 +1,12 @@
 package org.example.backend.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.Security.UserRepository;
+import org.example.backend.Security.UserServiceImpl;
+import org.example.backend.Security.UsernameDto;
 import org.example.backend.Security.User;
-import org.example.backend.Security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PublicController {
 
-    private final UserDetailsService userDetailsService;
+    private final UserServiceImpl userServiceImpl;
+
+    private final UserRepository userRepository;
+
     @RequestMapping("")
     public String getIndexPage(){
         return "index";
@@ -25,17 +29,13 @@ public class PublicController {
     public String getLoginPage(Model model){
         User user = new User();
         user.setEnabled(true);
-        model.addAttribute("user",user);
-        System.out.println("testing");
+        model.addAttribute("user", user);
         return "login";
-//        return "index";
     }
 
     @PostMapping("login")
     public String getLoginUser(@ModelAttribute User user, Model model){
-        System.out.println("testing 2");
-        System.out.println(user.getUsername() + " " + user.getPassword() + " " + user.isEnabled());
-        model.addAttribute("user",userDetailsService.loadUserByUsername(user.getUsername()));
+        model.addAttribute("user", userServiceImpl.loadUserByUsername(user.getUsername()));
         return getAdminLogin();
     }
 
@@ -49,5 +49,26 @@ public class PublicController {
     @PreAuthorize("hasAuthority('Admin')")
     String getConfidentialPage(){
         return "security/confidential";
+    }
+
+    @GetMapping(path = "forgotpassword")
+    String getForgotPasswordPage(Model model){
+        UsernameDto userxx = new UsernameDto();
+        model.addAttribute("user",userxx);
+        return "forgotpassword";
+    }
+
+    @PostMapping(path = "forgotpassword")
+    String getForgotPasswordUserName(@ModelAttribute UsernameDto userNameDto, Model model){
+        System.out.println("username" + userNameDto.getUsername());
+
+        User user = userRepository.getUserByUsername(userNameDto.getUsername());
+//        String output = "";
+//        if (user!=null){
+//            output = userServiceImpl.sendEmail(user);
+//            System.out.println(output);
+//        }
+        System.out.println("reset token: " + userServiceImpl.sendEmail(user));
+        return "index";
     }
 }
