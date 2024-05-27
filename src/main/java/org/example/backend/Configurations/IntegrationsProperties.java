@@ -13,6 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 public class IntegrationsProperties {
-    private String blacklistUrl;
     private String contractCustomersUrl;
+    private String emailTemplateFilePath;
 }
