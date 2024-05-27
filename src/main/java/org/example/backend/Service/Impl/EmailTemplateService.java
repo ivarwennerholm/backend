@@ -38,6 +38,7 @@ public class EmailTemplateService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo("nicolas.grady@ethereal.email");
+            helper.setFrom("nicolas.grady@ethereal.email");
             helper.setSubject("Your booking confirmation");
             String markup = emailTemplateRepository.getLatestEmailTemplate();
             // markup = insertUserDetails(markup, roomNumber, checkin, checkout, guests, extrabeds,
