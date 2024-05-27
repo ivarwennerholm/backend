@@ -58,18 +58,30 @@ public class UserServiceImpl implements UserDetailsService {
 
     public String generateResetToken(User user){
         PasswordResetToken p = tokenRepository.findByUserId(user.getId());
+        UUID uuid = UUID.randomUUID();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime expiryDateTime = currentDateTime.plusSeconds(10);
+        PasswordResetToken resetToken = new PasswordResetToken();
         if (p == null){
-            UUID uuid = UUID.randomUUID();
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            LocalDateTime expiryDateTime = currentDateTime.plusDays(1);
-            PasswordResetToken resetToken = new PasswordResetToken();
             resetToken.setUser(user);
             resetToken.setToken(uuid.toString());
             resetToken.setExpiryDateTime(expiryDateTime);
             tokenRepository.save(resetToken);
 
             return "im generating reset token here: " + tokenService.getTokenByUsername(user);
+        } else if (isTokenExpired(p)){
+            p.setToken(uuid.toString());
+            p.setExpiryDateTime(expiryDateTime);
+            tokenRepository.save(p);
+            return "im generating NEW reset token here: " + tokenService.getTokenByUsername(user);
+        } else {
+            return "Token already created";
         }
-        return "Token already created";
+
+    }
+
+    public boolean isTokenExpired(PasswordResetToken previousToken){
+        LocalDateTime now = LocalDateTime.now();
+        return now.isAfter(previousToken.getExpiryDateTime());
     }
 }
