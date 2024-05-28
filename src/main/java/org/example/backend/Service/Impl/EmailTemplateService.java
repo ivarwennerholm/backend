@@ -26,7 +26,7 @@ public class EmailTemplateService {
 
     private final EmailTemplateRepository emailTemplateRepository;
     private final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-    private static final Logger logger = LoggerFactory.getLogger(EmailTemplateService.class);
+    private final Logger logger = LoggerFactory.getLogger(EmailTemplateService.class);
 
     public void sendMail(int roomNumber, String checkin, String checkout, String guests, String extrabeds,
                          String name, String phone, String email, String fullprice, String discount, String discountedPrice) {
@@ -41,7 +41,7 @@ public class EmailTemplateService {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo("nicolas.grady@ethereal.email");
+            helper.setTo(email);
             helper.setFrom("nicolas.grady@ethereal.email");
             helper.setSubject("Your booking confirmation");
             String markup = emailTemplateRepository.getLatestEmailTemplate();

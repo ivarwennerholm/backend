@@ -1,7 +1,6 @@
 package org.example.backend.Service.Impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.DTO.ShipperDto;
 import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.ShipperRepository;
 import org.example.backend.Service.ShipperService;

@@ -7,31 +7,32 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
-    public Customer customerDtoToCustomer(CustomerDto c);
+    Customer customerDtoToCustomer(CustomerDto c);
 
-    public CustomerDto customerToCustomerDto(Customer c);
+    CustomerDto customerToCustomerDto(Customer c);
 
-    public List<CustomerDto> getAll();
+    List<CustomerDto> getAll();
 
-    public String addCustomer(CustomerDto c);
+    String addCustomer(CustomerDto c);
 
-    public void addCustomerWithoutID(String name, String phone, String email);
+    void addCustomerWithoutID(String name, String phone, String email);
 
-    public Optional<Customer> getCustomerByNamePhoneAndEmail(String name, String phone, String email);
+    Optional<Customer> getCustomerByNamePhoneAndEmail(String name, String phone, String email);
 
-    public Customer getCustomerByEmail(String email);
+    Customer getCustomerByEmail(String email);
 
-    public String deleteCustomerByName(String name);
+    String deleteCustomerByName(String name);
 
-    public String deleteCustomerById(Long id);
+    String deleteCustomerById(Long id);
 
-    public CustomerDto findCustomerById(Long id);
+    CustomerDto findCustomerById(Long id);
 
-    public String updateCustomer(Long id, String name, String phone);
+    String updateCustomer(Long id, String name, String phone);
 
-    public String updateForm(CustomerDto customerDto);
+    String updateForm(CustomerDto customerDto);
 
-    public Customer getCustomerById(Long id);
+    Customer getCustomerById(Long id);
 
-    public Customer getLastCustomer();
+    Customer getLastCustomer();
+
 }

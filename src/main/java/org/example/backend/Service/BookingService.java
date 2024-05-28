@@ -13,28 +13,28 @@ import org.example.backend.Model.Customer;
 
 public interface BookingService {
 
-    public BookingDto bookingToBookingDto (Booking b);
+    BookingDto bookingToBookingDto (Booking b);
 
-    public Booking bookindDtoToBooking (BookingDto b);
+    Booking bookindDtoToBooking (BookingDto b);
 
-    public List<BookingDto> getAll();
+    List<BookingDto> getAll();
 
-    public void deleteBooking (BookingDto b);
+    void deleteBooking (BookingDto b);
 
-    public void updateBooking (BookingDto b);
+    void updateBooking (BookingDto b);
 
-    public String deleteBookingById(Long id);
+    String deleteBookingById(Long id);
 
-    public BookingDto findBookingById(Long id);
+    BookingDto findBookingById(Long id);
 
-    public String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException;
+    String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException;
 
-    public void createAndAddBookingToDatabase (Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception;
+    void createAndAddBookingToDatabase (Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception;
 
-    public int getExtraBedsForBooking(RoomDto room, int guests);
+    int getExtraBedsForBooking(RoomDto room, int guests);
 
-    public boolean isRoomAvailableOnDates(RoomDto room, java.sql.Date checkin, java.sql.Date checkout);
+    boolean isRoomAvailableOnDates(RoomDto room, java.sql.Date checkin, java.sql.Date checkout);
 
-    public Booking getLastBooking();
+    Booking getLastBooking();
 
 }
