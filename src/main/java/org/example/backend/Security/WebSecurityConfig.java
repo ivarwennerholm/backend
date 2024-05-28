@@ -1,8 +1,5 @@
 package org.example.backend.Security;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +8,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -25,7 +21,7 @@ public class WebSecurityConfig {
 //        return new UserServiceImpl();
 //    }
     @Autowired
-    private UserServiceImpl userDetailsService;
+    private UserServiceImpl userService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -35,7 +31,7 @@ public class WebSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
@@ -47,7 +43,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/",  "/bookings/**","/customers/**", "/blacklist/**","/contractcustomers/**",
                                 "/rooms/**","/roomevents/**","/roomtypes/**","/shippingcontractors/**",
-                                "/js/**", "/css/**", "/images/**", "/login/**", "/logout","/queues/**","/login","/forgotpassword","/forgot").permitAll()
+                                "/js/**", "/css/**", "/images/**", "/login/**", "/logout","/queues/**","/login","/forgotpassword","/passwordreset/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

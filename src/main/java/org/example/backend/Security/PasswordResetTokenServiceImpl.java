@@ -13,5 +13,5 @@ public class PasswordResetTokenServiceImpl {
 
     public String getTokenByUsername(User user){
         return passwordResetTokenRepository.findByUserId(user.getId()).getToken();
-    };
+    }
 }

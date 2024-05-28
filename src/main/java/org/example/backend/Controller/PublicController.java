@@ -1,11 +1,8 @@
 package org.example.backend.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.Security.UserRepository;
-import org.example.backend.Security.UserServiceImpl;
-import org.example.backend.Security.UsernameDto;
-import org.example.backend.Security.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.backend.Security.PasswordResetDto;
+import org.example.backend.Security.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,8 +50,8 @@ public class PublicController {
 
     @GetMapping(path = "forgotpassword")
     String getForgotPasswordPage(Model model){
-        UsernameDto userxx = new UsernameDto();
-        model.addAttribute("user",userxx);
+        UsernameDto user = new UsernameDto();
+        model.addAttribute("user",user);
         return "forgotpassword";
     }
 
@@ -71,6 +68,27 @@ public class PublicController {
             System.out.println(e.getMessage());
             return getForgotPasswordPage(model);
         }
+    }
+    @GetMapping(path = "passwordreset/{token}")
+    String getPasswordResetPage(@PathVariable String token, Model model){
+        PasswordResetDto passwordReset = new PasswordResetDto();
+        passwordReset.setToken(token);
+        model.addAttribute("passwordReset",passwordReset);
+        model.addAttribute("token",token);
+        return "passwordResetProcess";
+    }
 
+    @PostMapping(path = "passwordreset")
+    String getNewPassword(@ModelAttribute PasswordResetDto passwordReset, Model model){
+        System.out.println("password reset");
+        System.out.println(passwordReset.getMail());
+        System.out.println(passwordReset.getNewPassword());
+        try {
+            userServiceImpl.updatePassword(passwordReset);
+            System.out.println("password reset successfully");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "index";
     }
 }

@@ -29,6 +29,6 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles;
 
-    @OneToOne
-    private PasswordResetToken passwordResetToken;
+//    @OneToOne
+//    private PasswordResetToken passwordResetToken;
 }

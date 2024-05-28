@@ -1,12 +1,10 @@
 package org.example.backend.Security;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,7 +27,7 @@ public class UserServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Could not find user");
         }
-
+        System.out.println("loaduserByusername: " + user.getUsername() + " " + user.getPassword());
         return new ConcreteUserDetails(user);
     }
 
@@ -88,5 +86,24 @@ public class UserServiceImpl implements UserDetailsService {
     public boolean isTokenExpired(PasswordResetToken previousToken){
         LocalDateTime now = LocalDateTime.now();
         return now.isAfter(previousToken.getExpiryDateTime());
+    }
+
+    public void updatePassword(PasswordResetDto passwordReset) throws Exception {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        try{
+            User user = userRepository.getUserByUsername(passwordReset.getMail());
+            if (user == null){
+                throw new Exception("no such user in database");
+            }
+            PasswordResetToken passwordResetToken = tokenRepository.findByUserId(user.getId());
+            if (passwordResetToken == null){
+                throw new Exception("no token found for such user");
+            }
+            String hash = bCryptPasswordEncoder.encode(passwordReset.getNewPassword());
+            user.setPassword(hash);
+            userRepository.save(user);
+        } catch (NullPointerException e){
+            throw new Exception("unexpected error occured");
+        }
     }
 }
