@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.Security.PasswordResetDto;
 import org.example.backend.Security.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +34,15 @@ public class PublicController {
 
     @PostMapping("login")
     public String getLoginUser(@ModelAttribute User user, Model model){
-        model.addAttribute("user", userServiceImpl.loadUserByUsername(user.getUsername()));
-        return getAdminLogin();
+        try{
+            model.addAttribute("user", userServiceImpl.loadUserByUsername(user.getUsername()));
+            return getAdminLogin();
+        } catch (UsernameNotFoundException e){
+            System.out.println(e.getMessage());
+            model.addAttribute("error",e.getMessage());
+            return getLoginPage(model);
+        }
+
     }
 
     @GetMapping(path="admin")
@@ -74,7 +83,6 @@ public class PublicController {
         PasswordResetDto passwordReset = new PasswordResetDto();
         passwordReset.setToken(token);
         model.addAttribute("passwordReset",passwordReset);
-//        model.addAttribute("token",token);
         return "passwordResetProcess";
     }
 

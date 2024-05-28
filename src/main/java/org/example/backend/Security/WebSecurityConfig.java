@@ -48,8 +48,9 @@ public class WebSecurityConfig {
                 )
                 .formLogin((form) -> form
                    .loginPage("/login")
-                     .defaultSuccessUrl("/admin")
-                        .failureForwardUrl("/")
+                   .loginProcessingUrl("/perform_login")
+                   .defaultSuccessUrl("/admin")
+                   .failureForwardUrl("/")
                 )
                 .logout((logout) -> {
                     logout.permitAll();

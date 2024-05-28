@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserDetailsService {
         User user = userRepository.getUserByUsername(username);
 
         if (user == null) {
+            System.out.println("throw exception");
             throw new UsernameNotFoundException("Could not find user");
         }
         System.out.println("loaduserByusername: " + user.getUsername() + " " + user.getPassword());
