@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BlacklistStatusDto {
-    String statusText;
-    boolean ok;
+    private String statusText;
+    private boolean ok;
 }

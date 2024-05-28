@@ -27,27 +27,27 @@ public class EmailTemplateController {
 
     private final EmailTemplateService service;
 
-    private static final Logger logger = LoggerFactory.getLogger(EmailTemplateController.class);
+    private final Logger logger = LoggerFactory.getLogger(EmailTemplateController.class);
 
     @GetMapping("/current")
-    public String getCurrentEmailTemplate() {
+    protected String getCurrentEmailTemplate() {
         return "currentEmailTemplate.html";
     }
 
     @GetMapping("/default")
-    public String getDefaultEmailTemplate() {
+    protected String getDefaultEmailTemplate() {
         return "defaultEmailTemplate.html";
     }
 
     @GetMapping("/edit")
-    public String getEmailTemplateEditor(Model model) {
+    protected String getEmailTemplateEditor(Model model) {
         String markup = service.getLatestEmailTemplate();
         model.addAttribute("markup", markup);
         return "emailTemplateEditor.html";
     }
 
     @PostMapping("/edit/done")
-    public String getEditConfirmation(@RequestParam(name = "markup") String markup) {
+    protected String getEditConfirmation(@RequestParam(name = "markup") String markup) {
         service.saveTemplatetoDatabase(markup);
         Path filePath = Paths.get("src/main/resources/templates/currentEmailTemplate.html");
         try {

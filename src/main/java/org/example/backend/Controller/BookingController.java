@@ -30,30 +30,30 @@ public class BookingController {
     private List<BookingDto> allBookings = new ArrayList<>();
 
     @Autowired
-    private EmailTemplateService emailTemplateService;
+    private final EmailTemplateService emailTemplateService;
 
     @RequestMapping("all")
-    public String allBookings(Model model){
+    protected String allBookings(Model model){
         allBookings = bookService.getAll();
         model.addAttribute("allBookings",allBookings);
         return "allBooking.html";
     }
 
     @RequestMapping("delete/{id}")
-    public String deleteBookings(@PathVariable Long id, Model model){
+    protected String deleteBookings(@PathVariable Long id, Model model){
         String s = bookService.deleteBookingById(id);
         return allBookings(model);
     }
 
     @RequestMapping("updateForm/{id}")
-    public String updateForm(@PathVariable Long id, Model model){
+    protected String updateForm(@PathVariable Long id, Model model){
         BookingDto b = bookService.findBookingById(id);
         model.addAttribute("booking",b);
         return "updateBooking.html";
     }
 
     @PostMapping("update/{id}")
-    public String updateBookings(@PathVariable Long id,
+    protected String updateBookings(@PathVariable Long id,
                                  @RequestParam(required = false) String newCheckIn,
                                  @RequestParam(required = false) String newCheckOut,
                                  Model model){
@@ -67,12 +67,12 @@ public class BookingController {
     }
 
     @RequestMapping("search")
-    public String searchBooking() {
+    protected String searchBooking() {
         return "searchBooking";
     }
 
     @PostMapping("getAvailableRooms")
-    public String getAvailableRooms(@RequestParam int guests,
+    protected String getAvailableRooms(@RequestParam int guests,
                                     @RequestParam String checkin,
                                     @RequestParam String checkout,
                                     Model model) throws ParseException {
@@ -100,7 +100,7 @@ public class BookingController {
     }
 
     @PostMapping("inputUserDetails")
-    public String inputUserDetails(@RequestParam String roomid,
+    protected String inputUserDetails(@RequestParam String roomid,
                                    @RequestParam String checkin,
                                    @RequestParam String checkout,
                                    @RequestParam String guests,
@@ -117,7 +117,7 @@ public class BookingController {
     }
 
     @PostMapping("getBookingConfirmation")
-    public String getBookingConfirmation(@RequestParam String roomid,
+    protected String getBookingConfirmation(@RequestParam String roomid,
                                          @RequestParam String checkin,
                                          @RequestParam String checkout,
                                          @RequestParam String guests,

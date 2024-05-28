@@ -7,15 +7,15 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ShipperDto {
-    Long id;
-    String email;
-    String companyName;
-    String contactName;
-    String contactTitle;
-    String streetAddress;
-    String city;
-    String postalCode;
-    String country;
-    String phone;
-    String fax;
+    private Long id;
+    private String email;
+    private String companyName;
+    private String contactName;
+    private String contactTitle;
+    private String streetAddress;
+    private String city;
+    private String postalCode;
+    private String country;
+    private String phone;
+    private String fax;
 }

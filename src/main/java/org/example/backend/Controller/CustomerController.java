@@ -23,14 +23,14 @@ public class CustomerController {
     private List<CustomerDto> allCustomersList = new ArrayList<>();
 
     @RequestMapping("all")
-    public String getAllCustomers(Model model){
+    protected String getAllCustomers(Model model){
         allCustomersList = cusService.getAll();
         model.addAttribute("allCustomers", allCustomersList);
         return "allCustomers.html";
     }
 
     @PostMapping("add")
-    public String addCustomer(@Valid Customer customer, BindingResult bindingResult, Model model) {
+    protected String addCustomer(@Valid Customer customer, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "addNewCustomer.html";
         }
@@ -39,13 +39,13 @@ public class CustomerController {
     }
 
     @RequestMapping("registerForm")
-    public String registerForm(Model model){
+    protected String registerForm(Model model){
         model.addAttribute("customer", new Customer());
         return "addNewCustomer.html";
     }
 
     @RequestMapping(value = "delete/{id}")
-    public String deleteCustomer(@PathVariable Long id, Model model){
+    protected String deleteCustomer(@PathVariable Long id, Model model){
         try{
             cusService.deleteCustomerById(id);
             model.addAttribute("success","Customer is delete sucessfully");
@@ -56,7 +56,7 @@ public class CustomerController {
     }
 
     @RequestMapping("updateForm/{id}")
-    public String updateForm(@PathVariable Long id,
+    protected String updateForm(@PathVariable Long id,
                                  Model model){
         CustomerDto customer = cusService.findCustomerById(id);
         model.addAttribute("customer", customer);
@@ -64,7 +64,7 @@ public class CustomerController {
     }
 
     @PostMapping("update")
-    public String updateCustomer(@Valid Customer customer, BindingResult bindingResult, Model model){
+    protected String updateCustomer(@Valid Customer customer, BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
             model.addAttribute("customer", customer);
             model.addAttribute("id", customer.getId());

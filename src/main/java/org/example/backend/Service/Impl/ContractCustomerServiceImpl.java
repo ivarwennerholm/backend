@@ -42,7 +42,7 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                 findAll().
                 stream().
                 map(this::contractCustomerToContractCustomerDto).
-                filter(cc -> Objects.equals(cc.id, id)).
+                filter(cc -> Objects.equals(cc.getId(), id)).
                 findFirst();
     }
 
@@ -52,13 +52,13 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
         Comparator<ContractCustomerDto> comparator;
         switch (cat) {
             case "company":
-                comparator = Comparator.comparing(ccdto -> ccdto.companyName, collator);
+                comparator = Comparator.comparing(ContractCustomerDto::getCompanyName, collator);
                 break;
             case "contact":
-                comparator = Comparator.comparing(ccdto -> ccdto.contactName, collator);
+                comparator = Comparator.comparing(ContractCustomerDto::getContactName, collator);
                 break;
             case "country":
-                comparator = Comparator.comparing(ccdto -> ccdto.country, collator);
+                comparator = Comparator.comparing(ContractCustomerDto::getCountry, collator);
                 break;
             default:
                 throw new IllegalArgumentException(ANSI_RED + "Invalid sort criteria: " + sort + ANSI_RESET);
