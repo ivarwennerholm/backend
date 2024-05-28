@@ -53,7 +53,7 @@ public class BlacklistController {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        return "UpdateExistingBlacklist.html";
+        return "updateExistingBlacklist.html";
     }
 
     @PostMapping("update")
