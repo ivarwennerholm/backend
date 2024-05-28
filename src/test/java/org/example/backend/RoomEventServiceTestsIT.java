@@ -35,7 +35,7 @@ public class RoomEventServiceTestsIT {
     @Autowired
     private RoomEventRepository eventRepo;
 
-    private ReadEventsApp eventApp = new ReadEventsApp(eventRepo);
+    private final ReadEventsApp eventApp = new ReadEventsApp(eventRepo);
 
     private JsonMapper jsonMapper;
     @BeforeEach
