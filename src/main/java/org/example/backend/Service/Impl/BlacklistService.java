@@ -1,12 +1,9 @@
 package org.example.backend.Service.Impl;
 
-
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BlacklistPersonDto;
 import org.example.backend.DTO.BlacklistStatusDto;
@@ -17,12 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -39,9 +34,7 @@ public class BlacklistService {
     public List<BlacklistPersonDto> getAll() throws IOException {
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());
-
         BlacklistPersonDto[] theblacklist = jsonMapper.readValue(blacklistURLProvider.getBlacklistURL(), BlacklistPersonDto[].class);
-
         List<BlacklistPersonDto> temp = new ArrayList<>();
         for (BlacklistPersonDto b: theblacklist) {
             temp.add(b);
@@ -107,15 +100,11 @@ public class BlacklistService {
     }
 
     public boolean isEmailValid(String email) throws Exception {
-
-        blacklistCheckEmailURLProvider = new BlacklistCheckEmailURLProvider(email);
-//        blacklistCheckEmailURLProvider.setEmail(email);
-
+        blacklistCheckEmailURLProvider.setEmail(email);
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());
-
         BlacklistStatusDto status = jsonMapper.readValue(blacklistCheckEmailURLProvider.getBlacklistCheckEmailURL(), BlacklistStatusDto.class);
-
         return status.isOk();
     }
+
 }

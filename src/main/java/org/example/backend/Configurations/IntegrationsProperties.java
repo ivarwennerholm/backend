@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class IntegrationsProperties {
     private String contractCustomersUrl;
     private String shippersUrl;
+    private String blacklistUrl;
     private EmailProperties email;
     private EventsProperties events;
 }

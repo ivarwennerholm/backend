@@ -145,10 +145,12 @@ public class BookingController {
         long roomId = Long.parseLong(roomid);
         int roomNumber = roomService.getRoomById(roomId).getRoomNumber();
         model.addAttribute("roomnumber", roomNumber);
+        String blacklistMsg = "";
         try {
             bookService.createAndAddBookingToDatabase(checkinDate, checkoutDate, guestsAmt, extrabedsAmt, roomId, name, phone, email);
         } catch (Exception e) {
-            model.addAttribute("blacklistMsg",e.getMessage());
+            blacklistMsg = e.getMessage();
+            model.addAttribute("blacklistMsg", blacklistMsg);
         }
         Booking lastBooking = bookService.getLastBooking();
         double discountValue = Double.parseDouble(fullprice) - lastBooking.getTotalPrice();
@@ -158,7 +160,8 @@ public class BookingController {
         String discountedPrice = df.format(discountedPriceValue);
         model.addAttribute("discount", discount);
         model.addAttribute("discountedprice", discountedPrice);
-        emailTemplateService.sendMail(roomNumber, checkin, checkout, guests, extrabeds, name, phone, email, fullprice, discount, discountedPrice);
+        if (blacklistMsg.isEmpty())
+            emailTemplateService.sendMail(roomNumber, checkin, checkout, guests, extrabeds, name, phone, email, fullprice, discount, discountedPrice);
         return "getBookingConfirmation";
     }
 
