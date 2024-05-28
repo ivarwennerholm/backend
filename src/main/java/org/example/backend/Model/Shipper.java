@@ -12,36 +12,22 @@ import org.example.backend.DTO.ShipperDto;
 @NoArgsConstructor
 @Builder
 public class Shipper {
+
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
 
-    Long shipper_id;
-    String email;
-    String companyName;
-    String contactName;
-    String contactTitle;
-    String streetAddress;
-    String city;
-    String postalCode;
-    String country;
-    String phone;
-    String fax;
-
-//    public Shipper(Long id, Long shipper_id, String email, String companyName, String contactName, String contactTitle, String streetAddress, String city, String postalCode, String country, String phone, String fax) {
-//        this.id = id;
-//        this.shipper_id = shipper_id;
-//        this.email = email;
-//        this.companyName = companyName;
-//        this.contactName = contactName;
-//        this.contactTitle = contactTitle;
-//        this.streetAddress = streetAddress;
-//        this.city = city;
-//        this.postalCode = postalCode;
-//        this.country = country;
-//        this.phone = phone;
-//        this.fax = fax;
-//    }
+    private Long shipper_id;
+    private String email;
+    private String companyName;
+    private String contactName;
+    private String contactTitle;
+    private String streetAddress;
+    private String city;
+    private String postalCode;
+    private String country;
+    private String phone;
+    private String fax;
 
     public Shipper(ShipperDto shipDto){
         this.shipper_id = shipDto.getId();
@@ -56,4 +42,5 @@ public class Shipper {
         this.phone = shipDto.getPhone();
         this.fax = shipDto.getFax();
     }
+
 }

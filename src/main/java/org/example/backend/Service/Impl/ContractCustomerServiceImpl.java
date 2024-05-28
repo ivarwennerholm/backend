@@ -22,17 +22,17 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     public ContractCustomerDto contractCustomerToContractCustomerDto(ContractCustomer cc) {
         return ContractCustomerDto.
                 builder().
-                id(cc.id).
-                customerId(cc.customerId).
-                companyName(cc.companyName).
-                contactName(cc.contactName).
-                contactTitle(cc.contactTitle).
-                streetAddress(cc.streetAddress).
-                city(cc.city).
-                postalCode(cc.postalCode).
-                country(cc.country).
-                phone(cc.phone).
-                fax(cc.fax).
+                id(cc.getId()).
+                customerId(cc.getCustomerId()).
+                companyName(cc.getCompanyName()).
+                contactName(cc.getContactName()).
+                contactTitle(cc.getContactTitle()).
+                streetAddress(cc.getStreetAddress()).
+                city(cc.getCity()).
+                postalCode(cc.getPostalCode()).
+                country(cc.getCountry()).
+                phone(cc.getPhone()).
+                fax(cc.getFax()).
                 build();
     }
 

@@ -16,6 +16,7 @@ public class Booking {
     @Id
     @GeneratedValue
     private Long id;
+
     private Date checkinDate;
     private Date checkoutDate;
     private int guestAmt;
@@ -40,5 +41,5 @@ public class Booking {
         this.customer = customer;
         this.room = room;
     }
-}
 
+}
