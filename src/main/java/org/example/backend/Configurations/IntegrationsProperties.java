@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 public class IntegrationsProperties {
     private String contractCustomersUrl;
+    private String shippersUrl;
     private EmailProperties email;
     private EventsProperties events;
 }

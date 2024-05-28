@@ -2,41 +2,37 @@ package org.example.backend;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.DTO.ShipperDto;
 import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.ShipperRepository;
 import org.example.backend.Utils.ShipperJsonProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
 
 @ComponentScan
 @RequiredArgsConstructor
 public class FetchShippingContractors implements CommandLineRunner{
 
     @Autowired
-    private final ShipperRepository shipperRepo;
+    private IntegrationsProperties integrations;
 
     @Autowired
+    private final ShipperRepository shipperRepo;
+
+    //@Autowired
     private ShipperJsonProvider shipperJsonProvider;
 
 
     @Override
     public void run(String... args) throws Exception {
-
+        shipperJsonProvider = new ShipperJsonProvider(integrations);
         HttpURLConnection httpConn = (HttpURLConnection)shipperJsonProvider.getShipperUrl().openConnection();
         httpConn.setInstanceFollowRedirects(false);
         httpConn.setRequestMethod("HEAD");

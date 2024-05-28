@@ -4,41 +4,43 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.backend.DTO.ShipperDto;
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.ShipperRepository;
 import org.example.backend.Utils.ShipperJsonProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ShipperServiceTestsIT {
 
     @Autowired
-    private ShipperRepository shipRepo;
+    private ShipperRepository repo;
 
     @Autowired
+    private IntegrationsProperties integrations;
+
     private ShipperJsonProvider shipperJsonProvider;
-    private FetchShippingContractors fetchShippingContractors = new FetchShippingContractors(shipRepo);
+
+    private FetchShippingContractors fetchShippingContractors;
+
     static URL url;
 
     @BeforeEach
     void setUp(){
+        shipperJsonProvider = new ShipperJsonProvider(integrations);
+        fetchShippingContractors = new FetchShippingContractors(repo);
         url = shipperJsonProvider.getShipperUrl();
     }
 
@@ -82,8 +84,8 @@ public class ShipperServiceTestsIT {
         jsonMapper.registerModule(new JavaTimeModule());
 
         //Act
-        fetchShippingContractors.getShippersToDatabase(in, jsonMapper,shipRepo);
-        List<Shipper> list = shipRepo.findAll();
+        fetchShippingContractors.getShippersToDatabase(in, jsonMapper, repo);
+        List<Shipper> list = repo.findAll();
 
         //Assert
         Assertions.assertEquals(3,list.size());

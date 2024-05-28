@@ -20,7 +20,6 @@ import java.util.List;
 import static org.example.backend.BackendApplication.*;
 
 @ComponentScan
-@Component
 public class FetchContractCustomers implements CommandLineRunner {
 
     ContractCustomerRepository repo;
@@ -37,7 +36,6 @@ public class FetchContractCustomers implements CommandLineRunner {
         this.repo = repo;
         this.integrations = integrations;
         this.filePath = integrations.getContractCustomersUrl();
-        // this.filePath = "https://javaintegration.systementor.se/customers";
     }
 
     @Override

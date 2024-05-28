@@ -69,7 +69,7 @@ public class EmailTemplateController {
         }
         if (Files.exists(filePath) && Files.isReadable(filePath)) {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
                 logger.error(ANSI_RED + "Thread was interrupted while waiting" + ANSI_RESET, ex);
