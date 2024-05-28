@@ -60,15 +60,17 @@ public class PublicController {
 
     @PostMapping(path = "forgotpassword")
     String getForgotPasswordUserName(@ModelAttribute UsernameDto userNameDto, Model model){
-        System.out.println("username" + userNameDto.getUsername());
+        System.out.println("username: " + userNameDto.getUsername());
+        try {
+            User user = userRepository.getUserByUsername(userNameDto.getUsername());
+            System.out.println("reset token: " + userServiceImpl.sendEmail(user));
+            model.addAttribute("success","reset token has sent");
+            return getForgotPasswordPage(model);
+        } catch (Exception e) {
+            model.addAttribute("error",e.getMessage());
+            System.out.println(e.getMessage());
+            return getForgotPasswordPage(model);
+        }
 
-        User user = userRepository.getUserByUsername(userNameDto.getUsername());
-//        String output = "";
-//        if (user!=null){
-//            output = userServiceImpl.sendEmail(user);
-//            System.out.println(output);
-//        }
-        System.out.println("reset token: " + userServiceImpl.sendEmail(user));
-        return "index";
     }
 }

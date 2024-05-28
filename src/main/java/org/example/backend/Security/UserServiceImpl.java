@@ -33,10 +33,15 @@ public class UserServiceImpl implements UserDetailsService {
         return new ConcreteUserDetails(user);
     }
 
-    public String sendEmail(User user){
-        String resetLink = generateResetToken(user);
-        System.out.println(resetLink);
-        return "";
+    public String sendEmail(User user) throws Exception {
+        try{
+            String resetLink = generateResetToken(user);
+            System.out.println(resetLink);
+            return "";
+        }catch (NullPointerException e){
+            throw new Exception("No valid email");
+        }
+
 
 //        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 //        mailSender.setHost("smtp.ethereal.email");
