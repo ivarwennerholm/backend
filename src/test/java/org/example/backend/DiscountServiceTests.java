@@ -58,6 +58,7 @@ public class DiscountServiceTests {
 
     @BeforeEach
     public void init() throws ParseException {
+
         // Mock
         MockitoAnnotations.openMocks(this);
 
@@ -81,7 +82,6 @@ public class DiscountServiceTests {
         r2 = new Room(2L, 102, rt2);
         r3 = new Room(3L, 103, rt3);
 
-
         // Bookings
         double totalPrice = 10000;
         b1 = new Booking(1L, new java.sql.Date(df.parse("2024-06-01").getTime()), new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, totalPrice, c1, r1);
@@ -95,7 +95,6 @@ public class DiscountServiceTests {
         when(bookingRepository.getAllBookingsForCustomer(c1.getId())).thenReturn(Arrays.asList(b1, b2, b3, b4));
         when(bookingRepository.getAllBookingsForCustomer(c2.getId())).thenReturn(Collections.singletonList(b5));
         when(bookingRepository.getAllBookingsForCustomer(c3.getId())).thenReturn(Collections.singletonList(b6));
-
     }
 
     @Test
@@ -114,7 +113,6 @@ public class DiscountServiceTests {
         double actual1 = discountService.getTotalPriceWithDiscounts(checkin1, checkout1, r1.getId(), c1.getId(), today, true);
         assertEquals(expected1, actual1);
         assertNotEquals(expected1, 13000);
-
 
         when(roomRepository.findById(2L)).thenReturn(Optional.ofNullable(r2));
         when(customerRepository.findById(2L)).thenReturn(Optional.ofNullable(c2));
@@ -221,4 +219,5 @@ public class DiscountServiceTests {
         assertFalse(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c2, today, true));
         assertTrue(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c3, today, true));
     }
+
 }

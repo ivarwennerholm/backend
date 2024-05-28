@@ -52,7 +52,7 @@ public class BookingServiceTestsIT {
     private Room room;
     private Booking booking;
 
-    private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @BeforeEach
     public void init() throws ParseException {

@@ -17,9 +17,9 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.Impl.*;
 import org.example.backend.Service.RoomService;
 import org.example.backend.Service.RoomTypeService;
-import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -87,7 +87,6 @@ public class BookingServiceTests {
         // Services:
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
         customerService = new CustomerServiceImpl(customerRepository);
-//        blacklistService = new BlacklistService(new BlacklistURLProvider());
         dateService = new DateService();
 
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
@@ -189,6 +188,7 @@ public class BookingServiceTests {
     }
 
     @Test
+    @DisplayName("isRoomAvailableOnDates() should return correct boolean")
     public void testIsRoomAvailableOnDates() throws ParseException {
         Date d1 = dateService.convertStringToDate("2024-05-25");
         Date d2 = dateService.convertStringToDate("2024-05-31");
@@ -207,6 +207,7 @@ public class BookingServiceTests {
     }
 
     @Test
+    @DisplayName("testGetExtraBedsForBooking() should return correct number")
     public void testGetExtraBedsForBooking() {
         RoomDto singleRoom = rdto1;
         RoomDto doubleRoom = rdto2;
@@ -239,11 +240,13 @@ public class BookingServiceTests {
     }
 
     @Test
+    @DisplayName("deleteBookingByIdTest() should return correct String confirmation")
     public void deleteBookingByIdTest() {
         assertEquals("delete booking id 1", sut.deleteBookingById(1L));
     }
 
     @Test
+    @DisplayName("updateBookingDatesTest() should return correct String or Exception")
     public void updateBookingDatesTest() throws ParseException {
         assertEquals("booking is updated", sut.updateBookingDates(1L, "2024-06-01", "2024-06-22"));
         Exception ex = assertThrows(RuntimeException.class, () -> sut.updateBookingDates(1L, "2024-07-01", "2024-07-06"));
@@ -251,6 +254,7 @@ public class BookingServiceTests {
     }
 
     @Test
+    @DisplayName("findBookingByIdTest() should return correct object")
     public void findBookingByIdTest() throws ParseException {
         BookingDto result = sut.findBookingById(1L);
 
@@ -271,7 +275,6 @@ public class BookingServiceTests {
         assertEquals(1, result.getRoom().getRoomType().getMaxPerson());
         assertEquals(0, result.getRoom().getRoomType().getMaxExtraBed());
         assertEquals(500, result.getRoom().getRoomType().getPricePerNight());
-
     }
 
 }

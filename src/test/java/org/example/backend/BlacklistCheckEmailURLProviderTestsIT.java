@@ -24,7 +24,7 @@ public class BlacklistCheckEmailURLProviderTestsIT {
     @Autowired
     private BlacklistCheckEmailURLProvider blacklistCheckEmailURLProvider;
 
-    static URL url;
+    private URL url;
 
     @Test
     void whenConnectMockUrlIfAvailableOrNot() throws Exception {

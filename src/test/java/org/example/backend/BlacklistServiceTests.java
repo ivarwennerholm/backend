@@ -3,35 +3,31 @@ package org.example.backend;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.backend.DTO.BlacklistPersonDto;
-import org.example.backend.DTO.BlacklistStatusDto;
-import org.example.backend.Model.Shipper;
 import org.example.backend.Service.Impl.BlacklistService;
 import org.example.backend.Utils.BlacklistCheckEmailURLProvider;
 import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BlacklistServiceTests {
+
     @Mock
     private BlacklistURLProvider blacklistURLProvider;
 
     @Mock
     private BlacklistCheckEmailURLProvider blacklistCheckEmailURLProvider;
+
     @InjectMocks
     private BlacklistService blacklistService;
 
@@ -94,24 +90,28 @@ public class BlacklistServiceTests {
         Assertions.assertFalse(bDto.isOk());
     }
 
-    //TODO: bug....
-//    @Test
-//    void whenCheckEmailValidityShouldReturnTrueFalse() throws Exception {
-//        //Arrange
-//        InputStream in = new FileInputStream("src/test/resources/BlacklistStatus.json");
-//        JsonMapper jsonMapper = new JsonMapper();
-//        jsonMapper.registerModule(new JavaTimeModule());
-//        URL mockURL = mock(URL.class);
-////        when(blacklistURLProvider.getBlacklistURL()).thenReturn(mockURL);
-//        //when(blacklistURLProvider.getBlacklistURL()).thenReturn(mockURL.toString());
-//
-//        when(blacklistCheckEmailURLProvider.getBlacklistCheckEmailURL()).thenReturn(mockURL);
-//        when(mockURL.openStream()).thenReturn(in);
-//
-//        //Act
-//        boolean s1 = blacklistService.isEmailValid("stefan6@aaa.com");
-//
-//        //Assert
-//        Assertions.assertFalse(s1);
-//    }
+    // TODO: Fix bug
+    /*
+    @Test
+    void whenCheckEmailValidityShouldReturnTrueFalse() throws Exception {
+
+        //Arrange
+        InputStream in = new FileInputStream("src/test/resources/BlacklistStatus.json");
+        JsonMapper jsonMapper = new JsonMapper();
+        jsonMapper.registerModule(new JavaTimeModule());
+        URL mockURL = mock(URL.class);
+        // when(blacklistURLProvider.getBlacklistURL()).thenReturn(mockURL);
+        // when(blacklistURLProvider.getBlacklistURL()).thenReturn(mockURL.toString());
+
+        when(blacklistCheckEmailURLProvider.getBlacklistCheckEmailURL()).thenReturn(mockURL);
+        when(mockURL.openStream()).thenReturn(in);
+
+        //Act
+        boolean s1 = blacklistService.isEmailValid("stefan6@aaa.com");
+
+        //Assert
+        Assertions.assertFalse(s1);
+    }
+    */
+
 }

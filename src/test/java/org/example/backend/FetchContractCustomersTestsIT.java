@@ -30,19 +30,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FetchContractCustomersTestsIT {
 
     @Autowired
-    IntegrationsProperties integrations;
+    private IntegrationsProperties integrations;
 
     @Autowired
     private ContractCustomerRepository repo;
 
     private FetchContractCustomers sut;
-
-    URL url;
-    InputStream xmlStream;
-    private static final Logger logger = LogManager.getLogger(FetchContractCustomersTestsIT.class);
+    private URL url;
+    private InputStream xmlStream;
+    private final Logger logger = LogManager.getLogger(FetchContractCustomersTestsIT.class);
 
     @BeforeEach
-    public void setup() throws IOException {
+    public void setup() {
         sut = new FetchContractCustomers(repo, integrations);
         repo.deleteAll();
         try {
@@ -91,17 +90,14 @@ public class FetchContractCustomersTestsIT {
     @DisplayName("Mapping of Contract Customers from xml should be done correctly")
     @Tag("integration")
     public void testFetchContractCustomersFromFile() throws Exception {
-        // ARRANGE
-        String testFilePath = Paths.get("src", "test", "resources", "contractcustomers.xml").toString();
+        String testFilePath = Paths.get("src", "test", "resources", "ContractCustomers.xml").toString();
         File testFile = new File(testFilePath);
         assertThat(testFile).exists();
         sut.setFilePath(testFilePath);
 
-        // ACT
         sut.run();
         List<ContractCustomer> result = repo.findAll();
 
-        // ASSERT
         assertThat(result).isNotEmpty();
         assertThat(result.size()).isEqualTo(3);
         assertEquals(3, result.size());
