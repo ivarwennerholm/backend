@@ -1,5 +1,6 @@
 package org.example.backend;
 
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.Model.EmailTemplate;
 import org.example.backend.Repository.EmailTemplateRepository;
 import org.slf4j.Logger;
@@ -24,11 +25,14 @@ public class ResetEmailTemplate implements CommandLineRunner {
     @Autowired
     EmailTemplateRepository emailTemplateRepository;
 
+    @Autowired
+    IntegrationsProperties integrations;
+
     @Override
     public void run(String... args) {
         logger.info(ANSI_YELLOW + "Running ResetEmailTemplate" + ANSI_RESET);
         try {
-            filePath = "src/main/resources/templates/defaultEmailTemplate.html";
+            filePath = integrations.getEmail().getTemplateFilepath();
             file = new File(filePath);
             fileReader = new FileReader(file);
         } catch (FileNotFoundException ex) {

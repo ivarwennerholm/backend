@@ -3,6 +3,8 @@ package org.example.backend;
 import org.example.backend.Model.*;
 import org.example.backend.Repository.*;
 import org.example.backend.Service.Impl.DiscountService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -16,37 +18,49 @@ import java.util.Objects;
 @SpringBootApplication
 public class BackendApplication {
 
+    private static final Logger logger = LoggerFactory.getLogger(BackendApplication.class);
+
     // ANSI colors for readability
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
 
     public static void main(String[] args) {
         if (args.length == 0) {
-            SpringApplication.run(BackendApplication.class, args);
-        } else if (Objects.equals(args[0], "fetchshippingcontractors")){
-            SpringApplication application = new SpringApplication(FetchShippingContractors.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
+            SpringApplication app = new SpringApplication(BackendApplication.class);
+            logActiveProfiles(app);
+            app.run(args);
+        } else if (Objects.equals(args[0], "fetchshippingcontractors")) {
+            SpringApplication app = new SpringApplication(FetchShippingContractors.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
         } else if (Objects.equals(args[0], "fetchcontractcustomers")) {
-            SpringApplication application = new SpringApplication(FetchContractCustomers.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
+            SpringApplication app = new SpringApplication(FetchContractCustomers.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
         } else if (Objects.equals(args[0], "readevents")) {
-            SpringApplication application = new SpringApplication(ReadEventsApp.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
+            SpringApplication app = new SpringApplication(ReadEventsApp.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
         } else if (Objects.equals(args[0], "resetemailtemplate")) {
-            SpringApplication application = new SpringApplication(ResetEmailTemplate.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
+            SpringApplication app = new SpringApplication(ResetEmailTemplate.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
         }
+    }
+
+    static void logActiveProfiles(SpringApplication app) {
+        app.setBanner((environment, sourceClass, out) -> {
+            String[] activeProfiles = environment.getActiveProfiles();
+            logger.info(ANSI_PURPLE + "Active Profiles: " + String.join(", ", activeProfiles) + ANSI_RESET);
+        });
     }
 
     @Bean

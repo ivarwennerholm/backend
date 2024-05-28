@@ -4,30 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 @Component
 @RequiredArgsConstructor
 public class BlacklistCheckEmailURLProvider {
 
-    @Autowired
     private BlacklistURLProvider blacklistURLProvider;
     private URL url;
-
     private String email;
 
-    public BlacklistCheckEmailURLProvider(String email){
-        this.email = email;
-        blacklistURLProvider = new BlacklistURLProvider();
-        try {
-            url = new URL(blacklistURLProvider.getBlacklistUrl_String()+"check/"+email);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Autowired
+    public BlacklistCheckEmailURLProvider(BlacklistURLProvider blacklistURLProvider){
+        this.blacklistURLProvider = blacklistURLProvider;
     }
+
     public URL getBlacklistCheckEmailURL(){
         return this.url;
     }
@@ -49,7 +41,13 @@ public class BlacklistCheckEmailURLProvider {
         this.url = newUrl;
     }
 
-    public void setEmail(String newEmail){
-        this.email = newEmail;
+    public void setEmail(String email){
+        this.email = email;
+        try {
+            url = new URL(blacklistURLProvider.getBlacklistUrl_String()+"check/"+email);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

@@ -3,10 +3,12 @@ package org.example.backend.Service.Impl;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.Model.EmailTemplate;
 import org.example.backend.Repository.EmailTemplateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import static org.example.backend.BackendApplication.*;
 @RequiredArgsConstructor
 public class EmailTemplateService {
 
+    @Autowired
+    IntegrationsProperties integrations;
 
     private final EmailTemplateRepository emailTemplateRepository;
     private final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -26,10 +30,10 @@ public class EmailTemplateService {
 
     public void sendMail(int roomNumber, String checkin, String checkout, String guests, String extrabeds,
                          String name, String phone, String email, String fullprice, String discount, String discountedPrice) {
-        mailSender.setHost("smtp.ethereal.email");
-        mailSender.setPort(587);
-        mailSender.setUsername("nicolas.grady@ethereal.email");
-        mailSender.setPassword("xXA9BeE2bZ95SJn77N");
+        mailSender.setHost(integrations.getEmail().getSenderHost());
+        mailSender.setPort(integrations.getEmail().getSenderPort());
+        mailSender.setUsername(integrations.getEmail().getUsername());
+        mailSender.setPassword(integrations.getEmail().getPassword());
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
@@ -37,12 +41,10 @@ public class EmailTemplateService {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo(email);
+            helper.setTo("nicolas.grady@ethereal.email");
             helper.setFrom("nicolas.grady@ethereal.email");
             helper.setSubject("Your booking confirmation");
             String markup = emailTemplateRepository.getLatestEmailTemplate();
-            // markup = insertUserDetails(markup, roomNumber, checkin, checkout, guests, extrabeds,
-            // name, phone, email, fullprice, discount, discountedPrice);
             markup = markup.replace("!!!name!!!", name).
                     replace("!!!phone!!!", phone).
                     replace("!!!roomnumber!!!", String.valueOf(roomNumber)).

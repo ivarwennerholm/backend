@@ -2,6 +2,7 @@ package org.example.backend;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.Model.ContractCustomer;
 import org.example.backend.Repository.ContractCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.example.backend.BackendApplication.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,26 +30,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FetchContractCustomersTestsIT {
 
     @Autowired
-    private FetchContractCustomers sut;
+    IntegrationsProperties integrations;
 
     @Autowired
     private ContractCustomerRepository repo;
 
+    private FetchContractCustomers sut;
+
     URL url;
     InputStream xmlStream;
-
-    // Logger for error messages
     private static final Logger logger = LogManager.getLogger(FetchContractCustomersTestsIT.class);
-
-    // ANSI colors for readability
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
 
     @BeforeEach
     public void setup() throws IOException {
+        sut = new FetchContractCustomers(repo, integrations);
         repo.deleteAll();
         try {
-            url = new URL("https://javaintegration.systementor.se/customers");
+            url = new URL(integrations.getContractCustomersUrl());
             xmlStream = url.openStream();
         } catch (MalformedURLException e) {
             logger.error(ANSI_RED + "The URL provided is not valid: " + ANSI_RESET + e.getMessage());

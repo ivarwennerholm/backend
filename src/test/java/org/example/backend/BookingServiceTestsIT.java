@@ -54,11 +54,6 @@ public class BookingServiceTestsIT {
 
     private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-    // ANSI colors for readability
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-
     @BeforeEach
     public void init() throws ParseException {
         MockitoAnnotations.openMocks(this);

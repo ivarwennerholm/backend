@@ -18,7 +18,7 @@
         <h4>New current email template 👇</h4>
     </div>
     <div class="my-2">
-        <div id="box" class="rounded border border-dark custom-width-90 text-center p-3" th:include="currentEmailTemplate.html"></div>
+        <div id="box" class="rounded border border-dark custom-width-90 text-center p-3" th:insert="~{currentEmailTemplate.html}"></div>
         <a href="http://localhost:8080/">
             <button id="backButton" class="btn btn-primary btn-block mt-2">
                 Back
