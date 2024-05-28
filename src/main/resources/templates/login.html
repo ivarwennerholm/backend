@@ -10,6 +10,7 @@
 </head>
 <body>
 <h1>Login Page</h1>
+<p th:unless="${#strings.isEmpty(error)}" th:text="${error}"></p>
 <form th:action="@{/login}" th:object="${user}" method="post">
     <label for="username">Mail:</label>
     <input type="text" id="username" th:field="*{username}"><br><br>

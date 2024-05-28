@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.Security.PasswordResetDto;
 import org.example.backend.Security.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class PublicController {
         try{
             model.addAttribute("user", userServiceImpl.loadUserByUsername(user.getUsername()));
             return getAdminLogin();
-        } catch (UsernameNotFoundException e){
+        } catch (UsernameNotFoundException | BadCredentialsException e){
             System.out.println(e.getMessage());
             model.addAttribute("error",e.getMessage());
             return getLoginPage(model);

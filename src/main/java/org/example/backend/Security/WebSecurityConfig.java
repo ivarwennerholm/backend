@@ -47,9 +47,9 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                   .loginPage("/login")
-                   .loginProcessingUrl("/perform_login")
-                   .defaultSuccessUrl("/admin")
+                   .loginPage("/login")     //use custom login page
+                   .loginProcessingUrl("/perform_login")    //custom login page handles login failure instead of default ones
+                   .defaultSuccessUrl("/admin")     //allows authority to admin page
                    .failureForwardUrl("/")
                 )
                 .logout((logout) -> {

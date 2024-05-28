@@ -1,6 +1,7 @@
 package org.example.backend.Security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +29,10 @@ public class UserServiceImpl implements UserDetailsService {
             System.out.println("throw exception");
             throw new UsernameNotFoundException("Could not find user");
         }
+//        if (!inputUser.getPassword().equals(user.getPassword())){
+//            System.out.println("throw bad exception");
+//            throw new BadCredentialsException("Invalid password");
+//        }
         System.out.println("loaduserByusername: " + user.getUsername() + " " + user.getPassword());
         return new ConcreteUserDetails(user);
     }
