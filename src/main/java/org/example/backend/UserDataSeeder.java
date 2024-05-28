@@ -1,18 +1,28 @@
-package org.example.backend.Security;
+package org.example.backend;
 
+import lombok.RequiredArgsConstructor;
+import org.example.backend.Security.Role;
+import org.example.backend.Security.RoleRepository;
+import org.example.backend.Security.User;
+import org.example.backend.Security.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Service
-public class UserDataSeeder {
+@ComponentScan
+@RequiredArgsConstructor
+public class UserDataSeeder implements CommandLineRunner {
     @Autowired
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-    public void Seed(){
+
+    @Override
+    public void run(String... args) throws Exception {
         if (roleRepository.findByName("Admin") == null) {
             addRole("Admin");
         }
@@ -26,7 +36,6 @@ public class UserDataSeeder {
             addUser("receptionist@hotel.se","Receptionist", "Reception123#");
         }
     }
-
     private void addUser(String mail, String role, String password) {
         ArrayList<Role> roles = new ArrayList<>();
         addRole(role);
