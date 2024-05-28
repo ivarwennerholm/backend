@@ -6,8 +6,8 @@ import org.example.backend.Model.Room;
 import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
-import org.example.backend.Service.Impl.RoomServiceImpl;
-import org.example.backend.Service.Impl.RoomTypeServiceImpl;
+import org.example.backend.Service.RoomService;
+import org.example.backend.Service.RoomTypeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ public class RoomServiceTests {
     private RoomTypeRepository rtRepo;
 
     @InjectMocks
-    private RoomTypeServiceImpl sut;
+    private RoomTypeService sut;
 
     @Test
     public void roomToRoomDtoTest(){
@@ -51,7 +51,7 @@ public class RoomServiceTests {
                 build();
 
         when(rtRepo.findById(1L)).thenReturn(Optional.of(rt));
-        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo, sut);
+        RoomService rmService2 = new RoomService(rmRepo,rtRepo, sut);
         RoomDto rmDto = rmService2.roomToRoomDto(rm);
         assertEquals(1L, rmDto.getId());
         assertEquals(101, rmDto.getRoomNumber());
@@ -73,7 +73,7 @@ public class RoomServiceTests {
                 build();
         RoomTypeDto rtDto = sut.roomTypeToRoomTypeDto(rt);
         RoomDto roomDto = new RoomDto(1L, 101, rtDto);
-        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo, sut);
+        RoomService rmService2 = new RoomService(rmRepo,rtRepo, sut);
         Room room = rmService2.roomDtoToRoom(roomDto);
         assertEquals(1L, room.getId());
         assertEquals(101, room.getRoomNumber());
@@ -100,7 +100,7 @@ public class RoomServiceTests {
                 roomType(rt).
                 build();
         when(rmRepo.findById(1L)).thenReturn(Optional.of(rm1));
-        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo, sut);
+        RoomService rmService2 = new RoomService(rmRepo,rtRepo, sut);
         RoomDto rmDto = rmService2.getRoomById(1L);
         assertEquals(1L, rmDto.getId());
         assertEquals(101, rmDto.getRoomNumber());
@@ -140,7 +140,7 @@ public class RoomServiceTests {
                 roomType(rt2).
                 build();
         when(rmRepo.findAll()).thenReturn(Arrays.asList(rm1,rm2));
-        RoomServiceImpl rmService2 = new RoomServiceImpl(rmRepo,rtRepo, sut);
+        RoomService rmService2 = new RoomService(rmRepo,rtRepo, sut);
         List<RoomDto> rmDtoList = rmService2.getAll();
         Assertions.assertEquals(2,rmDtoList.size());
     }

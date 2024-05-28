@@ -3,7 +3,7 @@ package org.example.backend.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.DTO.BlacklistPersonDto;
-import org.example.backend.Service.Impl.BlacklistService;
+import org.example.backend.Service.BlacklistService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

@@ -6,7 +6,10 @@ import org.example.backend.Model.Room;
 import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.RoomRepository;
-import org.example.backend.Service.Impl.*;
+import org.example.backend.Service.BlacklistService;
+import org.example.backend.Service.BookingService;
+import org.example.backend.Service.CustomerService;
+import org.example.backend.Service.DiscountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,7 +33,7 @@ import static org.mockito.Mockito.*;
 public class BookingServiceTestsIT {
 
     @Mock
-    private CustomerServiceImpl customerService;
+    private CustomerService customerService;
 
     @Mock
     private RoomRepository roomRepository;
@@ -45,7 +48,7 @@ public class BookingServiceTestsIT {
     private DiscountService discountService;
 
     @InjectMocks
-    private BookingServiceImpl bookingService;
+    private BookingService bookingService;
 
     private Customer customer;
     private RoomType roomType;

@@ -1,40 +1,175 @@
 package org.example.backend.Service;
 
-import org.example.backend.DTO.BookingDto;
+import lombok.RequiredArgsConstructor;
+import org.example.backend.DTO.*;
 import org.example.backend.Model.Booking;
+import org.example.backend.Model.Customer;
+import org.example.backend.Model.Room;
+import org.example.backend.Repository.BookingRepository;
+import org.example.backend.Repository.CustomerRepository;
+import org.example.backend.Repository.RoomRepository;
+import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.List;
+import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-import org.example.backend.DTO.RoomDto;
-import org.example.backend.Model.Customer;
+@Service
+@RequiredArgsConstructor
+public class BookingService {
 
-public interface BookingService {
+    private final RoomService roomService;
+    private final CustomerService customerService;
+    private final RoomRepository roomRepository;
+    private final CustomerRepository customerRepository;
+    private final BookingRepository bookingRepository;
+    private final BlacklistService blacklistService;
+    private final DiscountService discountService;
+    private final DateService dateService = new DateService();
 
-    BookingDto bookingToBookingDto (Booking b);
+    public BookingDto bookingToBookingDto(Booking b) {
+        RoomDto roomDto = roomService.roomToRoomDto(roomRepository.findById(b.getRoom().getId()).orElse(null));
+        CustomerDto customerDto = customerService.customerToCustomerDto(customerRepository.findById(b.getCustomer().getId()).orElse(null));
+        return BookingDto.builder().
+                id(b.getId()).
+                checkinDate(b.getCheckinDate()).
+                checkoutDate(b.getCheckoutDate()).
+                guestAmt(b.getGuestAmt()).
+                extraBedAmt(b.getExtraBedAmt()).
+                totalPrice(b.getTotalPrice()).
+                customer(customerDto).
+                room(roomDto).
+                build();
+    }
 
-    Booking bookindDtoToBooking (BookingDto b);
+    public Booking bookindDtoToBooking(BookingDto bd) {
+        Room room = roomService.roomDtoToRoom(bd.getRoom());
+        Customer customer = customerService.customerDtoToCustomer(bd.getCustomer());
+        return Booking.builder().
+                id(bd.getId()).
+                checkinDate(bd.getCheckinDate()).
+                checkoutDate(bd.getCheckoutDate()).
+                guestAmt(bd.getGuestAmt()).
+                extraBedAmt(bd.getExtraBedAmt()).
+                totalPrice(bd.getTotalPrice()).
+                customer(customer).
+                room(room).
+                build();
+    }
 
-    List<BookingDto> getAll();
+    public List<BookingDto> getAll() {
+        return bookingRepository.findAll().stream().map(this::bookingToBookingDto).toList();
+    }
 
-    void deleteBooking (BookingDto b);
+    public void deleteBooking(BookingDto bd) {
+        bookingRepository.deleteById(bd.getId());
+    }
 
-    void updateBooking (BookingDto b);
+    public void updateBooking(BookingDto bd) {
+        bookingRepository.deleteById(bd.getId());
+        bookingRepository.save(bookindDtoToBooking(bd));
+    }
 
-    String deleteBookingById(Long id);
+    public String deleteBookingById(Long id) {
+        Booking b = bookingRepository.findById(id).get();
+        bookingRepository.delete(b);
+        return "delete booking id " + b.getId();
+    }
 
-    BookingDto findBookingById(Long id);
+    public BookingDto findBookingById(Long id) {
+        return bookingToBookingDto(bookingRepository.findById(id).get());
+    }
 
-    String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException;
+    public String updateBookingDates(Long id, String newCheckIn, String newCheckOut) throws ParseException {
+        Room r = bookingRepository.findById(id).get().getRoom();
+        Booking originBooking = bookingRepository.findById(id).get();
+        long customerId = originBooking.getCustomer().getId();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date wantedCheckIn = originBooking.getCheckinDate();
+        Date wantedCheckOut = originBooking.getCheckoutDate();
+        if (!newCheckIn.isEmpty()) {
+            wantedCheckIn = new java.sql.Date(df.parse(newCheckIn).getTime());
+        }
+        if (!newCheckOut.isEmpty()) {
+            wantedCheckOut = new java.sql.Date(df.parse(newCheckOut).getTime());
+        }
+        List<Date> datesInterval = dateService.createDateInterval(wantedCheckIn, wantedCheckOut);
+        List<Booking> conflictBookList =
+                bookingRepository.findAll().stream()
+                        .filter(k -> k.getRoom().getId() == r.getId())
+                        .filter(k -> k.getId() != id)
+                        .filter(k -> dateService.areDatesOverlapping(datesInterval, dateService.createDateInterval(k.getCheckinDate(), k.getCheckoutDate())))
+                        .toList();
+        if (conflictBookList.isEmpty()) {
+            originBooking.setCheckinDate(wantedCheckIn);
+            originBooking.setCheckoutDate(wantedCheckOut);
+            originBooking.setTotalPrice(discountService.getTotalPriceWithDiscounts(wantedCheckIn, wantedCheckOut, r.getId(), customerId, null, false));
+            bookingRepository.save(originBooking);
+            return "booking is updated";
+        } else {
+            throw new RuntimeException("The room is occupied during this new booking period");
+        }
+    }
 
-    void createAndAddBookingToDatabase (Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception;
+    public void createAndAddBookingToDatabase(Date checkin, Date checkout, int guests, int extraBeds, long roomId, String name, String phone, String email) throws Exception {
+        if (blacklistService.isEmailValid(email)) {
+            Customer customer;
+            Optional<Customer> optional = customerService.getCustomerByNamePhoneAndEmail(name, phone, email);
+            if (optional.isPresent()) {
+                customer = optional.get();
+            } else {
+                customerService.addCustomerWithoutID(name, phone, email);
+                customer = customerService.getLastCustomer();
+            }
+            Room room = roomRepository.findById(roomId).orElse(null);
+            assert room != null;
+            double totalPrice = discountService.getTotalPriceWithDiscounts(checkin, checkout, room.getId(), customer.getId(), null, false);
+            Booking booking = new Booking(checkin, checkout, guests, extraBeds, totalPrice, customer, room);
+            bookingRepository.save(booking);
+        } else {
+            throw new Exception("Booking unsuccessful. Please contact Admin.");
+        }
+    }
 
-    int getExtraBedsForBooking(RoomDto room, int guests);
+    public int getExtraBedsForBooking(RoomDto room, int guests) {
+        int beds = 0;
+        switch (room.getRoomType().getType()) {
+            case "Single":
+                break;
+            case "Double":
+                if (guests == 3) {
+                    beds = 1;
+                    break;
+                } else
+                    break;
+            case "Large double":
+                if (guests == 4) {
+                    beds = 2;
+                    break;
+                } else if (guests == 3) {
+                    beds = 1;
+                    break;
+                } else
+                    break;
+        }
+        return beds;
+    }
 
-    boolean isRoomAvailableOnDates(RoomDto room, java.sql.Date checkin, java.sql.Date checkout);
+    public boolean isRoomAvailableOnDates(RoomDto room, Date checkin, Date checkout) {
+        long roomId = room.getId();
+        List<Date> datesInterval = dateService.createDateInterval(checkin, checkout);
+        List<BookingDto> conflictingBookings = getAll().
+                stream().
+                filter(b -> b.getRoom().getId() == roomId).
+                filter(b -> dateService.areDatesOverlapping(datesInterval, dateService.createDateInterval(b.getCheckinDate(), b.getCheckoutDate()))).
+                toList();
+        return conflictingBookings.isEmpty();
+    }
 
-    Booking getLastBooking();
+    public Booking getLastBooking() {
+        return bookingRepository.getLastBooking();
+    }
 
 }

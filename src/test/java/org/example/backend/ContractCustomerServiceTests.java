@@ -4,7 +4,6 @@ import org.example.backend.DTO.ContractCustomerDto;
 import org.example.backend.Model.ContractCustomer;
 import org.example.backend.Repository.ContractCustomerRepository;
 import org.example.backend.Service.ContractCustomerService;
-import org.example.backend.Service.Impl.ContractCustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -31,7 +30,7 @@ public class ContractCustomerServiceTests {
     @BeforeEach()
     void init() {
         repo = mock(ContractCustomerRepository.class);
-        sut = new ContractCustomerServiceImpl(repo);
+        sut = new ContractCustomerService(repo);
         cc1 = ContractCustomer.builder().
                 id(1L).
                 customerId(1).

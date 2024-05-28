@@ -1,7 +1,7 @@
 package org.example.backend.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.Service.Impl.EmailTemplateService;
+import org.example.backend.Service.EmailTemplateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

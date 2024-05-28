@@ -12,11 +12,7 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
-import org.example.backend.Service.BookingService;
-import org.example.backend.Service.CustomerService;
-import org.example.backend.Service.Impl.*;
-import org.example.backend.Service.RoomService;
-import org.example.backend.Service.RoomTypeService;
+import org.example.backend.Service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,7 +43,7 @@ public class BookingServiceTests {
 
     private RoomTypeService roomTypeService;
     private RoomService roomService;
-    private CustomerService customerService;
+    private org.example.backend.Service.CustomerService customerService;
     private BlacklistService blacklistService;
     private DiscountService discountService;
     private DateService dateService;
@@ -85,13 +81,13 @@ public class BookingServiceTests {
         MockitoAnnotations.openMocks(this);
 
         // Services:
-        roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
-        customerService = new CustomerServiceImpl(customerRepository);
+        roomTypeService = new RoomTypeService(roomTypeRepository);
+        customerService = new CustomerService(customerRepository);
         dateService = new DateService();
 
-        roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
+        roomService = new RoomService(roomRepository, roomTypeRepository, roomTypeService);
         discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);
-        sut = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
+        sut = new BookingService(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
 
         // Customers
         c1 = new Customer(1L, "Venus", "111-1111111", "venus@pear.com");

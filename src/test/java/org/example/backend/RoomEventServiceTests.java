@@ -2,7 +2,7 @@ package org.example.backend;
 
 import org.example.backend.Events.*;
 import org.example.backend.Repository.RoomEventRepository;
-import org.example.backend.Service.Impl.RoomEventServiceImpl;
+import org.example.backend.Service.RoomEventService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ public class RoomEventServiceTests {
     private RoomEventRepository rmEventRepo;
 
     @InjectMocks
-    private RoomEventServiceImpl sut;
+    private RoomEventService sut;
 
     @Test
     void whenGetRoomEventsByRoomNoShouldMapCorrectly(){

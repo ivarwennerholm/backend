@@ -1,4 +1,4 @@
-package org.example.backend.Service.Impl;
+package org.example.backend.Service;
 
 import lombok.AllArgsConstructor;
 import org.example.backend.Model.Booking;

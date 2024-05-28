@@ -3,7 +3,7 @@ package org.example.backend;
 import org.example.backend.DTO.RoomTypeDto;
 import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.RoomTypeRepository;
-import org.example.backend.Service.Impl.RoomTypeServiceImpl;
+import org.example.backend.Service.RoomTypeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ public class RoomTypeServiceTests {
     private RoomTypeRepository rtRepo;
 
     @InjectMocks
-    private RoomTypeServiceImpl rtService;
+    private RoomTypeService rtService;
 
     @Test
     public void roomTypeToRoomTypeDtoTest(){

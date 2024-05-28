@@ -2,7 +2,7 @@ package org.example.backend;
 
 import org.example.backend.Model.*;
 import org.example.backend.Repository.*;
-import org.example.backend.Service.Impl.DiscountService;
+import org.example.backend.Service.DiscountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
