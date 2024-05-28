@@ -37,7 +37,7 @@ public class EmailTemplateService {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo("nicolas.grady@ethereal.email");
+            helper.setTo(email);
             helper.setFrom("nicolas.grady@ethereal.email");
             helper.setSubject("Your booking confirmation");
             String markup = emailTemplateRepository.getLatestEmailTemplate();
