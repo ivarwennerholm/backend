@@ -13,7 +13,6 @@ import org.example.backend.Service.CustomerService;
 import org.example.backend.Service.Impl.*;
 import org.example.backend.Service.RoomService;
 import org.example.backend.Service.RoomTypeService;
-import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -57,11 +56,6 @@ public class DiscountServiceTests {
     Room r1; Room r2; Room r3;
     Booking b1; Booking b2; Booking b3; Booking b4; Booking b5; Booking b6;
 
-    // ANSI colors for readability
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-
     @BeforeEach
     public void init() throws ParseException {
         // Mock
@@ -69,7 +63,6 @@ public class DiscountServiceTests {
 
         // Services
         roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
-        //blacklistService = new BlacklistService(new BlacklistURLProvider());
         dateService = new DateService();
         roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
         discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);

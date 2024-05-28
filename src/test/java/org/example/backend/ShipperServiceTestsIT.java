@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.ShipperRepository;
 import org.example.backend.Utils.ShipperJsonProvider;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 public class ShipperServiceTestsIT {
@@ -29,8 +27,6 @@ public class ShipperServiceTestsIT {
     private ShipperRepository repo;
 
     @Autowired
-    private IntegrationsProperties integrations;
-
     private ShipperJsonProvider shipperJsonProvider;
 
     private FetchShippingContractors fetchShippingContractors;
@@ -39,7 +35,6 @@ public class ShipperServiceTestsIT {
 
     @BeforeEach
     void setUp(){
-        shipperJsonProvider = new ShipperJsonProvider(integrations);
         fetchShippingContractors = new FetchShippingContractors(repo);
         url = shipperJsonProvider.getShipperUrl();
     }

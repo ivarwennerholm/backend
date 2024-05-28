@@ -3,7 +3,6 @@ package org.example.backend;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.DTO.ShipperDto;
 import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.ShipperRepository;
@@ -21,32 +20,25 @@ import java.net.HttpURLConnection;
 public class FetchShippingContractors implements CommandLineRunner{
 
     @Autowired
-    private IntegrationsProperties integrations;
+    private final ShipperRepository repo;
 
     @Autowired
-    private final ShipperRepository shipperRepo;
-
-    //@Autowired
     private ShipperJsonProvider shipperJsonProvider;
-
 
     @Override
     public void run(String... args) throws Exception {
-        shipperJsonProvider = new ShipperJsonProvider(integrations);
         HttpURLConnection httpConn = (HttpURLConnection)shipperJsonProvider.getShipperUrl().openConnection();
         httpConn.setInstanceFollowRedirects(false);
         httpConn.setRequestMethod("HEAD");
             httpConn.connect();
-            shipperRepo.deleteAll();
+            repo.deleteAll();
             JsonMapper jsonMapper = new JsonMapper();
             jsonMapper.registerModule(new JavaTimeModule());
-
-            getShippersToDatabase(shipperJsonProvider.getShipperUrl().openStream(),jsonMapper, shipperRepo);
+            getShippersToDatabase(shipperJsonProvider.getShipperUrl().openStream(),jsonMapper, repo);
     }
 
     void getShippersToDatabase(InputStream input, JsonMapper jsonMapper, ShipperRepository shipperRepo) throws IOException {
         ShipperDto[]theShippers = jsonMapper.readValue(input, ShipperDto[].class);
-
             for (ShipperDto s : theShippers){
                 shipperRepo.save(new Shipper(s));
             }

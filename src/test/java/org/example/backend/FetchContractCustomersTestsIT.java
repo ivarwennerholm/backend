@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.example.backend.BackendApplication.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,10 +40,6 @@ public class FetchContractCustomersTestsIT {
     URL url;
     InputStream xmlStream;
     private static final Logger logger = LogManager.getLogger(FetchContractCustomersTestsIT.class);
-
-    // ANSI colors for readability
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
 
     @BeforeEach
     public void setup() throws IOException {
