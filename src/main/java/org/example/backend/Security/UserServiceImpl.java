@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserDetailsService {
         PasswordResetToken p = tokenRepository.findByUserId(user.getId());
         UUID uuid = UUID.randomUUID();
         LocalDateTime currentDateTime = LocalDateTime.now();
-        LocalDateTime expiryDateTime = currentDateTime.plusMinutes(1);
+        LocalDateTime expiryDateTime = currentDateTime.plusDays(1);
         PasswordResetToken resetToken = new PasswordResetToken();
         if (p == null){
             resetToken.setUser(user);
