@@ -74,21 +74,25 @@ public class PublicController {
         PasswordResetDto passwordReset = new PasswordResetDto();
         passwordReset.setToken(token);
         model.addAttribute("passwordReset",passwordReset);
-        model.addAttribute("token",token);
+//        model.addAttribute("token",token);
         return "passwordResetProcess";
     }
 
     @PostMapping(path = "passwordreset")
     String getNewPassword(@ModelAttribute PasswordResetDto passwordReset, Model model){
         System.out.println("password reset");
+        System.out.println(passwordReset.getToken());
         System.out.println(passwordReset.getMail());
         System.out.println(passwordReset.getNewPassword());
         try {
             userServiceImpl.updatePassword(passwordReset);
             System.out.println("password reset successfully");
+            return getLoginPage(model);
         } catch (Exception e) {
+            model.addAttribute("error",e.getMessage());
             System.out.println(e.getMessage());
+            return getPasswordResetPage(passwordReset.getToken(),model);
         }
-        return "index";
+
     }
 }

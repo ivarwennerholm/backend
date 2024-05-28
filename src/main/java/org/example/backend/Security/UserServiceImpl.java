@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserDetailsService {
         PasswordResetToken p = tokenRepository.findByUserId(user.getId());
         UUID uuid = UUID.randomUUID();
         LocalDateTime currentDateTime = LocalDateTime.now();
-        LocalDateTime expiryDateTime = currentDateTime.plusSeconds(10);
+        LocalDateTime expiryDateTime = currentDateTime.plusMinutes(1);
         PasswordResetToken resetToken = new PasswordResetToken();
         if (p == null){
             resetToken.setUser(user);
@@ -91,6 +91,13 @@ public class UserServiceImpl implements UserDetailsService {
     public void updatePassword(PasswordResetDto passwordReset) throws Exception {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         try{
+            PasswordResetToken passwordResetToken2 = tokenRepository.findByToken(passwordReset.getToken());
+            if (passwordResetToken2 == null){
+                throw new Exception("token not existing in database");
+            }
+            if (isTokenExpired(passwordResetToken2)){
+                throw new Exception("token expired.");
+            }
             User user = userRepository.getUserByUsername(passwordReset.getMail());
             if (user == null){
                 throw new Exception("no such user in database");
