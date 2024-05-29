@@ -6,8 +6,9 @@ import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
 import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.CustomerRepository;
-import org.example.backend.Service.Impl.CustomerServiceImpl;
+import org.example.backend.Service.CustomerService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,15 +29,17 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceTests {
+
     @Mock
     private CustomerRepository cusRepo;
 
     @InjectMocks
-    private CustomerServiceImpl cusService;
+    private CustomerService cusService;
 
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @Test
+    @Tag("unit")
     public void customerDtoToCustomerTest(){
         CustomerDto cDto = CustomerDto.builder().id(1L).name("Venus P").phone("+0711111").build();
         Customer actual = cusService.customerDtoToCustomer(cDto);
@@ -47,6 +50,7 @@ public class CustomerServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void customerToCustomerDtoTest(){
         Customer c = Customer.builder().id(1L).name("Harry").phone("+0711111").bookingList(new ArrayList<>()).build();
         CustomerDto actual = cusService.customerToCustomerDto(c);
@@ -56,6 +60,7 @@ public class CustomerServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getAllTest(){
         Customer c1 = Customer.builder().id(1L).name("Venus P").phone("+071111111").build();
         Customer c2 = Customer.builder().id(2L).name("Alex B").phone("+07222222").build();
@@ -71,6 +76,7 @@ public class CustomerServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void addCustomerTest(){
         CustomerDto cDto = CustomerDto.builder().id(1L).name("Venus P").phone("+0711111").build();
         Customer c = Customer.builder().id(1L).name("Venus P").phone("+0711111").bookingList(new ArrayList<>()).build();
@@ -79,6 +85,7 @@ public class CustomerServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void deleteCustomerByNameTest(){
         Customer c = Customer.builder().id(1L).name("Venus P").phone("+0711111").bookingList(new ArrayList<>()).build();
         when(cusRepo.findByName("Venus P")).thenReturn(c);
@@ -86,6 +93,7 @@ public class CustomerServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void deleteCustomerByIdTest() throws ParseException {
         Booking b1 = Booking.builder()
                 .id(1L)
@@ -106,6 +114,7 @@ public class CustomerServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void findCustomerByIdTest(){
         Customer c = Customer.builder().id(1L).name("Venus P").phone("+0711111").bookingList(new ArrayList<>()).build();
         when(cusRepo.findById(1L)).thenReturn(Optional.of(c));
@@ -115,6 +124,7 @@ public class CustomerServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void updateCustomerTest(){
         Customer c = Customer.builder().id(1L).name("Venus P").phone("+0711111").bookingList(new ArrayList<>()).build();
         when(cusRepo.findById(1L)).thenReturn(Optional.of(c));

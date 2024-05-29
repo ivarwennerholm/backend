@@ -8,13 +8,9 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
-import org.example.backend.Service.BookingService;
-import org.example.backend.Service.CustomerService;
-import org.example.backend.Service.Impl.*;
-import org.example.backend.Service.RoomService;
-import org.example.backend.Service.RoomTypeService;
-import org.example.backend.Utils.BlacklistURLProvider;
+import org.example.backend.Service.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -57,23 +53,18 @@ public class DiscountServiceTests {
     Room r1; Room r2; Room r3;
     Booking b1; Booking b2; Booking b3; Booking b4; Booking b5; Booking b6;
 
-    // ANSI colors for readability
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-
     @BeforeEach
     public void init() throws ParseException {
+
         // Mock
         MockitoAnnotations.openMocks(this);
 
         // Services
-        roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
-        //blacklistService = new BlacklistService(new BlacklistURLProvider());
+        roomTypeService = new RoomTypeService(roomTypeRepository);
         dateService = new DateService();
-        roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
+        roomService = new RoomService(roomRepository, roomTypeRepository, roomTypeService);
         discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);
-        bookingService = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
+        bookingService = new BookingService(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
 
         // Customers, room types & rooms
         c1 = new Customer(1L, "Venus", "111-1111111");
@@ -88,7 +79,6 @@ public class DiscountServiceTests {
         r2 = new Room(2L, 102, rt2);
         r3 = new Room(3L, 103, rt3);
 
-
         // Bookings
         double totalPrice = 10000;
         b1 = new Booking(1L, new java.sql.Date(df.parse("2024-06-01").getTime()), new java.sql.Date(df.parse("2024-06-07").getTime()), 1, 0, totalPrice, c1, r1);
@@ -102,10 +92,10 @@ public class DiscountServiceTests {
         when(bookingRepository.getAllBookingsForCustomer(c1.getId())).thenReturn(Arrays.asList(b1, b2, b3, b4));
         when(bookingRepository.getAllBookingsForCustomer(c2.getId())).thenReturn(Collections.singletonList(b5));
         when(bookingRepository.getAllBookingsForCustomer(c3.getId())).thenReturn(Collections.singletonList(b6));
-
     }
 
     @Test
+    @Tag("unit")
     public void getTotalPriceIncludingDiscountTest() throws ParseException {
         when(roomRepository.findById(1L)).thenReturn(Optional.ofNullable(r1));
         when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(c1));
@@ -121,7 +111,6 @@ public class DiscountServiceTests {
         double actual1 = discountService.getTotalPriceWithDiscounts(checkin1, checkout1, r1.getId(), c1.getId(), today, true);
         assertEquals(expected1, actual1);
         assertNotEquals(expected1, 13000);
-
 
         when(roomRepository.findById(2L)).thenReturn(Optional.ofNullable(r2));
         when(customerRepository.findById(2L)).thenReturn(Optional.ofNullable(c2));
@@ -139,6 +128,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getDiscountSundayMondayTest() throws ParseException {
         Date checkin = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkout = new java.sql.Date(df.parse("2024-06-12").getTime());
@@ -153,6 +143,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getDiscountTwoOrMoreNights() throws ParseException {
         Date checkin1 = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkout1 = new java.sql.Date(df.parse("2024-05-18").getTime());
@@ -180,6 +171,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getDiscountForReturningCustomerTest() throws ParseException {
         Date today = new java.sql.Date(df.parse("2025-05-15").getTime());
         double fullPrice = 10000;
@@ -194,6 +186,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getNumberOfDiscountedNightsTest() throws ParseException {
         Date checkin1 = new java.sql.Date(df.parse("2024-05-14").getTime());
         Date checkout1 = new java.sql.Date(df.parse("2024-05-17").getTime());
@@ -222,10 +215,12 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void doesCustomerHaveTenOrMoreNightsBookedInTheLastYearTest() throws ParseException {
         Date today = new java.sql.Date(df.parse("2025-05-15").getTime());
         assertTrue(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c1, today, true));
         assertFalse(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c2, today, true));
         assertTrue(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c3, today, true));
     }
+
 }

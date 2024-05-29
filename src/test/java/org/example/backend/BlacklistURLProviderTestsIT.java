@@ -5,14 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -25,29 +24,37 @@ public class BlacklistURLProviderTestsIT {
 
     @Autowired
     private BlacklistURLProvider blacklistURLProvider;
-    static URL url;
-//    @Test
-//    void whenConnectMockUrlIfAvailableOrNot() throws IOException {
-//        HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
-//        when(mockHttpURLConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_NOT_FOUND);
-//
-//        URL mockURL = mock(URL.class);
-//        when(mockURL.openConnection()).thenReturn(mockHttpURLConnection);
-//        blacklistURLProvider.setUrl(mockURL);
-//
-//        Assertions.assertFalse(blacklistURLProvider.isURLAvailable());
-//    }
+    private URL url;
+
+    // TODO: Should this be deleted or commented out?
+    /*
+    @Test
+    void whenConnectMockUrlIfAvailableOrNot() throws IOException {
+        HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
+        when(mockHttpURLConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_NOT_FOUND);
+
+        URL mockURL = mock(URL.class);
+        when(mockURL.openConnection()).thenReturn(mockHttpURLConnection);
+        blacklistURLProvider.setUrl(mockURL);
+
+        Assertions.assertFalse(blacklistURLProvider.isURLAvailable());
+    }
+    */
+
     @BeforeEach
-    void setUp(){
+    public void setUp(){
         url = blacklistURLProvider.getBlacklistURL();
     }
+
     @Test
-    void whenConnectUrlIfSuccessOrNot() throws Exception {
+    @Tag("integration")
+    public void whenConnectUrlIfSuccessOrNot() throws Exception {
         Assertions.assertTrue(blacklistURLProvider.isURLAvailable());
     }
 
     @Test
-    void fetchBlacklistPersonShouldContainCorrectTags() throws IOException {
+    @Tag("integration")
+    public void fetchBlacklistPersonShouldContainCorrectTags() throws IOException {
         //Arrange
         Scanner s = new Scanner(url.openStream()).useDelimiter("\\A");
         ObjectMapper mapper = new ObjectMapper();
@@ -68,4 +75,5 @@ public class BlacklistURLProviderTestsIT {
         assertTrue(  result.contains("created") );
         assertTrue(  result.contains("ok") );
     }
+
 }

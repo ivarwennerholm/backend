@@ -4,63 +4,64 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.backend.DTO.ShipperDto;
 import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.ShipperRepository;
 import org.example.backend.Utils.ShipperJsonProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ShipperServiceTestsIT {
 
     @Autowired
-    private ShipperRepository shipRepo;
+    private ShipperRepository repo;
 
     @Autowired
     private ShipperJsonProvider shipperJsonProvider;
-    private FetchShippingContractors fetchShippingContractors = new FetchShippingContractors(shipRepo);
-    static URL url;
+
+    private FetchShippingContractors fetchShippingContractors;
+
+    private URL url;
 
     @BeforeEach
-    void setUp(){
+    public void setUp(){
+        fetchShippingContractors = new FetchShippingContractors(repo);
         url = shipperJsonProvider.getShipperUrl();
     }
 
     @Test
-    void whenConnectMockUrlIfAvailableOrNot() throws Exception {
+    @Tag("integration")
+    public void whenConnectMockUrlIfAvailableOrNot() throws Exception {
         Assertions.assertTrue(shipperJsonProvider.isURLAvailable());
     }
 
     @Test
-    void fetchShippingContractorsShouldContainCorrectTags() throws IOException {
-        //Arrange
+    @Tag("integration")
+    public void fetchShippingContractorsShouldContainCorrectTags() throws IOException {
+
+        // Arrange
         Scanner s = new Scanner(url.openStream()).useDelimiter("\\A");
         ObjectMapper mapper = new ObjectMapper();
 
-        //Act
+        // Act
         String result = s.hasNext() ? s.next() : "";
 
-        //to check that number of fields of a json object has only 11 fields
+        // To check that number of fields of a json object has only 11 fields
         JsonNode arrayNode = mapper.readTree(result);
         int fieldCount = arrayNode.get(0).size();
 
-        //Assert
+        // Assert
         Assertions.assertEquals(11,fieldCount);
         assertTrue(  result.contains("id") );
         assertTrue(  result.contains("email") );
@@ -74,18 +75,21 @@ public class ShipperServiceTestsIT {
         assertTrue(  result.contains("phone") );
         assertTrue(  result.contains("fax") );
     }
+
     @Test
+    @Tag("integration")
     public void getShippersToDatabaseShouldMapCorrectly() throws IOException {
-        //Arrange
+
+        // Arrange
         InputStream in = new FileInputStream(new File("src/test/resources/ShippingContractors.json"));
         JsonMapper jsonMapper = new JsonMapper();
         jsonMapper.registerModule(new JavaTimeModule());
 
-        //Act
-        fetchShippingContractors.getShippersToDatabase(in, jsonMapper,shipRepo);
-        List<Shipper> list = shipRepo.findAll();
+        // Act
+        fetchShippingContractors.getShippersToDatabase(in, jsonMapper, repo);
+        List<Shipper> list = repo.findAll();
 
-        //Assert
+        // Assert
         Assertions.assertEquals(3,list.size());
 
         Assertions.assertTrue(list.get(0).getId()==1);
@@ -97,4 +101,5 @@ public class ShipperServiceTestsIT {
         Assertions.assertTrue(list.get(2).getId()==3);
         Assertions.assertTrue(list.get(2).getEmail().equals("karin.ostlund@yahoo.com"));
     }
+
 }

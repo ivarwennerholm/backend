@@ -5,8 +5,10 @@ import org.example.backend.DTO.BookingDto;
 import org.example.backend.DTO.AvailableBookingDto;
 import org.example.backend.Model.Booking;
 import org.example.backend.Service.BookingService;
-import org.example.backend.Service.Impl.DateService;
+import org.example.backend.Service.DateService;
+import org.example.backend.Service.EmailTemplateService;
 import org.example.backend.Service.RoomService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,28 +29,31 @@ public class BookingController {
     private final DateService dateService;
     private List<BookingDto> allBookings = new ArrayList<>();
 
+    @Autowired
+    private final EmailTemplateService emailTemplateService;
+
     @RequestMapping("all")
-    public String allBookings(Model model){
+    protected String allBookings(Model model){
         allBookings = bookService.getAll();
         model.addAttribute("allBookings",allBookings);
         return "allBooking.html";
     }
 
     @RequestMapping("delete/{id}")
-    public String deleteBookings(@PathVariable Long id, Model model){
+    protected String deleteBookings(@PathVariable Long id){
         String s = bookService.deleteBookingById(id);
-        return allBookings(model);
+        return "redirect:/bookings/all";
     }
 
     @RequestMapping("updateForm/{id}")
-    public String updateForm(@PathVariable Long id, Model model){
+    protected String updateForm(@PathVariable Long id, Model model){
         BookingDto b = bookService.findBookingById(id);
         model.addAttribute("booking",b);
         return "updateBooking.html";
     }
 
     @PostMapping("update/{id}")
-    public String updateBookings(@PathVariable Long id,
+    protected String updateBookings(@PathVariable Long id,
                                  @RequestParam(required = false) String newCheckIn,
                                  @RequestParam(required = false) String newCheckOut,
                                  Model model){
@@ -62,12 +67,12 @@ public class BookingController {
     }
 
     @RequestMapping("search")
-    public String searchBooking() {
+    protected String searchBooking() {
         return "searchBooking";
     }
 
     @PostMapping("getAvailableRooms")
-    public String getAvailableRooms(@RequestParam int guests,
+    protected String getAvailableRooms(@RequestParam int guests,
                                     @RequestParam String checkin,
                                     @RequestParam String checkout,
                                     Model model) throws ParseException {
@@ -95,7 +100,7 @@ public class BookingController {
     }
 
     @PostMapping("inputUserDetails")
-    public String inputUserDetails(@RequestParam String roomid,
+    protected String inputUserDetails(@RequestParam String roomid,
                                    @RequestParam String checkin,
                                    @RequestParam String checkout,
                                    @RequestParam String guests,
@@ -112,7 +117,7 @@ public class BookingController {
     }
 
     @PostMapping("getBookingConfirmation")
-    public String getBookingConfirmation(@RequestParam String roomid,
+    protected String getBookingConfirmation(@RequestParam String roomid,
                                          @RequestParam String checkin,
                                          @RequestParam String checkout,
                                          @RequestParam String guests,
@@ -140,10 +145,12 @@ public class BookingController {
         long roomId = Long.parseLong(roomid);
         int roomNumber = roomService.getRoomById(roomId).getRoomNumber();
         model.addAttribute("roomnumber", roomNumber);
+        String blacklistMsg = "";
         try {
             bookService.createAndAddBookingToDatabase(checkinDate, checkoutDate, guestsAmt, extrabedsAmt, roomId, name, phone, email);
         } catch (Exception e) {
-            model.addAttribute("blacklistMsg",e.getMessage());
+            blacklistMsg = e.getMessage();
+            model.addAttribute("blacklistMsg", blacklistMsg);
         }
         Booking lastBooking = bookService.getLastBooking();
         double discountValue = Double.parseDouble(fullprice) - lastBooking.getTotalPrice();
@@ -153,6 +160,8 @@ public class BookingController {
         String discountedPrice = df.format(discountedPriceValue);
         model.addAttribute("discount", discount);
         model.addAttribute("discountedprice", discountedPrice);
+        if (blacklistMsg.isEmpty())
+            emailTemplateService.sendMail(roomNumber, checkin, checkout, guests, extrabeds, name, phone, email, fullprice, discount, discountedPrice);
         return "getBookingConfirmation";
     }
 

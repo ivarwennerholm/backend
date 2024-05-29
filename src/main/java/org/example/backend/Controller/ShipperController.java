@@ -15,8 +15,9 @@ import java.util.List;
 public class ShipperController {
 
     private final ShipperService shipService;
+
     @RequestMapping("all")
-    public String getAllShippers(Model model){
+    protected String getAllShippers(Model model){
         List<Shipper> allShippers = shipService.getAllShippers();
         model.addAttribute("allShippers",allShippers);
         return "allShippers.html";

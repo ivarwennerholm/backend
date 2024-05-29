@@ -1,19 +1,18 @@
 package org.example.backend;
 
-import org.example.backend.Model.Booking;
-import org.example.backend.Model.Customer;
-import org.example.backend.Model.Room;
-import org.example.backend.Model.RoomType;
-import org.example.backend.Repository.BookingRepository;
-import org.example.backend.Repository.CustomerRepository;
-import org.example.backend.Repository.RoomRepository;
-import org.example.backend.Repository.RoomTypeRepository;
-import org.example.backend.Service.Impl.DiscountService;
+import org.example.backend.Conditions.DevelopmentProfileCondition;
+import org.example.backend.Conditions.MainAppProfileCondition;
+import org.example.backend.Model.*;
+import org.example.backend.Repository.*;
+import org.example.backend.Service.DiscountService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,26 +21,63 @@ import java.util.Objects;
 @SpringBootApplication
 public class BackendApplication {
 
+    private static final Logger logger = LoggerFactory.getLogger(BackendApplication.class);
+
+    // ANSI colors for readability
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+
     public static void main(String[] args) {
-        if(args.length == 0) {
-            SpringApplication.run(BackendApplication.class, args);
-        } else if (Objects.equals(args[0], "fetchshippingcontractors")){
-            SpringApplication application = new SpringApplication(FetchShippingContractors.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
+        if (args.length == 0) {
+            SpringApplication app = new SpringApplication(BackendApplication.class);
+            app.setAdditionalProfiles("mainapp");
+            logActiveProfiles(app);
+            app.run(args);
+        } else if (Objects.equals(args[0], "fetchshippingcontractors")) {
+            SpringApplication app = new SpringApplication(FetchShippingContractors.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
         } else if (Objects.equals(args[0], "fetchcontractcustomers")) {
-            SpringApplication application = new SpringApplication(FetchContractCustomers.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
+            SpringApplication app = new SpringApplication(FetchContractCustomers.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
         } else if (Objects.equals(args[0], "readevents")) {
-            SpringApplication application = new SpringApplication(ReadEventsApp.class);
-            application.setWebApplicationType(WebApplicationType.NONE);
-            application.run(args);
+            SpringApplication app = new SpringApplication(ReadEventsApp.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
+        } else if (Objects.equals(args[0], "resetemailtemplate")) {
+            SpringApplication app = new SpringApplication(ResetEmailTemplate.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
+        } else if (Objects.equals(args[0], "userdataseeder")) {
+            SpringApplication app = new SpringApplication(UserDataSeeder.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
         }
+    }
+    static void logActiveProfiles(SpringApplication app) {
+        app.setBanner((environment, sourceClass, out) -> {
+            String[] activeProfiles = environment.getActiveProfiles();
+            logger.info(ANSI_PURPLE + "Active Profiles: " + String.join(", ", activeProfiles) + ANSI_RESET);
+        });
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(CustomerRepository cRepo, RoomTypeRepository rtRepo, RoomRepository rRepo, BookingRepository bRepo, DiscountService discountService, CustomerRepository customerRepository, BookingRepository bookingRepository) {
+    // Conditional = only run this part when starting BackendApplication with "development profile"  ↓
+    @Conditional({MainAppProfileCondition.class, DevelopmentProfileCondition.class})
+    public CommandLineRunner commandLineRunner(CustomerRepository cRepo, RoomTypeRepository rtRepo, RoomRepository rRepo, BookingRepository bRepo, DiscountService discountService) {
+
+        logger.info(ANSI_YELLOW + "Running @Bean section of BackendApplication" + ANSI_RESET);
+
         return (args) -> {
             // Delete all
             cRepo.deleteAll();

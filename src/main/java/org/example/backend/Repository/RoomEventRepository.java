@@ -14,5 +14,5 @@ public interface RoomEventRepository extends JpaRepository<RoomEvent,Long> {
     @Modifying
     @Transactional
     @Query("select x from RoomEvent x where x.roomno=:roomnr")
-    public List<RoomEvent> getRoomEventByRoomNo(@Param("roomnr") int roomnr);
+    List<RoomEvent> getRoomEventByRoomNo(@Param("roomnr") int roomnr);
 }

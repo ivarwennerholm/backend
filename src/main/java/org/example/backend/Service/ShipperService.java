@@ -1,10 +1,19 @@
 package org.example.backend.Service;
 
-import org.example.backend.DTO.ShipperDto;
+import lombok.RequiredArgsConstructor;
 import org.example.backend.Model.Shipper;
+import org.example.backend.Repository.ShipperRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface ShipperService {
-    public List<Shipper> getAllShippers();
+@Service
+@RequiredArgsConstructor
+public class ShipperService {
+
+    private final ShipperRepository repo;
+
+    public List<Shipper> getAllShippers() {
+        return repo.findAll();
+    }
 }

@@ -12,15 +12,8 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
-import org.example.backend.Service.BookingService;
-import org.example.backend.Service.CustomerService;
-import org.example.backend.Service.Impl.*;
-import org.example.backend.Service.RoomService;
-import org.example.backend.Service.RoomTypeService;
-import org.example.backend.Utils.BlacklistURLProvider;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.example.backend.Service.*;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -47,7 +40,7 @@ public class BookingServiceTests {
 
     private RoomTypeService roomTypeService;
     private RoomService roomService;
-    private CustomerService customerService;
+    private org.example.backend.Service.CustomerService customerService;
     private BlacklistService blacklistService;
     private DiscountService discountService;
     private DateService dateService;
@@ -85,14 +78,13 @@ public class BookingServiceTests {
         MockitoAnnotations.openMocks(this);
 
         // Services:
-        roomTypeService = new RoomTypeServiceImpl(roomTypeRepository);
-        customerService = new CustomerServiceImpl(customerRepository);
-//        blacklistService = new BlacklistService(new BlacklistURLProvider());
+        roomTypeService = new RoomTypeService(roomTypeRepository);
+        customerService = new CustomerService(customerRepository);
         dateService = new DateService();
 
-        roomService = new RoomServiceImpl(roomRepository, roomTypeRepository, roomTypeService);
+        roomService = new RoomService(roomRepository, roomTypeRepository, roomTypeService);
         discountService = new DiscountService(bookingRepository, roomRepository, customerRepository);
-        sut = new BookingServiceImpl(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
+        sut = new BookingService(roomService, customerService, roomRepository, customerRepository, bookingRepository, blacklistService, discountService);
 
         // Customers
         c1 = new Customer(1L, "Venus", "111-1111111", "venus@pear.com");
@@ -189,6 +181,8 @@ public class BookingServiceTests {
     }
 
     @Test
+    @DisplayName("isRoomAvailableOnDates() should return correct boolean")
+    @Tag("unit")
     public void testIsRoomAvailableOnDates() throws ParseException {
         Date d1 = dateService.convertStringToDate("2024-05-25");
         Date d2 = dateService.convertStringToDate("2024-05-31");
@@ -207,6 +201,8 @@ public class BookingServiceTests {
     }
 
     @Test
+    @DisplayName("testGetExtraBedsForBooking() should return correct number")
+    @Tag("unit")
     public void testGetExtraBedsForBooking() {
         RoomDto singleRoom = rdto1;
         RoomDto doubleRoom = rdto2;
@@ -239,11 +235,15 @@ public class BookingServiceTests {
     }
 
     @Test
+    @DisplayName("deleteBookingByIdTest() should return correct String confirmation")
+    @Tag("unit")
     public void deleteBookingByIdTest() {
         assertEquals("delete booking id 1", sut.deleteBookingById(1L));
     }
 
     @Test
+    @DisplayName("updateBookingDatesTest() should return correct String or Exception")
+    @Tag("unit")
     public void updateBookingDatesTest() throws ParseException {
         assertEquals("booking is updated", sut.updateBookingDates(1L, "2024-06-01", "2024-06-22"));
         Exception ex = assertThrows(RuntimeException.class, () -> sut.updateBookingDates(1L, "2024-07-01", "2024-07-06"));
@@ -251,6 +251,8 @@ public class BookingServiceTests {
     }
 
     @Test
+    @DisplayName("findBookingByIdTest() should return correct object")
+    @Tag("unit")
     public void findBookingByIdTest() throws ParseException {
         BookingDto result = sut.findBookingById(1L);
 
@@ -271,7 +273,6 @@ public class BookingServiceTests {
         assertEquals(1, result.getRoom().getRoomType().getMaxPerson());
         assertEquals(0, result.getRoom().getRoomType().getMaxExtraBed());
         assertEquals(500, result.getRoom().getRoomType().getPricePerNight());
-
     }
 
 }

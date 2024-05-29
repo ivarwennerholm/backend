@@ -2,6 +2,7 @@ package org.example.backend;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.Model.ContractCustomer;
 import org.example.backend.Repository.ContractCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.example.backend.BackendApplication.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,26 +30,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FetchContractCustomersTestsIT {
 
     @Autowired
-    private FetchContractCustomers sut;
+    private IntegrationsProperties integrations;
 
     @Autowired
     private ContractCustomerRepository repo;
 
-    URL url;
-    InputStream xmlStream;
-
-    // Logger for error messages
-    private static final Logger logger = LogManager.getLogger(FetchContractCustomersTestsIT.class);
-
-    // ANSI colors for readability
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
+    private FetchContractCustomers sut;
+    private URL url;
+    private InputStream xmlStream;
+    private final Logger logger = LogManager.getLogger(FetchContractCustomersTestsIT.class);
 
     @BeforeEach
-    public void setup() throws IOException {
+    public void setup() {
+        sut = new FetchContractCustomers(repo, integrations);
         repo.deleteAll();
         try {
-            url = new URL("https://javaintegration.systementor.se/customers");
+            url = new URL(integrations.getContractCustomersUrl());
             xmlStream = url.openStream();
         } catch (MalformedURLException e) {
             logger.error(ANSI_RED + "The URL provided is not valid: " + ANSI_RESET + e.getMessage());
@@ -92,30 +90,27 @@ public class FetchContractCustomersTestsIT {
     @DisplayName("Mapping of Contract Customers from xml should be done correctly")
     @Tag("integration")
     public void testFetchContractCustomersFromFile() throws Exception {
-        // ARRANGE
-        String testFilePath = Paths.get("src", "test", "resources", "contractcustomers.xml").toString();
+        String testFilePath = Paths.get("src", "test", "resources", "ContractCustomers.xml").toString();
         File testFile = new File(testFilePath);
         assertThat(testFile).exists();
         sut.setFilePath(testFilePath);
 
-        // ACT
         sut.run();
         List<ContractCustomer> result = repo.findAll();
 
-        // ASSERT
         assertThat(result).isNotEmpty();
         assertThat(result.size()).isEqualTo(3);
         assertEquals(3, result.size());
-        assertEquals(1, result.get(0).customerId);
-        assertEquals("Persson Kommanditbolag", result.get(0).companyName);
-        assertEquals("Maria Åslund", result.get(0).contactName);
-        assertEquals("gardener", result.get(0).contactTitle);
-        assertEquals("Anderssons Gata 259", result.get(0).streetAddress);
-        assertEquals("Kramland", result.get(0).city);
-        assertEquals(60843, result.get(0).postalCode);
-        assertEquals("Sverige", result.get(0).country);
-        assertEquals("076-340-7143", result.get(0).phone);
-        assertEquals("1500-16026", result.get(0).fax);
+        assertEquals(1, result.get(0).getCustomerId());
+        assertEquals("Persson Kommanditbolag", result.get(0).getCompanyName());
+        assertEquals("Maria Åslund", result.get(0).getContactName());
+        assertEquals("gardener", result.get(0).getContactTitle());
+        assertEquals("Anderssons Gata 259", result.get(0).getStreetAddress());
+        assertEquals("Kramland", result.get(0).getCity());
+        assertEquals(60843, result.get(0).getPostalCode());
+        assertEquals("Sverige", result.get(0).getCountry());
+        assertEquals("076-340-7143", result.get(0).getPhone());
+        assertEquals("1500-16026", result.get(0).getFax());
     }
 
 }

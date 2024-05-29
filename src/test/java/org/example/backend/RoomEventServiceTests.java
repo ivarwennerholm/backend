@@ -2,15 +2,14 @@ package org.example.backend;
 
 import org.example.backend.Events.*;
 import org.example.backend.Repository.RoomEventRepository;
-import org.example.backend.Service.Impl.RoomEventServiceImpl;
 import org.example.backend.Service.RoomEventService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -20,18 +19,18 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RoomEventServiceTests {
+
     @Mock
     private RoomEventRepository rmEventRepo;
 
     @InjectMocks
-    private RoomEventServiceImpl sut;
+    private RoomEventService sut;
 
-//    public List<RoomEvent> getRoomEventsByRoomNo(int roomNo) {
-//        return rmEventRepo.getRoomEventByRoomNo(roomNo);
-//    }
     @Test
-    void whenGetRoomEventsByRoomNoShouldMapCorrectly(){
-        //Arrange
+    @Tag("unit")
+    public void whenGetRoomEventsByRoomNoShouldMapCorrectly(){
+
+        // Arrange
         RoomEvent ev1 = new RoomOpened(1L,101,LocalDateTime.parse("2024-05-16T12:57:29.101686955"));
         RoomEvent ev2 = new RoomClosed(2L,101,LocalDateTime.parse("2024-05-16T05:28:27.579059895"));
         RoomEvent ev3 = new RoomCleanStarted(3L,101,LocalDateTime.parse("2024-05-16T01:20:27.497480694"),"Cassandra Gutmann");
@@ -39,10 +38,10 @@ public class RoomEventServiceTests {
         List<RoomEvent> list = Arrays.asList(ev1,ev2,ev3,ev4);
         when(rmEventRepo.getRoomEventByRoomNo(101)).thenReturn(list);
 
-        //Act
+        // Act
         List<RoomEvent> actual = sut.getRoomEventsByRoomNo(101);
 
-        //Assert
+        // Assert
         verify(rmEventRepo,times(1)).getRoomEventByRoomNo(101);
         Assertions.assertEquals(4,actual.size());
 

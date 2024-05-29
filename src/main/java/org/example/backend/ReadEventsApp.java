@@ -7,35 +7,33 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.rabbitmq.client.*;
 import lombok.RequiredArgsConstructor;
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.Events.RoomEvent;
-//import org.example.backend.Events.RoomEvent2;
 import org.example.backend.Repository.RoomEventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-
-import java.io.UnsupportedEncodingException;
 
 @ComponentScan
 @RequiredArgsConstructor
 public class ReadEventsApp implements CommandLineRunner {
 
-    private String queueName = "8984dd98-efa9-44fc-8f27-6701b88e9bca";
+    @Autowired
+    private IntegrationsProperties integrations;
 
+    private String queueName;
     private final RoomEventRepository eventRepo;
-
 
     @Override
     public void run(String... args) throws Exception {
-
+        queueName = integrations.getEvents().getQueue();
         System.out.println("reading start");
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("128.140.81.47");
-        factory.setUsername("djk47589hjkew789489hjf894");
-        factory.setPassword("sfdjkl54278frhj7");
+        factory.setHost(integrations.getEvents().getHost());
+        factory.setUsername(integrations.getEvents().getUsername());
+        factory.setPassword(integrations.getEvents().getPassword());
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
-
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -53,9 +51,9 @@ public class ReadEventsApp implements CommandLineRunner {
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }
 
-    void getQueueMessageToDatabase(JsonMapper jsonMapper, RoomEventRepository eventRepo, String message) throws JsonProcessingException {
+    protected void getQueueMessageToDatabase(JsonMapper jsonMapper, RoomEventRepository eventRepo, String message) throws JsonProcessingException {
         RoomEvent r = jsonMapper.readValue(message, RoomEvent.class);
         eventRepo.save(r);
-        System.out.println(r.toString());
+        System.out.println(r);
     }
 }

@@ -1,9 +1,8 @@
-## 🖥️ Backend 1: inlämningsuppgift
+## 🖥️ Backend 2: inlämningsuppgift
 
 ### 👩‍🎓 Teamet
 
 - [Venus](https://github.com/VenusauRRR)
-- [Alex](https://github.com/alebar89)
 - [Ivar](https://github.com/ivarwennerholm)
 
 ### 🔶 ER-diagram

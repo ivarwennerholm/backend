@@ -18,11 +18,12 @@ public class Customer {
     @Id
     @GeneratedValue
     private Long id;
+
     @NotEmpty(message = "Name is mandatory")
     @Size(min = 2, message = "Type a name that is at least 2 characters")
     @Pattern(regexp = "^[A-Za-zÅÄÖåäö\\s]*$", message = "Only letters and whitespace for name")
-    // @Pattern(regexp = "^[A-Öa-ö]*$", message = "Only letters for name")
     private String name;
+
     @NotEmpty(message = "Telephone number is mandatory")
     @Size(min = 5, max = 16, message = "You must type a telephone number of at least 5 but not more than 16 digits")
     @Pattern(regexp = "^[\\d+-]*$", message = "Telephone numbers can only contain digits and hyphens")
@@ -32,15 +33,9 @@ public class Customer {
     @Pattern(regexp = "^(.+)@(\\S+)$", message = "Please provide a valid email")
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "customer")
     @ToString.Exclude
     private List<Booking> bookingList;
-
-    // TODO: Do we need all these different constructors? - Ivar
-    public Customer(String name, String phone) {
-        this.name = name;
-        this.phone = phone;
-    }
 
     public Customer(Long id, String name, String phone) {
         this.id = id;
@@ -61,10 +56,4 @@ public class Customer {
         this.email = email;
     }
 
-    public Customer(Long id, String name, String phone, List<Booking> bookingList) {
-        this.id = id;
-        this.name = name;
-        this.phone = phone;
-        this.bookingList = bookingList;
-    }
 }

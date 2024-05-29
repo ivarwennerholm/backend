@@ -1,12 +1,10 @@
 package org.example.backend.Utils;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.example.backend.Service.Impl.BlacklistService;
+import org.example.backend.Configurations.IntegrationsProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,12 +13,15 @@ import java.net.URL;
 @AllArgsConstructor
 public class BlacklistURLProvider {
 
+    private final IntegrationsProperties integrations;
+
     private URL url;
 
-    public BlacklistURLProvider(){
-
+    @Autowired
+    public BlacklistURLProvider(IntegrationsProperties integrations){
+        this.integrations = integrations;
         try {
-            url = new URL("https://javabl.systementor.se/api/stefan/blacklist");
+            url = new URL(integrations.getBlacklistUrl());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -46,4 +47,5 @@ public class BlacklistURLProvider {
     public void setUrl(URL newUrl){
         this.url = newUrl;
     }
+
 }
