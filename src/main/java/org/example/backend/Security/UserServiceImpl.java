@@ -1,9 +1,8 @@
 package org.example.backend.Security;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +14,6 @@ import java.util.Properties;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -25,6 +23,14 @@ public class UserServiceImpl implements UserDetailsService {
     private final PasswordResetTokenRepository tokenRepository;
 
     private final JavaMailSenderImpl mailSender;
+
+    @Autowired
+    public UserServiceImpl (UserRepository userRepository, PasswordResetTokenServiceImpl tokenService, PasswordResetTokenRepository tokenRepository, JavaMailSenderImpl mailSender) {
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
+        this.tokenRepository = tokenRepository;
+        this.mailSender = mailSender;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
