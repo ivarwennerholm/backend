@@ -7,11 +7,12 @@ import java.util.List;
 
 public interface RoomService {
 
-    public RoomDto roomToRoomDto(Room r);
+    RoomDto roomToRoomDto(Room r);
 
-    public Room roomDtoToRoom(RoomDto room);
+    Room roomDtoToRoom(RoomDto room);
 
-    public List<RoomDto> getAll();
+    List<RoomDto> getAll();
 
-    public RoomDto getRoomById(long id);
+    RoomDto getRoomById(long id);
+
 }

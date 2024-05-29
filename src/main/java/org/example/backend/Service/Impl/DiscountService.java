@@ -1,7 +1,6 @@
 package org.example.backend.Service.Impl;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.example.backend.Model.Booking;
 import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
@@ -32,15 +31,6 @@ public class DiscountService {
         this.roomRepository = roomRepository;
         this.customerRepository = customerRepository;
     }
-
-    /*
-    public DiscountService(DateService dateService, BookingRepository bookingRepository,RoomRepository roomRepository,CustomerRepository customerRepository) {
-        this.dateService = dateService;
-        this.bookingRepository = bookingRepository;
-        this.roomRepository = roomRepository;
-        this.customerRepository = customerRepository;
-    }
-    */
 
     public double getTotalPriceWithDiscounts(Date checkin, Date checkout, long roomId, long customerId, Date dateForTesting, boolean test) {
         long nights = dateService.getNumberOfDaysBetweenTwoDates(checkin, checkout);

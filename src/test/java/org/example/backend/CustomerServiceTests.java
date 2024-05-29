@@ -34,7 +34,7 @@ public class CustomerServiceTests {
     @InjectMocks
     private CustomerServiceImpl cusService;
 
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @Test
     public void customerDtoToCustomerTest(){

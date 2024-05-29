@@ -1,24 +1,22 @@
 package org.example.backend.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
 public class ContractCustomerDto {
-    public Long id;
-    public int customerId;
-    public String companyName;
-    public String contactName;
-    public String contactTitle;
-    public String streetAddress;
-    public String city;
-    public int postalCode;
-    public String country;
-    public String phone;
-    public String fax;
+    private Long id;
+    private int customerId;
+    private String companyName;
+    private String contactName;
+    private String contactTitle;
+    private String streetAddress;
+    private String city;
+    private int postalCode;
+    private String country;
+    private String phone;
+    private String fax;
 }

@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class ReadEventsApp implements CommandLineRunner {
 
     @Autowired
-    IntegrationsProperties integrations;
+    private IntegrationsProperties integrations;
 
     private String queueName;
 
@@ -53,9 +53,9 @@ public class ReadEventsApp implements CommandLineRunner {
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }
 
-    void getQueueMessageToDatabase(JsonMapper jsonMapper, RoomEventRepository eventRepo, String message) throws JsonProcessingException {
+    protected void getQueueMessageToDatabase(JsonMapper jsonMapper, RoomEventRepository eventRepo, String message) throws JsonProcessingException {
         RoomEvent r = jsonMapper.readValue(message, RoomEvent.class);
         eventRepo.save(r);
-        System.out.println(r.toString());
+        System.out.println(r);
     }
 }

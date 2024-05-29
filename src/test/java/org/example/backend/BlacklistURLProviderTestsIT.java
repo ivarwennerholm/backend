@@ -6,13 +6,11 @@ import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -26,21 +24,27 @@ public class BlacklistURLProviderTestsIT {
     @Autowired
     private BlacklistURLProvider blacklistURLProvider;
     static URL url;
-//    @Test
-//    void whenConnectMockUrlIfAvailableOrNot() throws IOException {
-//        HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
-//        when(mockHttpURLConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_NOT_FOUND);
-//
-//        URL mockURL = mock(URL.class);
-//        when(mockURL.openConnection()).thenReturn(mockHttpURLConnection);
-//        blacklistURLProvider.setUrl(mockURL);
-//
-//        Assertions.assertFalse(blacklistURLProvider.isURLAvailable());
-//    }
+
+    // TODO: Should this be deleted or commented out?
+    /*
+    @Test
+    void whenConnectMockUrlIfAvailableOrNot() throws IOException {
+        HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
+        when(mockHttpURLConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_NOT_FOUND);
+
+        URL mockURL = mock(URL.class);
+        when(mockURL.openConnection()).thenReturn(mockHttpURLConnection);
+        blacklistURLProvider.setUrl(mockURL);
+
+        Assertions.assertFalse(blacklistURLProvider.isURLAvailable());
+    }
+    */
+
     @BeforeEach
     void setUp(){
         url = blacklistURLProvider.getBlacklistURL();
     }
+
     @Test
     void whenConnectUrlIfSuccessOrNot() throws Exception {
         Assertions.assertTrue(blacklistURLProvider.isURLAvailable());
@@ -68,4 +72,5 @@ public class BlacklistURLProviderTestsIT {
         assertTrue(  result.contains("created") );
         assertTrue(  result.contains("ok") );
     }
+
 }

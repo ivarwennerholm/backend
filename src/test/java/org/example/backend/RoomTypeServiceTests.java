@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class RoomTypeServiceTests {
+
     @Mock
     private RoomTypeRepository rtRepo;
 

@@ -63,7 +63,7 @@ public class RoomServiceTests {
     }
 
     @Test
-    void roomDtoToRoomTest() {
+    public void roomDtoToRoomTest() {
         RoomType rt = RoomType.builder().
                 id(1L).
                 type("single").

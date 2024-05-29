@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BlacklistPersonDto {
-    Long id;
-    String email;
-    String name;
-    String group;
-    String created;
-    boolean ok;
+    private Long id;
+    private String email;
+    private String name;
+    private String group;
+    private String created;
+    private boolean ok;
 }

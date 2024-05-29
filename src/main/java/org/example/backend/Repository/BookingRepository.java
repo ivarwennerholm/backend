@@ -13,5 +13,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> getAllBookingsForCustomer(@Param("customerId") long customerId);
 
     @Query("SELECT b FROM Booking b ORDER BY b.id DESC LIMIT 1")
-    public Booking getLastBooking();
+    Booking getLastBooking();
 }

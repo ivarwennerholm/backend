@@ -22,17 +22,17 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     public ContractCustomerDto contractCustomerToContractCustomerDto(ContractCustomer cc) {
         return ContractCustomerDto.
                 builder().
-                id(cc.id).
-                customerId(cc.customerId).
-                companyName(cc.companyName).
-                contactName(cc.contactName).
-                contactTitle(cc.contactTitle).
-                streetAddress(cc.streetAddress).
-                city(cc.city).
-                postalCode(cc.postalCode).
-                country(cc.country).
-                phone(cc.phone).
-                fax(cc.fax).
+                id(cc.getId()).
+                customerId(cc.getCustomerId()).
+                companyName(cc.getCompanyName()).
+                contactName(cc.getContactName()).
+                contactTitle(cc.getContactTitle()).
+                streetAddress(cc.getStreetAddress()).
+                city(cc.getCity()).
+                postalCode(cc.getPostalCode()).
+                country(cc.getCountry()).
+                phone(cc.getPhone()).
+                fax(cc.getFax()).
                 build();
     }
 
@@ -42,7 +42,7 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
                 findAll().
                 stream().
                 map(this::contractCustomerToContractCustomerDto).
-                filter(cc -> Objects.equals(cc.id, id)).
+                filter(cc -> Objects.equals(cc.getId(), id)).
                 findFirst();
     }
 
@@ -52,13 +52,13 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
         Comparator<ContractCustomerDto> comparator;
         switch (cat) {
             case "company":
-                comparator = Comparator.comparing(ccdto -> ccdto.companyName, collator);
+                comparator = Comparator.comparing(ContractCustomerDto::getCompanyName, collator);
                 break;
             case "contact":
-                comparator = Comparator.comparing(ccdto -> ccdto.contactName, collator);
+                comparator = Comparator.comparing(ContractCustomerDto::getContactName, collator);
                 break;
             case "country":
-                comparator = Comparator.comparing(ccdto -> ccdto.country, collator);
+                comparator = Comparator.comparing(ContractCustomerDto::getCountry, collator);
                 break;
             default:
                 throw new IllegalArgumentException(ANSI_RED + "Invalid sort criteria: " + sort + ANSI_RESET);

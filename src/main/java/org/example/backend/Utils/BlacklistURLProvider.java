@@ -13,7 +13,7 @@ import java.net.URL;
 @AllArgsConstructor
 public class BlacklistURLProvider {
 
-    private IntegrationsProperties integrations;
+    private final IntegrationsProperties integrations;
 
     private URL url;
 

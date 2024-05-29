@@ -29,7 +29,7 @@ public class BlacklistService {
     private final BlacklistURLProvider blacklistURLProvider;
 
     @Autowired
-    private BlacklistCheckEmailURLProvider blacklistCheckEmailURLProvider;
+    private final BlacklistCheckEmailURLProvider blacklistCheckEmailURLProvider;
 
     public List<BlacklistPersonDto> getAll() throws IOException {
         JsonMapper jsonMapper = new JsonMapper();

@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RoomTypeServiceImpl implements RoomTypeService {
+
     private final RoomTypeRepository repo;
 
     @Override
@@ -46,4 +47,5 @@ public class RoomTypeServiceImpl implements RoomTypeService {
         repo.save(roomTypeDtoToRoomType(rtd));
         return "new room type is added";
     }
+
 }

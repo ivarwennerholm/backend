@@ -37,7 +37,7 @@ public class FetchShippingContractors implements CommandLineRunner{
             getShippersToDatabase(shipperJsonProvider.getShipperUrl().openStream(),jsonMapper, repo);
     }
 
-    void getShippersToDatabase(InputStream input, JsonMapper jsonMapper, ShipperRepository shipperRepo) throws IOException {
+    protected void getShippersToDatabase(InputStream input, JsonMapper jsonMapper, ShipperRepository shipperRepo) throws IOException {
         ShipperDto[]theShippers = jsonMapper.readValue(input, ShipperDto[].class);
             for (ShipperDto s : theShippers){
                 shipperRepo.save(new Shipper(s));

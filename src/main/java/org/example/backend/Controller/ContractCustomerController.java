@@ -21,7 +21,7 @@ public class ContractCustomerController {
     private final ContractCustomerService service;
 
     @GetMapping
-    public String getContractCustomers(@RequestParam(name = "search", required = false) String search,
+    protected String getContractCustomers(@RequestParam(name = "search", required = false) String search,
                                          @RequestParam(name = "sort", required = false) String sort,
                                          @RequestParam(name = "cat", required = false) String cat,
                                          Model model) {
@@ -37,7 +37,7 @@ public class ContractCustomerController {
     }
 
     @GetMapping("/{id}")
-    public String getContractCustomer(@PathVariable Long id, Model model) {
+    protected String getContractCustomer(@PathVariable Long id, Model model) {
         Optional<ContractCustomerDto> ccOptional = service.getById(id);
         if (ccOptional.isPresent()) {
             ContractCustomerDto cc = ccOptional.get();

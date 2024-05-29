@@ -16,17 +16,17 @@ import static org.example.backend.BackendApplication.*;
 @ComponentScan
 public class ResetEmailTemplate implements CommandLineRunner {
 
-    private static final Logger logger = LoggerFactory.getLogger(ResetEmailTemplate.class);
+    private final Logger logger = LoggerFactory.getLogger(ResetEmailTemplate.class);
 
-    String filePath, markup;
-    File file;
-    FileReader fileReader;
-
-    @Autowired
-    EmailTemplateRepository emailTemplateRepository;
+    private String filePath, markup;
+    private File file;
+    private FileReader fileReader;
 
     @Autowired
-    IntegrationsProperties integrations;
+    private EmailTemplateRepository emailTemplateRepository;
+
+    @Autowired
+    private IntegrationsProperties integrations;
 
     @Override
     public void run(String... args) {

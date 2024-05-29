@@ -14,6 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DateServiceTests {
+
     private final DateService dateService = new DateService();
 
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

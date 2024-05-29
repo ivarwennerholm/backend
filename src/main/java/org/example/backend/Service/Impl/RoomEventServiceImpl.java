@@ -13,6 +13,7 @@ import java.util.List;
 public class RoomEventServiceImpl implements RoomEventService {
 
     private final RoomEventRepository rmEventRepo;
+
     @Override
     public List<RoomEvent> getRoomEventsByRoomNo(int roomNo) {
         return rmEventRepo.getRoomEventByRoomNo(roomNo);

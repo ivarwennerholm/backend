@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface RoomEventService {
 
-    public List<RoomEvent> getRoomEventsByRoomNo(int roomNo);
+    List<RoomEvent> getRoomEventsByRoomNo(int roomNo);
+
 }
