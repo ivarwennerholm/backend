@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventsProperties {
+public class UsersProperties {
 
-    private String queue;
-    private String host;
-    private String username;
-    private String password;
+    private String adminUsername;
+    private String adminPassword;
+    private String receptionistUsername;
+    private String receptionistPassword;
 
 }

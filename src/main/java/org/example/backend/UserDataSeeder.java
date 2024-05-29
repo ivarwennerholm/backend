@@ -1,6 +1,7 @@
 package org.example.backend;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.example.backend.Security.Role;
 import org.example.backend.Security.RoleRepository;
 import org.example.backend.Security.User;
@@ -9,33 +10,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @ComponentScan
 @RequiredArgsConstructor
 public class UserDataSeeder implements CommandLineRunner {
+
     @Autowired
     UserRepository userRepository;
+
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    IntegrationsProperties integrations;
+
+    private String adminUsername, adminPassword, receptionistUsername, receptionistPassword;
+
     @Override
     public void run(String... args) throws Exception {
+
+        adminUsername = integrations.getUsers().getAdminUsername();
+        adminPassword = integrations.getUsers().getAdminPassword();
+        receptionistUsername = integrations.getUsers().getReceptionistUsername();
+        receptionistPassword = integrations.getUsers().getReceptionistPassword();
+
         if (roleRepository.findByName("Admin") == null) {
             addRole("Admin");
         }
         if (roleRepository.findByName("Receptionist") == null) {
             addRole("Receptionist");
         }
-        if(userRepository.getUserByUsername("admin@hotel.se") == null){
-            addUser("admin@hotel.se","Admin", "Admin123#");
+        if(userRepository.getUserByUsername(adminUsername) == null){
+            addUser(adminUsername,"Admin", adminPassword);
         }
-        if(userRepository.getUserByUsername("receptionist@hotel.se") == null){
-            addUser("receptionist@hotel.se","Receptionist", "Reception123#");
+        if(userRepository.getUserByUsername(receptionistUsername) == null){
+            addUser(receptionistUsername,"Receptionist", receptionistPassword);
         }
     }
+
     private void addUser(String mail, String role, String password) {
         ArrayList<Role> roles = new ArrayList<>();
         addRole(role);

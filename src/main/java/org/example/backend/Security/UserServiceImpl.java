@@ -1,5 +1,6 @@
 package org.example.backend.Security;
 
+import org.example.backend.Configurations.IntegrationsProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -15,6 +16,9 @@ import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserDetailsService {
+
+    @Autowired
+    IntegrationsProperties integrations;
 
     private final UserRepository userRepository;
 
@@ -52,10 +56,10 @@ public class UserServiceImpl implements UserDetailsService {
         String resetLink = generateResetToken(user);
         LocalDateTime resetTokenExpiryDateTime = tokenRepository.findByToken(resetLink).getExpiryDateTime();
 
-        mailSender.setHost("smtp.ethereal.email");
-        mailSender.setPort(587);
-        mailSender.setUsername("nicolas.grady@ethereal.email");
-        mailSender.setPassword("xXA9BeE2bZ95SJn77N");
+        mailSender.setHost(integrations.getEmail().getSenderHost());
+        mailSender.setPort(integrations.getEmail().getSenderPort());
+        mailSender.setUsername(integrations.getEmail().getUsername());
+        mailSender.setPassword(integrations.getEmail().getPassword());
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
@@ -68,7 +72,7 @@ public class UserServiceImpl implements UserDetailsService {
 
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setFrom("noreply@hotel.com");
-        msg.setTo(mailSender.getUsername());
+        msg.setTo(username);
         msg.setSubject("Reset Password Link");
         msg.setText(text);
 
