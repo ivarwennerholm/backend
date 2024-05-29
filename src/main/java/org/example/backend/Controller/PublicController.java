@@ -4,9 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.Security.PasswordResetDto;
 import org.example.backend.Security.*;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,15 +32,8 @@ public class PublicController {
 
     @PostMapping("login")
     public String getLoginUser(@ModelAttribute User user, Model model){
-//        try{
             model.addAttribute("user", userServiceImpl.loadUserByUsername(user.getUsername()));
             return getAdminLogin();
-//        } catch (UsernameNotFoundException | BadCredentialsException e){
-//            System.out.println(e.getMessage() + "where");
-//            model.addAttribute("error",e.getMessage());
-//            return getLoginErrorPage();
-//        }
-
     }
 
     @GetMapping(path="admin")
@@ -104,8 +94,13 @@ public class PublicController {
         }
     }
 
-    @RequestMapping("loginerror")
+    @RequestMapping("login-error")
     String getLoginErrorPage(){
-        return "loginerror";
+        return "login-error";
+    }
+
+    @RequestMapping("access-denied")
+    String getAccessDeniedPage(){
+        return "access-denied";
     }
 }
