@@ -27,7 +27,7 @@ public class BlacklistCheckEmailURLProviderTestsIT {
     private URL url;
 
     @Test
-    void whenConnectMockUrlIfAvailableOrNot() throws Exception {
+    public void whenConnectMockUrlIfAvailableOrNot() throws Exception {
         HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
         when(mockHttpURLConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_NOT_FOUND);
         URL mockURL = mock(URL.class);
@@ -37,18 +37,18 @@ public class BlacklistCheckEmailURLProviderTestsIT {
     }
 
     @BeforeEach
-    void setUp(){
+    public void setUp(){
         blacklistCheckEmailURLProvider.setEmail("stefan6@aaa.com");
         url = blacklistCheckEmailURLProvider.getBlacklistCheckEmailURL();
     }
 
     @Test
-    void whenConnectCheckEmailUrlIfSuccessOrNot() throws Exception {
+    public void whenConnectCheckEmailUrlIfSuccessOrNot() throws Exception {
         Assertions.assertTrue(blacklistCheckEmailURLProvider.isCheckEmailURLAvailable());
     }
 
     @Test
-    void fetchBlacklistCheckEmailShouldContainCorrectTags() throws IOException {
+    public void fetchBlacklistCheckEmailShouldContainCorrectTags() throws IOException {
         //Arrange
         Scanner s = new Scanner(url.openStream()).useDelimiter("\\A");
         ObjectMapper mapper = new ObjectMapper();

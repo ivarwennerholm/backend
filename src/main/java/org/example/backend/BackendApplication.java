@@ -1,5 +1,7 @@
 package org.example.backend;
 
+import org.example.backend.Conditions.DevelopmentProfileCondition;
+import org.example.backend.Conditions.MainAppProfileCondition;
 import org.example.backend.Model.*;
 import org.example.backend.Repository.*;
 import org.example.backend.Service.Impl.DiscountService;
@@ -10,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,6 +34,7 @@ public class BackendApplication {
     public static void main(String[] args) {
         if (args.length == 0) {
             SpringApplication app = new SpringApplication(BackendApplication.class);
+            app.setAdditionalProfiles("mainapp");
             logActiveProfiles(app);
             app.run(args);
         } else if (Objects.equals(args[0], "fetchshippingcontractors")) {
@@ -68,7 +72,12 @@ public class BackendApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(CustomerRepository cRepo, RoomTypeRepository rtRepo, RoomRepository rRepo, BookingRepository bRepo, DiscountService discountService, CustomerRepository customerRepository, BookingRepository bookingRepository, EmailTemplateRepository etRepo) {
+    // Conditional = only run this part when starting BackendApplication with "development profile"  ↓
+    @Conditional({MainAppProfileCondition.class, DevelopmentProfileCondition.class})
+    public CommandLineRunner commandLineRunner(CustomerRepository cRepo, RoomTypeRepository rtRepo, RoomRepository rRepo, BookingRepository bRepo, DiscountService discountService) {
+
+        logger.info(ANSI_YELLOW + "Running @Bean section of BackendApplication" + ANSI_RESET);
+
         return (args) -> {
             // Delete all
             cRepo.deleteAll();

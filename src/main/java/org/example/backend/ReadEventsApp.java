@@ -22,9 +22,7 @@ public class ReadEventsApp implements CommandLineRunner {
     private IntegrationsProperties integrations;
 
     private String queueName;
-
     private final RoomEventRepository eventRepo;
-
 
     @Override
     public void run(String... args) throws Exception {
