@@ -53,9 +53,13 @@ public class BackendApplication {
             app.setWebApplicationType(WebApplicationType.NONE);
             logActiveProfiles(app);
             app.run(args);
+        } else if (Objects.equals(args[0], "userdataseeder")) {
+            SpringApplication app = new SpringApplication(UserDataSeeder.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            logActiveProfiles(app);
+            app.run(args);
         }
     }
-
     static void logActiveProfiles(SpringApplication app) {
         app.setBanner((environment, sourceClass, out) -> {
             String[] activeProfiles = environment.getActiveProfiles();
