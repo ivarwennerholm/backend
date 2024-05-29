@@ -97,11 +97,11 @@ public class UserServiceImpl implements UserDetailsService {
     public void updatePassword(PasswordResetDto passwordReset) throws Exception {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         try{
-            PasswordResetToken passwordResetToken2 = tokenRepository.findByToken(passwordReset.getToken());
-            if (passwordResetToken2 == null){
+            PasswordResetToken inputToken = tokenRepository.findByToken(passwordReset.getToken());
+            if (inputToken == null){
                 throw new Exception("token not existing in database");
             }
-            if (isTokenExpired(passwordResetToken2)){
+            if (isTokenExpired(inputToken)){
                 throw new Exception("token expired.");
             }
             User user = userRepository.getUserByUsername(passwordReset.getMail());
@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserDetailsService {
             String hash = bCryptPasswordEncoder.encode(passwordReset.getNewPassword());
             user.setPassword(hash);
             userRepository.save(user);
+            tokenRepository.deleteById(inputToken.getId());
         } catch (NullPointerException e){
             throw new Exception("unexpected error occured");
         }

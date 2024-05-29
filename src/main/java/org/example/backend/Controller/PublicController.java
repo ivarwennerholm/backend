@@ -35,14 +35,14 @@ public class PublicController {
 
     @PostMapping("login")
     public String getLoginUser(@ModelAttribute User user, Model model){
-        try{
+//        try{
             model.addAttribute("user", userServiceImpl.loadUserByUsername(user.getUsername()));
             return getAdminLogin();
-        } catch (UsernameNotFoundException | BadCredentialsException e){
-            System.out.println(e.getMessage());
-            model.addAttribute("error",e.getMessage());
-            return getLoginPage(model);
-        }
+//        } catch (UsernameNotFoundException | BadCredentialsException e){
+//            System.out.println(e.getMessage() + "where");
+//            model.addAttribute("error",e.getMessage());
+//            return getLoginErrorPage();
+//        }
 
     }
 
@@ -96,12 +96,17 @@ public class PublicController {
         try {
             userServiceImpl.updatePassword(passwordReset);
             System.out.println("password reset successfully");
+
             return getLoginPage(model);
         } catch (Exception e) {
             model.addAttribute("error",e.getMessage());
             System.out.println(e.getMessage());
             return getPasswordResetPage(passwordReset.getToken(),model);
         }
+    }
 
+    @RequestMapping("loginerror")
+    String getLoginErrorPage(){
+        return "loginerror";
     }
 }
