@@ -50,7 +50,7 @@ public class WebSecurityConfig {
                 .formLogin((form) -> form
                    .loginPage("/login")     //use custom login page
                    .loginProcessingUrl("/login")    //custom login page handles login failure instead of default ones
-                   .failureForwardUrl("/loginerror")
+                   .failureForwardUrl("/login-error")
                 )
                 .logout((logout) -> {
                     logout.permitAll();
