@@ -84,7 +84,6 @@ public class BookingServiceTestsIT {
         when(customerService.getCustomerByNamePhoneAndEmail(anyString(), anyString(), anyString())).thenReturn(Optional.of(customer));
         when(roomRepository.findById(anyLong())).thenReturn(Optional.of(room));
         when(discountService.getTotalPriceWithDiscounts(any(Date.class), any(Date.class), anyLong(), anyLong(), isNull(), anyBoolean())).thenReturn(12000.00);
-        System.out.println("Discount get discount : " + discountService.getTotalPriceWithDiscounts(checkin, checkout, 1L, 1L, null, false));
 
         // ACT
         bookingService.createAndAddBookingToDatabase(checkin, checkout, guests, extraBeds, roomId, customerName, customerPhone, customerEmail);

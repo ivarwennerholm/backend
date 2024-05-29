@@ -41,7 +41,6 @@ public class RoomEventServiceTestsIT {
 
         // Act
         String message = s.hasNext() ? s.next() : "";
-        System.out.println(message);
         eventApp.getQueueMessageToDatabase(jsonMapper, eventRepo, message);
 
         // Assert
