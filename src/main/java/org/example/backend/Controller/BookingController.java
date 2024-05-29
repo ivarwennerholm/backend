@@ -40,9 +40,9 @@ public class BookingController {
     }
 
     @RequestMapping("delete/{id}")
-    protected String deleteBookings(@PathVariable Long id, Model model){
+    protected String deleteBookings(@PathVariable Long id){
         String s = bookService.deleteBookingById(id);
-        return allBookings(model);
+        return "redirect:/bookings/all";
     }
 
     @RequestMapping("updateForm/{id}")
