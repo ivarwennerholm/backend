@@ -19,7 +19,7 @@
         <a href="http://localhost:8080/"><img src="/js/logo.png"></a>
     </div>
     <div class="my-3">
-        <h4>Please fill in your details 👇 </h4>
+        <h3>Please fill in your details 👇 </h3>
     </div>
     <form method="post" th:action="@{getBookingConfirmation}">
         <div class="mt-1 center-align">
@@ -73,17 +73,5 @@
     </form>
 </div>
 <script type="text/javascript" th:src="@{/js/inputUserDetails.js}"></script>
-<!-- FOR TESTING ONLY
-<div style="border:1px solid black">
-    <p><b>For testing</b></p>
-    <p>document: inputUserDetails.html</p>
-    <p th:text="'room-id: ' + ${roomid}"></p>
-    <p th:text="'checkin: ' + ${checkin}"></p>
-    <p th:text="'checkout: ' + ${checkout}"></p>
-    <p th:text="'guests: ' + ${guests}"></p>
-    <p th:text="'extrabeds: ' + ${extrabeds}"></p>
-    <p th:text="'fullprice: ' + ${fullprice}"></p>
-</div>
--->
 </body>
 </html>

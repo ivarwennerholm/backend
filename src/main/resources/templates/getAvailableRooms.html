@@ -7,7 +7,6 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-
 <div th:if="${#lists.isEmpty(list)}">
     <div class="container text-center m-5">
         <div class="mt-2 mb-4">
@@ -25,7 +24,7 @@
             <a href="http://localhost:8080/"><img src="/js/logo.png"></a>
         </div>
         <div class="my-3">
-            <h4>Available rooms for you 👇 </h4>
+            <h3>Available rooms for you 👇 </h3>
         </div>
         <table class="table">
             <tbody>
@@ -34,7 +33,6 @@
                 <td><b>Room type</b></td>
                 <td><b>Price per night</b></td>
                 <td><b>Total nights</b></td>
-                <!--<td><b>Total price</b></td>-->
                 <td><b>Extra bed(s)</b></td>
             </tr>
             <tr th:each="booking : ${list}">
@@ -42,7 +40,6 @@
                 <td th:text="${booking.room.roomType.type}"></td>
                 <td th:text="${booking.room.roomType.pricePerNight + 'kr'}"></td>
                 <td th:text="${nights}"></td>
-                <!--<td th:text="${nights * booking.room.roomType.pricePerNight} + 'kr'"></td>-->
                 <td th:text="${booking.extraBedAmt}"></td>
                 <td>
                     <form method="post" th:action="@{inputUserDetails}">
@@ -51,7 +48,8 @@
                         <input type="hidden" name="checkout" th:value="${checkout}"/>
                         <input type="hidden" name="guests" th:value="${guests}"/>
                         <input type="hidden" name="extrabeds" th:value="${booking.extraBedAmt}"/>
-                        <input type="hidden" name="fullprice" th:value="${nights * booking.room.roomType.pricePerNight}"/>
+                        <input type="hidden" name="fullprice"
+                               th:value="${nights * booking.room.roomType.pricePerNight}"/>
                         <input type="submit" value="Make reservation">
                     </form>
                 </td>
@@ -59,36 +57,6 @@
             </tbody>
         </table>
     </div>
-    <!-- FOR TESTING ONLY
-    <div style="border:1px solid black">
-        <p><b>For testing</b></p>
-        <p>document: showAvailableBookings.html</p>
-        <p th:text="'guests: ' + ${guests}"></p>
-        <p th:text="'checkin: ' + ${checkin}"></p>
-        <p th:text="'checkout: ' + ${checkout}"></p>
-    </div>
-    -->
 </div>
 </body>
 </html>
-
-<!-- OLD CODE SNIPPETS FOR FUTURE REFERENCE
-<a th:href="@{/kategori/deleteById/{id}(id=${cat.id})}">Delete</a>
-<input type="hidden" id="custId" name="custId" value="3487">
-
-<td><a th:href="@{/roomtypes/deleteById/{id}(id=${item.id})}">Delete</a></td>
-<td><a th:href="@{/kategori/updateById/{id}(id=${item.id})}">Update</a></td>
-
-<form action="#" th:action="@{inputUserDetails}" th:object="${booking}"  method="post" >
-<input type="submit" value="Make reservation">
-</form>
-
-<form method="post" th:action="@{/getBookingConfirmation}" th:object="${booking}">
-<input type="submit" value="Make reservation">
-</form>
-<form action="getBookingConfirmation" method="get">
-<input type="hidden" name="booking" th:value="${booking}" />
-<input type="hidden" name="booking" th:value="${#json.toJson(booking)}" />
-<input type="submit" value="Make reservation">
-</form>
--->
