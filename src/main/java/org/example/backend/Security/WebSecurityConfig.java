@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/",  "/bookings/**","/customers/**", "/blacklist/**","/contractcustomers/**",
                                 "/rooms/**","/roomevents/**","/roomtypes/**","/shippingcontractors/**",
-                                "/js/**", "/css/**", "/images/**", "/login/**", "/logout","/queues/**","/login","/forgotpassword","/passwordreset/**","/loginerror","/access-denied").permitAll()
+                                "/js/**", "/css/**", "/images/**", "/login/**", "/logout","/queues/**","/login","/forgotpassword","/passwordreset/**","/login-error","/access-denied").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

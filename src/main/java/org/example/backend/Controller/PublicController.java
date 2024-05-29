@@ -32,15 +32,8 @@ public class PublicController {
 
     @PostMapping("login")
     public String getLoginUser(@ModelAttribute User user, Model model){
-//        try{
             model.addAttribute("user", userServiceImpl.loadUserByUsername(user.getUsername()));
             return getAdminLogin();
-//        } catch (UsernameNotFoundException | BadCredentialsException e){
-//            System.out.println(e.getMessage() + "where");
-//            model.addAttribute("error",e.getMessage());
-//            return getLoginErrorPage();
-//        }
-
     }
 
     @GetMapping(path="admin")
@@ -101,9 +94,9 @@ public class PublicController {
         }
     }
 
-    @RequestMapping("loginerror")
+    @RequestMapping("login-error")
     String getLoginErrorPage(){
-        return "loginerror";
+        return "login-error";
     }
 
     @RequestMapping("access-denied")
