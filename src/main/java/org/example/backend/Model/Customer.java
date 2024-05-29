@@ -33,7 +33,7 @@ public class Customer {
     @Pattern(regexp = "^(.+)@(\\S+)$", message = "Please provide a valid email")
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "customer")
     @ToString.Exclude
     private List<Booking> bookingList;
 
