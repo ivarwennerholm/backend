@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -43,21 +44,26 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/",  "/bookings/**","/customers/**", "/blacklist/**","/contractcustomers/**",
                                 "/rooms/**","/roomevents/**","/roomtypes/**","/shippingcontractors/**",
-                                "/js/**", "/css/**", "/images/**", "/login/**", "/logout","/queues/**","/login","/forgotpassword","/passwordreset/**","/loginerror").permitAll()
+                                "/js/**", "/css/**", "/images/**", "/login/**", "/logout","/queues/**","/login","/forgotpassword","/passwordreset/**","/loginerror","/access-denied").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                    .loginPage("/login")     //use custom login page
                    .loginProcessingUrl("/login")    //custom login page handles login failure instead of default ones
-                   .defaultSuccessUrl("/admin")     //allows authority to admin page
                    .failureForwardUrl("/loginerror")
                 )
                 .logout((logout) -> {
                     logout.permitAll();
                     logout.logoutSuccessUrl("/");
                 })
+                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler()))
                 .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
     }
 }

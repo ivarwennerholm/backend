@@ -4,9 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.Security.PasswordResetDto;
 import org.example.backend.Security.*;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -107,5 +104,10 @@ public class PublicController {
     @RequestMapping("loginerror")
     String getLoginErrorPage(){
         return "loginerror";
+    }
+
+    @RequestMapping("access-denied")
+    String getAccessDeniedPage(){
+        return "access-denied";
     }
 }
