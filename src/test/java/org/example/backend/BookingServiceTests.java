@@ -13,10 +13,7 @@ import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
 import org.example.backend.Service.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -185,6 +182,7 @@ public class BookingServiceTests {
 
     @Test
     @DisplayName("isRoomAvailableOnDates() should return correct boolean")
+    @Tag("unit")
     public void testIsRoomAvailableOnDates() throws ParseException {
         Date d1 = dateService.convertStringToDate("2024-05-25");
         Date d2 = dateService.convertStringToDate("2024-05-31");
@@ -204,6 +202,7 @@ public class BookingServiceTests {
 
     @Test
     @DisplayName("testGetExtraBedsForBooking() should return correct number")
+    @Tag("unit")
     public void testGetExtraBedsForBooking() {
         RoomDto singleRoom = rdto1;
         RoomDto doubleRoom = rdto2;
@@ -237,12 +236,14 @@ public class BookingServiceTests {
 
     @Test
     @DisplayName("deleteBookingByIdTest() should return correct String confirmation")
+    @Tag("unit")
     public void deleteBookingByIdTest() {
         assertEquals("delete booking id 1", sut.deleteBookingById(1L));
     }
 
     @Test
     @DisplayName("updateBookingDatesTest() should return correct String or Exception")
+    @Tag("unit")
     public void updateBookingDatesTest() throws ParseException {
         assertEquals("booking is updated", sut.updateBookingDates(1L, "2024-06-01", "2024-06-22"));
         Exception ex = assertThrows(RuntimeException.class, () -> sut.updateBookingDates(1L, "2024-07-01", "2024-07-06"));
@@ -251,6 +252,7 @@ public class BookingServiceTests {
 
     @Test
     @DisplayName("findBookingByIdTest() should return correct object")
+    @Tag("unit")
     public void findBookingByIdTest() throws ParseException {
         BookingDto result = sut.findBookingById(1L);
 

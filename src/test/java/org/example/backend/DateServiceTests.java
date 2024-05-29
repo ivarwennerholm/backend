@@ -2,6 +2,7 @@ package org.example.backend;
 
 import org.example.backend.Service.DateService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
@@ -20,6 +21,7 @@ public class DateServiceTests {
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @Test
+    @Tag("unit")
     public void areDatesOverlappingTest() throws ParseException {
         Date d1 = dateService.convertStringToDate("2024-07-01");
         Date d2 = dateService.convertStringToDate("2024-07-30");
@@ -45,6 +47,7 @@ public class DateServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void createDateIntervalTest() throws ParseException {
         Date d1 = dateService.convertStringToDate("2024-07-31");
         Date d2 = dateService.convertStringToDate("2024-08-01");
@@ -56,6 +59,7 @@ public class DateServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getNumberOfDaysBetweenTwoDatesTest() throws ParseException {
         Date d1 = dateService.convertStringToDate("2024-07-30");
         Date d2 = dateService.convertStringToDate("2024-07-31");
@@ -72,6 +76,7 @@ public class DateServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void convertStringToDateTest() throws ParseException {
         String expected = "2024-06-01";
         String notExpected = "2023-12-13";
@@ -83,6 +88,7 @@ public class DateServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void isDateWithinAYearFromTodayTest() throws ParseException {
         Date today = new java.sql.Date(df.parse("2024-01-01").getTime());
         Date compare1 = new java.sql.Date(df.parse("2022-12-31").getTime());

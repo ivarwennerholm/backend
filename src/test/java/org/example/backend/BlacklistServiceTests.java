@@ -7,6 +7,7 @@ import org.example.backend.Service.BlacklistService;
 import org.example.backend.Utils.BlacklistCheckEmailURLProvider;
 import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +32,7 @@ public class BlacklistServiceTests {
     @InjectMocks
     private BlacklistService blacklistService;
 
-    void setUp() throws IOException {
+    public void setUp() throws IOException {
         //Arrange
         InputStream in = new FileInputStream("src/test/resources/BlacklistPerson.json");
         JsonMapper jsonMapper = new JsonMapper();
@@ -42,7 +43,8 @@ public class BlacklistServiceTests {
     }
 
     @Test
-    void whenGetAllShouldReturnCorrectly() throws IOException {
+    @Tag("unit")
+    public void whenGetAllShouldReturnCorrectly() throws IOException {
         //Arrange
         setUp();
 
@@ -74,7 +76,8 @@ public class BlacklistServiceTests {
         Assertions.assertTrue(list.get(2).isOk()==true);
     }
     @Test
-    void whenGetBlacklistPersonShouldMatchCorrectly() throws IOException {
+    @Tag("unit")
+    public void whenGetBlacklistPersonShouldMatchCorrectly() throws IOException {
         //Arrange
         setUp();
 

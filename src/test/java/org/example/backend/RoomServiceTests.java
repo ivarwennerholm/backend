@@ -9,6 +9,7 @@ import org.example.backend.Repository.RoomTypeRepository;
 import org.example.backend.Service.RoomService;
 import org.example.backend.Service.RoomTypeService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -63,6 +64,7 @@ public class RoomServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void roomDtoToRoomTest() {
         RoomType rt = RoomType.builder().
                 id(1L).
@@ -85,6 +87,7 @@ public class RoomServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getroomByIdTest(){
         RoomType rt = RoomType.builder().
                 id(1L).
@@ -112,6 +115,7 @@ public class RoomServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getAllTest(){
         RoomType rt1 = RoomType.builder().
                 id(1L).

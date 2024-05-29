@@ -4,6 +4,7 @@ import org.example.backend.Events.*;
 import org.example.backend.Repository.RoomEventRepository;
 import org.example.backend.Service.RoomEventService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +27,8 @@ public class RoomEventServiceTests {
     private RoomEventService sut;
 
     @Test
-    void whenGetRoomEventsByRoomNoShouldMapCorrectly(){
+    @Tag("unit")
+    public void whenGetRoomEventsByRoomNoShouldMapCorrectly(){
 
         // Arrange
         RoomEvent ev1 = new RoomOpened(1L,101,LocalDateTime.parse("2024-05-16T12:57:29.101686955"));

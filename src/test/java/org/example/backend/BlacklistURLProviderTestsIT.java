@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +24,7 @@ public class BlacklistURLProviderTestsIT {
 
     @Autowired
     private BlacklistURLProvider blacklistURLProvider;
-    static URL url;
+    private URL url;
 
     // TODO: Should this be deleted or commented out?
     /*
@@ -41,17 +42,19 @@ public class BlacklistURLProviderTestsIT {
     */
 
     @BeforeEach
-    void setUp(){
+    public void setUp(){
         url = blacklistURLProvider.getBlacklistURL();
     }
 
     @Test
-    void whenConnectUrlIfSuccessOrNot() throws Exception {
+    @Tag("integration")
+    public void whenConnectUrlIfSuccessOrNot() throws Exception {
         Assertions.assertTrue(blacklistURLProvider.isURLAvailable());
     }
 
     @Test
-    void fetchBlacklistPersonShouldContainCorrectTags() throws IOException {
+    @Tag("integration")
+    public void fetchBlacklistPersonShouldContainCorrectTags() throws IOException {
         //Arrange
         Scanner s = new Scanner(url.openStream()).useDelimiter("\\A");
         ObjectMapper mapper = new ObjectMapper();

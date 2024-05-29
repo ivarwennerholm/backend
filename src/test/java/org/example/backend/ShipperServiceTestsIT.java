@@ -9,6 +9,7 @@ import org.example.backend.Repository.ShipperRepository;
 import org.example.backend.Utils.ShipperJsonProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,11 +41,13 @@ public class ShipperServiceTestsIT {
     }
 
     @Test
+    @Tag("integration")
     public void whenConnectMockUrlIfAvailableOrNot() throws Exception {
         Assertions.assertTrue(shipperJsonProvider.isURLAvailable());
     }
 
     @Test
+    @Tag("integration")
     public void fetchShippingContractorsShouldContainCorrectTags() throws IOException {
 
         // Arrange
@@ -74,6 +77,7 @@ public class ShipperServiceTestsIT {
     }
 
     @Test
+    @Tag("integration")
     public void getShippersToDatabaseShouldMapCorrectly() throws IOException {
 
         // Arrange

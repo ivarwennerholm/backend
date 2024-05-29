@@ -10,6 +10,7 @@ import org.example.backend.Repository.RoomRepository;
 import org.example.backend.Repository.RoomTypeRepository;
 import org.example.backend.Service.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -94,6 +95,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getTotalPriceIncludingDiscountTest() throws ParseException {
         when(roomRepository.findById(1L)).thenReturn(Optional.ofNullable(r1));
         when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(c1));
@@ -126,6 +128,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getDiscountSundayMondayTest() throws ParseException {
         Date checkin = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkout = new java.sql.Date(df.parse("2024-06-12").getTime());
@@ -140,6 +143,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getDiscountTwoOrMoreNights() throws ParseException {
         Date checkin1 = new java.sql.Date(df.parse("2024-05-17").getTime());
         Date checkout1 = new java.sql.Date(df.parse("2024-05-18").getTime());
@@ -167,6 +171,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getDiscountForReturningCustomerTest() throws ParseException {
         Date today = new java.sql.Date(df.parse("2025-05-15").getTime());
         double fullPrice = 10000;
@@ -181,6 +186,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void getNumberOfDiscountedNightsTest() throws ParseException {
         Date checkin1 = new java.sql.Date(df.parse("2024-05-14").getTime());
         Date checkout1 = new java.sql.Date(df.parse("2024-05-17").getTime());
@@ -209,6 +215,7 @@ public class DiscountServiceTests {
     }
 
     @Test
+    @Tag("unit")
     public void doesCustomerHaveTenOrMoreNightsBookedInTheLastYearTest() throws ParseException {
         Date today = new java.sql.Date(df.parse("2025-05-15").getTime());
         assertTrue(discountService.doesCustomerHaveTenOrMoreNightsBookedInTheLastYear(c1, today, true));

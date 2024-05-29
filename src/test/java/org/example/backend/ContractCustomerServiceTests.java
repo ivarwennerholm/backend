@@ -17,18 +17,18 @@ import static org.mockito.Mockito.when;
 
 public class ContractCustomerServiceTests {
 
-    ContractCustomerRepository repo;
-    ContractCustomerService sut;
+    private ContractCustomerRepository repo;
+    private ContractCustomerService sut;
 
-    ContractCustomer cc1;
-    ContractCustomer cc2;
-    ContractCustomer cc3;
-    ContractCustomerDto ccdto1;
-    ContractCustomerDto ccdto2;
-    ContractCustomerDto ccdto3;
+    private ContractCustomer cc1;
+    private ContractCustomer cc2;
+    private ContractCustomer cc3;
+    private ContractCustomerDto ccdto1;
+    private ContractCustomerDto ccdto2;
+    private ContractCustomerDto ccdto3;
 
     @BeforeEach()
-    void init() {
+    public void init() {
         repo = mock(ContractCustomerRepository.class);
         sut = new ContractCustomerService(repo);
         cc1 = ContractCustomer.builder().
@@ -78,7 +78,7 @@ public class ContractCustomerServiceTests {
     @Test
     @DisplayName("Conversion between ContractCustomer and ContractCustomerDto should be done correctly")
     @Tag("unit")
-    void contractCustomerToContractCustomerDtoTest() {
+    public void contractCustomerToContractCustomerDtoTest() {
         ContractCustomerDto actual = sut.contractCustomerToContractCustomerDto(cc1);
         assertEquals(1L, actual.getId());
         assertEquals(1, actual.getCustomerId());

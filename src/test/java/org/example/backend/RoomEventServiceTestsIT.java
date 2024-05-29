@@ -6,6 +6,7 @@ import org.example.backend.Events.RoomEvent;
 import org.example.backend.Repository.RoomEventRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +32,7 @@ public class RoomEventServiceTestsIT {
     }
 
     @Test
+    @Tag("integration")
     public void whenGetQueueMessageToDatabaseShouldMapCorrectly() throws IOException {
 
         // Arrange

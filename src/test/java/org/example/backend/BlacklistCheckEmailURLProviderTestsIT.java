@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.Utils.BlacklistCheckEmailURLProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +27,14 @@ public class BlacklistCheckEmailURLProviderTestsIT {
 
     private URL url;
 
+    @BeforeEach
+    public void setUp(){
+        blacklistCheckEmailURLProvider.setEmail("stefan6@aaa.com");
+        url = blacklistCheckEmailURLProvider.getBlacklistCheckEmailURL();
+    }
+
     @Test
+    @Tag("integration")
     public void whenConnectMockUrlIfAvailableOrNot() throws Exception {
         HttpURLConnection mockHttpURLConnection = mock(HttpURLConnection.class);
         when(mockHttpURLConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_NOT_FOUND);
@@ -36,18 +44,14 @@ public class BlacklistCheckEmailURLProviderTestsIT {
         Assertions.assertFalse(blacklistCheckEmailURLProvider.isCheckEmailURLAvailable());
     }
 
-    @BeforeEach
-    public void setUp(){
-        blacklistCheckEmailURLProvider.setEmail("stefan6@aaa.com");
-        url = blacklistCheckEmailURLProvider.getBlacklistCheckEmailURL();
-    }
-
     @Test
+    @Tag("integration")
     public void whenConnectCheckEmailUrlIfSuccessOrNot() throws Exception {
         Assertions.assertTrue(blacklistCheckEmailURLProvider.isCheckEmailURLAvailable());
     }
 
     @Test
+    @Tag("integration")
     public void fetchBlacklistCheckEmailShouldContainCorrectTags() throws IOException {
         //Arrange
         Scanner s = new Scanner(url.openStream()).useDelimiter("\\A");
