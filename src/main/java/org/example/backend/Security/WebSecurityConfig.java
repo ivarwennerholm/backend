@@ -56,7 +56,7 @@ public class WebSecurityConfig {
                     logout.permitAll();
                     logout.logoutSuccessUrl("/");
                 })
-                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler()))
+                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler())) //user without authority redirect to custom access denied page
                 .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
