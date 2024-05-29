@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
 <head>
     <meta charset="UTF-8">
     <title>HOTEL</title>
@@ -26,7 +29,7 @@
 <body>
 <div class="container text-center mx-5 mt-5">
     <div class="mt-2 mb-4">
-        <a href="http://localhost:8080/"><img src="/logo.png"></a>
+        <a href="http://localhost:8080/"><img src="/js/logo.png"></a>
     </div>
     <div class="my-1">
         <a href="bookings/search">New booking</a>
@@ -52,6 +55,25 @@
     <div class="my-1">
         <a href="emailtemplate/edit">Email editor</a>
     </div>
+    <div class="my-1">
+        <a href="admin" sec:authorize="!isAuthenticated()">Admin Login</a>
+    </div>
+    <div class="my-1">
+        <a href="confidential" sec:authorize="isAuthenticated()">Confidential</a>
+    </div>
+    <div class="my-1">
+        <a href="" sec:authorize="isAuthenticated()" onclick="displayLogoutConfirmationQ()" id="logout" class="btn btn-warning">Logout</a>
+    </div>
 </div>
+<script>
+    function displayLogoutConfirmationQ(){
+        const logout = document.getElementById("logout");
+        const logoutSuccess = document.getElementById("logoutSuccess");
+            const confirmOpt = confirm('Are you sure you want to logout?');
+            if (confirmOpt){
+                logout.href = "/logout";
+            }
+    }
+</script>
 </body>
 </html>

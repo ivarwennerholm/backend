@@ -11,11 +11,10 @@
         <a href="http://localhost:8080/"><img src="/js/logo.png"></a>
     </div>
     <div class="mb-3">
-        <h2>All Rooms</h2>
+        <h2>Confidential Page</h2>
+        <p>You are seeing confidential info now!</p>
     </div>
-    <ul class="list-group" th:unless="${#lists.isEmpty(rooms)}">
-        <li class="list-group-item" th:each="r : ${rooms}"><a th:href="@{/roomevents/{roomno}(roomno=${r.roomNumber})}" th:text="${r.roomNumber}"></a></li>
-    </ul>
+
 </div>
 </body>
 </html>
