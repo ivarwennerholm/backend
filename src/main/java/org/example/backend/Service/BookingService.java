@@ -9,6 +9,7 @@ import org.example.backend.Repository.BookingRepository;
 import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.text.DateFormat;
@@ -72,9 +73,11 @@ public class BookingService {
         bookingRepository.save(bookindDtoToBooking(bd));
     }
 
+    @Transactional
     public String deleteBookingById(Long id) {
         Booking b = bookingRepository.findById(id).get();
-        bookingRepository.delete(b);
+        bookingRepository.deleteBooking(id);
+        //bookingRepository.delete(b);
         return "delete booking id " + b.getId();
     }
 

@@ -13,12 +13,14 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @SpringBootApplication
+//@EnableTransactionManagement
 public class BackendApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(BackendApplication.class);

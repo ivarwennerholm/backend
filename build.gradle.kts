@@ -53,20 +53,18 @@ dependencies {
     // Jackson annotations
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.1")
-    //spring security
+    // spring security
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
     implementation("org.springframework.boot:spring-boot-starter-security:3.2.5")
-    //spring security web
-// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity6
+    // spring security web
+    // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity6
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE")
-    //spring security web
+    // spring security web
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
     implementation("org.springframework.security:spring-security-web:6.3.0")
-    //spring boot mail
+    // spring boot mail
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
     implementation("org.springframework.boot:spring-boot-starter-mail:3.3.0")
-
-
 }
 
 tasks.withType<Test> {
