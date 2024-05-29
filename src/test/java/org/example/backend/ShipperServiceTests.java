@@ -2,7 +2,7 @@ package org.example.backend;
 
 import org.example.backend.Model.Shipper;
 import org.example.backend.Repository.ShipperRepository;
-import org.example.backend.Service.Impl.ShipperServiceImpl;
+import org.example.backend.Service.ShipperService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ public class ShipperServiceTests {
     private ShipperRepository shipRepo;
 
     @InjectMocks
-    private ShipperServiceImpl shipService;
+    private ShipperService shipService;
 
     @BeforeEach
     public void setUp(){

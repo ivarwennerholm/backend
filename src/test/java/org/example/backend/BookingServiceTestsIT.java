@@ -5,10 +5,11 @@ import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
 import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.BookingRepository;
-import org.example.backend.Repository.CustomerRepository;
 import org.example.backend.Repository.RoomRepository;
-import org.example.backend.Repository.RoomTypeRepository;
-import org.example.backend.Service.Impl.*;
+import org.example.backend.Service.BlacklistService;
+import org.example.backend.Service.BookingService;
+import org.example.backend.Service.CustomerService;
+import org.example.backend.Service.DiscountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.*;
 public class BookingServiceTestsIT {
 
     @Mock
-    private CustomerServiceImpl customerService;
+    private CustomerService customerService;
 
     @Mock
     private RoomRepository roomRepository;
@@ -47,7 +48,7 @@ public class BookingServiceTestsIT {
     private DiscountService discountService;
 
     @InjectMocks
-    private BookingServiceImpl bookingService;
+    private BookingService bookingService;
 
     private Customer customer;
     private RoomType roomType;
@@ -104,17 +105,7 @@ public class BookingServiceTestsIT {
     @SpringBootTest
     class BookingServiceDBIT {
         @Autowired
-        private CustomerRepository customerRepository;
-
-        @Autowired
-        private RoomTypeRepository roomTypeRepository;
-
-        @Autowired
-        private RoomRepository roomRepository;
-
-        @Autowired
         private BookingRepository sut2;
-
         @Test
         @DisplayName("Customer should be saved to H2 database")
         public void writeToDataBaseTest() throws ParseException {
@@ -127,10 +118,7 @@ public class BookingServiceTestsIT {
                     1, 0, 12000.00, customer, room);
 
             // ACT
-            //sut2.deleteAll();
-            customerRepository.save(customer);
-            roomTypeRepository.save(roomType);
-            roomRepository.save(room);
+            sut2.deleteAll();
             sut2.save(booking);
 
             // ASSERT

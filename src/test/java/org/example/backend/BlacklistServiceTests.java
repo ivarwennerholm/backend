@@ -3,7 +3,7 @@ package org.example.backend;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.backend.DTO.BlacklistPersonDto;
-import org.example.backend.Service.Impl.BlacklistService;
+import org.example.backend.Service.BlacklistService;
 import org.example.backend.Utils.BlacklistCheckEmailURLProvider;
 import org.example.backend.Utils.BlacklistURLProvider;
 import org.junit.jupiter.api.Assertions;

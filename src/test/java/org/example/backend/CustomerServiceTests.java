@@ -6,7 +6,7 @@ import org.example.backend.Model.Customer;
 import org.example.backend.Model.Room;
 import org.example.backend.Model.RoomType;
 import org.example.backend.Repository.CustomerRepository;
-import org.example.backend.Service.Impl.CustomerServiceImpl;
+import org.example.backend.Service.CustomerService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ public class CustomerServiceTests {
     private CustomerRepository cusRepo;
 
     @InjectMocks
-    private CustomerServiceImpl cusService;
+    private CustomerService cusService;
 
     private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
