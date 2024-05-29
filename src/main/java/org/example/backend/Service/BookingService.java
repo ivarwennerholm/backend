@@ -77,7 +77,6 @@ public class BookingService {
     public String deleteBookingById(Long id) {
         Booking b = bookingRepository.findById(id).get();
         bookingRepository.deleteBooking(id);
-        //bookingRepository.delete(b);
         return "delete booking id " + b.getId();
     }
 

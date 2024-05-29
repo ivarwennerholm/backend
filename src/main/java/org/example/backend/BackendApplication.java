@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @SpringBootApplication
-//@EnableTransactionManagement
 public class BackendApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(BackendApplication.class);
