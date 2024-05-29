@@ -69,8 +69,7 @@ public class PublicController {
     String getForgotPasswordUserName(@ModelAttribute UsernameDto userNameDto, Model model){
         System.out.println("username: " + userNameDto.getUsername());
         try {
-            User user = userRepository.getUserByUsername(userNameDto.getUsername());
-            System.out.println("reset token: " + userServiceImpl.sendEmail(user));
+            userServiceImpl.sendEmail(userNameDto.getUsername());
             model.addAttribute("success","reset token has sent");
             return getForgotPasswordPage(model);
         } catch (Exception e) {
